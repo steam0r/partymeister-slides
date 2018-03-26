@@ -39,6 +39,7 @@ class PartymeisterServiceProvider extends ServiceProvider
     public function publishResourceAssets()
     {
         $assets = [
+            __DIR__ . '/../../resources/assets/images' => resource_path('assets/images'),
             __DIR__ . '/../../resources/assets/css' => resource_path('assets/css'),
             __DIR__ . '/../../resources/assets/js'  => resource_path('assets/js'),
         ];
