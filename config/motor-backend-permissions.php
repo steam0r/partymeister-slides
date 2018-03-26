@@ -33,4 +33,12 @@ return [
             'delete'
         ]
     ],
+    'slide_clients'   => [
+        'name'   => 'partymeister-slides::backend/slide_clients.slide_clients',
+        'values' => [
+            'read',
+            'write',
+            'delete'
+        ]
+    ],
 ];

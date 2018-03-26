@@ -23,8 +23,38 @@ Route::group([
 
         Route::resource('playlists', 'PlaylistsController');
         Route::resource('transitions', 'TransitionsController');
+        Route::resource('slide_clients', 'SlideClientsController');
+        Route::get('slide_clients/{slide_client}/activate', 'SlideClientsController@activate')->name('slide_clients.activate');
+
+        Route::resource('files', 'FilesController');
     });
 });
 
 Route::get('backend/slide_templates/{slide_template}', 'Partymeister\Slides\Http\Controllers\Backend\SlideTemplatesController@show')->middleware(['bindings', 'navigation'])->name('backend.slide_templates.show');
 Route::get('backend/slides/{slide}', 'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')->middleware(['bindings', 'navigation'])->name('backend.slides.show');
+
+
+Route::get('xmlservice/playlist', function() {
+    //$result = XMLMeister::send('playlist', array('playlist_id' => arr::get($_GET, 'play'), 'callbacks' => arr::get($_GET, 'callbacks')));
+    $xml = \Partymeister\Slides\Services\XMLService::send('playlist', ['playlist_id' => \Partymeister\Slides\Models\Playlist::find(23)->id, 'callbacks' => 0], false, true);
+    return response($xml, 200)
+        ->header('Content-Type', 'text/xml');    //echo $xml;
+});
+
+Route::get('xmlservice/next', function() {
+    $xml = \Partymeister\Slides\Services\XMLService::send('next', ['hard' => true], false, true);
+    return response($xml, 200)
+        ->header('Content-Type', 'text/xml');    //echo $xml;
+});
+
+Route::get('xmlservice/previous', function() {
+    $xml = \Partymeister\Slides\Services\XMLService::send('previous', ['hard' => true], false, true);
+    return response($xml, 200)
+        ->header('Content-Type', 'text/xml');    //echo $xml;
+});
+
+Route::get('xmlservice/getplaylists', function() {
+    $xml = \Partymeister\Slides\Services\XMLService::send('get_playlists', ['hard' => true], false, true);
+    return response($xml, 200)
+        ->header('Content-Type', 'text/xml');    //echo $xml;
+});

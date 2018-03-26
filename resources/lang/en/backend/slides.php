@@ -14,9 +14,10 @@ return [
     'name'        => 'Name',
     'slide_type'  => 'Slide type',
     'slide_types' => [
-        'default'  => 'Default',
-        'positive' => 'Positive',
-        'warning'  => 'Warning',
-        'danger'   => 'Danger'
+        'announce'           => 'Default',
+        'announce_important' => 'Warning',
+        'compo'              => 'Competition',
+        'comingup'           => 'Coming up / End',
+        'end'                => 'End / Participants'
     ]
 ];

@@ -6,9 +6,7 @@
 
 @section('contentheader_title')
     {{ trans('partymeister-slides::backend/slides.slides') }}
-    {{--@if (has_permission('slides.write'))--}}
-	    {{--{!! link_to_route('backend.slides.create', trans('partymeister-slides::backend/slides.new'), [], ['class' => 'pull-right btn btn-sm btn-success']) !!}--}}
-    {{--@endif--}}
+    @include('partymeister-slides::layouts.partials.slide_clients_controls')
 @endsection
 
 @section('main-content')
@@ -23,6 +21,7 @@
     </div>
 @endsection
 
+@include('partymeister-slides::layouts.partials.slide_clients_scripts')
 @section('view_scripts')
     <script type="text/javascript">
         $('.delete-record').click(function (e) {
@@ -32,4 +31,4 @@
             }
         });
     </script>
-@endsection
+@append

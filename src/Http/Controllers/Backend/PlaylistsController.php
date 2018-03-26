@@ -117,16 +117,19 @@ class PlaylistsController extends Controller
         $this->fractal = new Manager();
 
         foreach ($record->items as $item) {
+            $f = null;
             $i = fractal($item, new PlaylistItemTransformer())->toArray();
             if ($item->slide_id != null) {
                 $f = fractal($item->slide, new SlideTransformer())->toArray();
-            } else {
+            } elseif ($item->file_association != null) {
                 $f = fractal($item->file_association->file, new FileTransformer())->toArray();
             }
 
-            $i['data'] = array_merge($i['data'], $f['data']);
-            //$i['data']['file'] = $f['data'];
-            $playlistItems[] = $i['data'];
+            if ($f != null) {
+                $i['data'] = array_merge($i['data'], $f['data']);
+                //$i['data']['file'] = $f['data'];
+                $playlistItems[] = $i['data'];
+            }
         }
 
         $playlistItems = json_encode($playlistItems, JSON_UNESCAPED_SLASHES);

@@ -14,8 +14,9 @@ use Motor\Media\Models\FileAssociation;
 
 class PlaylistItem extends Model
 {
+
     use Searchable;
-	use Filterable;
+    use Filterable;
     use Blameable, CreatedBy, UpdatedBy, DeletedBy;
 
     /**
@@ -23,15 +24,14 @@ class PlaylistItem extends Model
      *
      * @var array
      */
-    protected $blameable = array('created', 'updated', 'deleted');
+    protected $blameable = [ 'created', 'updated', 'deleted' ];
 
     /**
      * Searchable columns for the searchable trait
      *
      * @var array
      */
-    protected $searchableColumns = [
-    ];
+    protected $searchableColumns = [];
 
     /**
      * The attributes that are mass assignable.
@@ -52,17 +52,24 @@ class PlaylistItem extends Model
         'metadata',
         'callback_hash',
         'callback_delay',
+        'sort_position',
     ];
 
-    function transition() {
+
+    function transition()
+    {
         return $this->belongsTo(Transition::class);
     }
 
-    function file_association() {
+
+    function file_association()
+    {
         return $this->morphOne(FileAssociation::class, 'model');
     }
 
-    function slide() {
+
+    function slide()
+    {
         return $this->belongsTo(Slide::class);
     }
 }

@@ -28,7 +28,7 @@
         </div>
         <div id="slidemeister">
         </div>
-        <div id="vuedropzone" :style="{ zIndex: zIndex }">
+        <div id="vuedropzone" :style="{ zIndex: zIndex }">a
             <draggable v-model="droppedFiles" :options="{group:'files'}" @add="onAdd" class="draggable-container">
             </draggable>
         </div>

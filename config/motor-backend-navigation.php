@@ -34,6 +34,14 @@ return [
                     'roles'       => [ 'SuperAdmin' ],
                     'permissions' => [ 'slide_templates.read' ],
                 ],
+                310 => [ // <-- !!! replace 157 with your own sort position !!!
+                    'slug' => 'slide_clients',
+                    'name'  => 'partymeister-slides::backend/slide_clients.slide_clients',
+                    'icon'  => 'fa fa-plus',
+                    'route' => 'backend.slide_clients.index',
+                    'roles'       => [ 'SuperAdmin' ],
+                    'permissions' => [ 'slide_clients.read' ],
+                ],
                 400 => [ // <-- !!! replace 308 with your own sort position !!!
                     'slug'        => 'transitions',
                     'name'        => 'partymeister-slides::backend/transitions.transitions',

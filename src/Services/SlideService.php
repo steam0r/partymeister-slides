@@ -4,6 +4,7 @@ namespace Partymeister\Slides\Services;
 
 use Motor\Backend\Models\Category;
 use Motor\Core\Filter\Renderers\SelectRenderer;
+use Partymeister\Slides\Events\SlideSaved;
 use Partymeister\Slides\Helpers\Browsershot;
 use Partymeister\Slides\Models\Slide;
 use Motor\Backend\Services\BaseService;
@@ -24,10 +25,16 @@ class SlideService extends BaseService
     public function beforeCreate()
     {
         $this->data['definitions'] = stripslashes($this->request->get('definitions'));
+        if ($this->request->get('slide_template_id') == '') {
+            $this->data['slide_template_id'] = null;
+        }
     }
 
     public function beforeUpdate()
     {
+        if ($this->request->get('slide_template_id') == '') {
+            $this->data['slide_template_id'] = null;
+        }
         $this->beforeCreate();
     }
 
@@ -43,26 +50,25 @@ class SlideService extends BaseService
 
     protected function generatePreview()
     {
-        $filnameForPreview = base_path().'/storage/app/temp/slide_preview_'.$this->record->id.'.png';
-        $filenameForFinal = base_path().'/storage/app/temp/slide_final_'.$this->record->id.'.png';
+        $media = $this->record->getFirstMedia('preview');
+        if (!is_null($media)) {
+            $media->setCustomProperty('generating', true)->save();
+        } else {
+            $this->record->addMedia(public_path() . '/images/generating-preview.png')
+                         ->preservingOriginal()
+                         ->withCustomProperties([ 'generating' => true ])
+                         ->toMediaCollection('preview', 'media');
 
-        Browsershot::url(url('/backend/slides/' . $this->record->id))
-            ->waitUntilNetworkIdle()
-            ->windowSize(1920, 1080)
-            //->debug()
-            //->fit(Manipulations::FIT_CONTAIN, 1920, 1080)
-            ->save($filenameForFinal);
+        }
 
-        Browsershot::url(url('/backend/slides/' . $this->record->id.'?preview=true'))
-            ->waitUntilNetworkIdle()
-            ->windowSize(1920, 1080)
-            //->debug()
-            //->fit(Manipulations::FIT_CONTAIN, 1920, 1080)
-            ->save($filnameForPreview);
+        //$this->record->clearMediaCollection('preview');
+        //$this->record->clearMediaCollection('final');
+        //
+        //$this->record
+        //     ->addMedia(public_path().'/images/generating-preview.png')
+        //     ->preservingOriginal()
+        //     ->toMediaCollection('preview', 'media');
 
-        $this->record->clearMediaCollection('preview');
-        $this->record->clearMediaCollection('final');
-        $this->record->addMedia($filnameForPreview)->toMediaCollection('preview', 'media');
-        $this->record->addMedia($filenameForFinal)->toMediaCollection('final', 'media');
+        event(new SlideSaved($this->record, 'slides'));
     }
 }

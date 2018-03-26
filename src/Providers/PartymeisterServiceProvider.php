@@ -26,12 +26,24 @@ class PartymeisterServiceProvider extends ServiceProvider
         $this->permissions();
         $this->registerCommands();
         $this->migrations();
+        $this->publishResourceAssets();
     }
 
 
     public function config()
     {
+        $this->mergeConfigFrom(__DIR__ . '/../../config/partymeister-slides-fonts.php', 'partymeister-slides-fonts');
+    }
 
+
+    public function publishResourceAssets()
+    {
+        $assets = [
+            __DIR__ . '/../../resources/assets/css' => resource_path('assets/css'),
+            __DIR__ . '/../../resources/assets/js'  => resource_path('assets/js'),
+        ];
+
+        $this->publishes($assets, 'partymeister-slides-install');
     }
 
 
@@ -105,6 +117,9 @@ class PartymeisterServiceProvider extends ServiceProvider
         });
         Route::bind('transition', function ($id) {
             return \Partymeister\Slides\Models\Transition::findOrFail($id);
+        });
+        Route::bind('slide_client', function ($id) {
+            return \Partymeister\Slides\Models\SlideClient::findOrFail($id);
         });
     }
 

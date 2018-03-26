@@ -2,7 +2,7 @@
 
 function create_test_slide($count = 1)
 {
-    return factory(\Partymeister\Slides\\Models\Slide::class, $count)->create();
+    return factory(\Partymeister\Slides\Models\Slide::class, $count)->create();
 }
 
 function create_test_slide_template($count = 1)
@@ -18,4 +18,9 @@ function create_test_playlist($count = 1)
 function create_test_transition($count = 1)
 {
     return factory(Partymeister\Slides\Models\Transition::class, $count)->create();
+}
+
+function create_test_slide_client($count = 1)
+{
+    return factory(Partymeister\Slides\Models\SlideClient::class, $count)->create();
 }

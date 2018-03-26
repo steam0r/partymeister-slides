@@ -25,7 +25,6 @@
         border-bottom-right-radius: 10px;
         position: absolute;
         top: 3px;
-        Lettermark.png image/png
         left: 3px;
     }
 
@@ -111,7 +110,7 @@
                         </button>
                     </div>
                     <div v-if="isImage(file)" class="image-wrapper">
-                        <div>{{trans('partymeister-slides::backend/playlists.slide_types.image')}}</div>
+                        <div>@{{ filetype(file) }}</div>
                         <img :src="file.file.preview" class="img-fluid">
                     </div>
                     <div v-else> @{{ file.file.file_name }}</div>
@@ -134,7 +133,7 @@
                         </div>
                         <div>
                             {{ trans('partymeister-slides::backend/playlists.callback') }}
-                            <select name="callback_hash" v-model="file.callback_hash">
+                            <select name="callback_hash" v-model="file.callback_hash" style="width: 80%">
                                 <option value="">{{ trans('partymeister-slides::backend/callbacks.no_callback') }}</option>
                                 <option v-for="(callback, index) in callbacks" :value="callback.hash">
                                     @{{ callback.name }}
@@ -181,7 +180,8 @@
                 <draggable v-model="files" :options="{group:{ name:'files',  pull:'clone', put:false }, sort: false, dragClass: 'sortable-drag', ghostClass: 'sortable-ghost'}" @start="onStart" @end="onEnd">
                     <div v-for="file in files">
                         <div class="card">
-                            <img v-if="isImage(file)" class="card-img-top" :src="file.file.preview">
+                                <img v-if="file.file.is_generating" class="card-img-top" src="{{url('/images/generating-preview.png')}}">
+                                <img v-if="!file.file.is_generating && isImage(file)" class="card-img-top" :src="file.file.preview">
                             <div class="card-body" data-toggle="tooltip" data-placement="top" :title="file.description">
                                 <p class="card-text">
                                     @{{ file.name }}<br>
@@ -224,7 +224,7 @@
                     });
                 },
                 isImage: function(file) {
-                    if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg') {
+                    if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg' || file.file.mime_type == 'video/mp4') {
                         return true;
                     }
                     return false;
@@ -269,10 +269,18 @@
                     Vue.set(this.droppedFiles[event.newIndex], 'transition_duration', 2000);
                     Vue.set(this.droppedFiles[event.newIndex], 'callback_hash', '');
                     Vue.set(this.droppedFiles[event.newIndex], 'callback_delay', 20);
-                    Vue.set(this.droppedFiles[event.newIndex], 'is_advanced_manually', true);
+                    Vue.set(this.droppedFiles[event.newIndex], 'is_advanced_manually', false);
+                },
+                filetype: function(file) {
+                    if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg') {
+                        return 'Image';
+                    } else if (file.file.mime_type == 'video/mp4') {
+                        return 'Video';
+                    }
+                    return 'unknown';
                 },
                 isImage: function (file) {
-                    if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg') {
+                    if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg' || file.file.mime_type == 'video/mp4') {
                         return true;
                     }
                     return false;
@@ -289,7 +297,10 @@
 
                 axios.get('{{route('ajax.transitions.index')}}').then(function (response) {
                     vuePlaylists.transitions = response.data.data;
-                    // vueMediapool.$emit('test', {data: 'lol'});
+                });
+
+                axios.get('{{route('ajax.callbacks.index')}}').then(function (response) {
+                    vuePlaylists.callbacks = response.data.data;
                 });
             }
         });

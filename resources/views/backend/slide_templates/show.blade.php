@@ -2,6 +2,11 @@
 <head>
     @include('partymeister-slides::layouts.partials.slide_fonts')
     <link href="{{ asset('/css/all.css') }}" rel="stylesheet" type="text/css"/>
+    <style type="text/css">
+        body {
+            background: transparent !important;
+        }
+    </style>
 </head>
 <body id="slidemeister-render">
 <div id="slidemeister">

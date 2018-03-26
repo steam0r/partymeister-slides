@@ -1,0 +1,30 @@
+{
+  "name": "partymeister/slides",
+  "description": "Partymeister slides and beam system package",
+  "license": "MIT",
+  "keywords": [
+    "motor"
+  ],
+  "authors": [
+    {
+      "name": "Reza Esmaili",
+      "email": "me@dfox.info"
+    }
+  ],
+  "require": {
+    "partymeister/core": "0.4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Partymeister\\Slides\\": "src"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Partymeister\\Slides\\Providers\\PartymeisterServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev"
+}
