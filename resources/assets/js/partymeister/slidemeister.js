@@ -214,45 +214,46 @@
         };
 
         slidemeister.data.populateTimetable = function (data) {
-            var baseTimeElement, baseTypeElement, baseNameElement = false;
+            setTimeout(function () {
+                var baseTimeElement, baseTypeElement, baseNameElement = false;
 
-            $.each($elements, function (index, element) {
-                if ($elementData[element].prettyname == 'timetable_time') {
-                    baseTimeElement = element;
-                }
-                if ($elementData[element].prettyname == 'timetable_event_type') {
-                    baseTypeElement = element;
-                }
-                if ($elementData[element].prettyname == 'timetable_event_name') {
-                    baseNameElement = element;
-                }
-            });
+                $.each($elements, function (index, element) {
+                    if ($elementData[element].prettyname == 'timetable_time') {
+                        baseTimeElement = element;
+                    }
+                    if ($elementData[element].prettyname == 'timetable_event_type') {
+                        baseTypeElement = element;
+                    }
+                    if ($elementData[element].prettyname == 'timetable_event_name') {
+                        baseNameElement = element;
+                    }
+                });
 
-            var height = $($target).find('.'+baseNameElement+ ' div').height();
+                var height = $($target).find('.'+baseNameElement+ ' div').height();
 
-            $.each(data, function (index, row) {
-                if (index == 0) {
-                    timeElement = baseTimeElement;
-                    typeElement = baseTypeElement;
-                    nameElement = baseNameElement;
-                } else {
-                    timeElement = slidemeister.element.clone(baseTimeElement, 0, index*height, false);
-                    typeElement = slidemeister.element.clone(baseTypeElement, 0, index*height, false);
-                    nameElement = slidemeister.element.clone(baseNameElement, 0, index*height, false);
-                }
+                $.each(data, function (index, row) {
+                    if (index == 0) {
+                        timeElement = baseTimeElement;
+                        typeElement = baseTypeElement;
+                        nameElement = baseNameElement;
+                    } else {
+                        timeElement = slidemeister.element.clone(baseTimeElement, 0, index*height, false);
+                        typeElement = slidemeister.element.clone(baseTypeElement, 0, index*height, false);
+                        nameElement = slidemeister.element.clone(baseNameElement, 0, index*height, false);
+                    }
 
-                time = '';
-                if (index == 0 || data[index-1].time != row.time) {
-                    time = row.time;
-                }
-                $($target).find('.'+timeElement+ ' span').html(time);
+                    time = '';
+                    if (index == 0 || data[index-1].time != row.time) {
+                        time = row.time;
+                    }
+                    $($target).find('.'+timeElement+ ' span').html(time);
 
-                $($target).find('.'+typeElement+ ' span').html(row.type);
-                $($target).find('.'+typeElement).css('color', row.color);
-                $($target).find('.'+nameElement+ ' span').html(row.name);
-                slidemeister.ui.resizeText(nameElement, true);
-            });
-
+                    $($target).find('.'+typeElement+ ' span').html(row.type);
+                    $($target).find('.'+typeElement).css('color', row.color);
+                    $($target).find('.'+nameElement+ ' span').html(row.name);
+                    slidemeister.ui.resizeText(nameElement, true);
+                });
+            }, 100);
         };
 
         /**
@@ -1220,10 +1221,13 @@
             while ((textHeight > elementHeight || textWidth > elementWidth) && fontSize > 5) { //} || textWidth > elementWidth) && fontSize > 10) { // define minimum fontsize
                 fontSize--;
                 $($target).find('.' + element).css({'font-size': fontSize + 'px'});
+                // $($target).find('.' + element).attr('font-size', fontSize+'px');
                 textHeight = $($target).find('.' + element + ' div span').outerHeight();
                 textWidth = $($target).find('.' + element + ' div span').outerWidth();
 
                 // console.log('Element: ' + element + ', Textheight: ' + textHeight + ', Textwidth: ' + textWidth + ', Elementheight: ' + elementHeight + ', Fontsize: ' + fontSize);
+                // console.log('CLIENT HEIGHT: '+ $($target).find('.' + element)[0].clientHeight);
+                // console.log('SCROLL HEIGHT: '+ $($target).find('.' + element)[0].scrollHeight);
             }
         };
 
