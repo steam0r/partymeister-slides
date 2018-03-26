@@ -12,7 +12,10 @@
     }
   ],
   "require": {
-    "partymeister/core": "0.1.*"
+    "partymeister/core": "0.1.*",
+    "predis/predis": "^1.1",
+    "spatie/browsershot": "^3.17",
+    "laravel/horizon": "^1.2"
   },
   "autoload": {
     "psr-4": {
