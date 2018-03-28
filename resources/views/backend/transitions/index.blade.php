@@ -7,7 +7,7 @@
 @section('contentheader_title')
     {{ trans('partymeister-slides::backend/transitions.transitions') }}
     @if (has_permission('transitions.write'))
-	    {!! link_to_route('backend.transitions.create', trans('partymeister-slides::backend/transitions.new'), [], ['class' => 'pull-right btn btn-sm btn-success']) !!}
+	    {!! link_to_route('backend.transitions.create', trans('partymeister-slides::backend/transitions.new'), [], ['class' => 'pull-right float-right btn btn-sm btn-success']) !!}
     @endif
 @endsection
 

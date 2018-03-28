@@ -7,7 +7,7 @@
 @section('contentheader_title')
     {{ trans('partymeister-slides::backend/slide_clients.slide_clients') }}
     @if (has_permission('slide_clients.write'))
-	    {!! link_to_route('backend.slide_clients.create', trans('partymeister-slides::backend/slide_clients.new'), [], ['class' => 'pull-right btn btn-sm btn-success']) !!}
+	    {!! link_to_route('backend.slide_clients.create', trans('partymeister-slides::backend/slide_clients.new'), [], ['class' => 'pull-right float-right btn btn-sm btn-success']) !!}
     @endif
 @endsection
 

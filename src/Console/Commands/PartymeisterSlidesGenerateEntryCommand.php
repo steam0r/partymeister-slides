@@ -20,7 +20,7 @@ class PartymeisterSlidesGenerateEntryCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'partymeister:slides:generate:entry {competition_id} {count=1}';
+    protected $signature = 'partymeister:slides:generate:entry {competition_id} {count=1} {locale=en_US}';
 
     /**
      * The console command description.
@@ -39,7 +39,7 @@ class PartymeisterSlidesGenerateEntryCommand extends Command
     {
         Auth::login(User::find(1));
 
-        $faker = Factory::create();
+        $faker = Factory::create($this->argument('locale'));
 
         $count = $this->argument('count');
 
@@ -60,7 +60,7 @@ class PartymeisterSlidesGenerateEntryCommand extends Command
         for ($i = 0; $i < $count; $i++) {
             $entry                                              = new Entry();
             $entry->competition_id                              = $competition->id;
-            $entry->title                                       = $faker->catchPhrase;
+            $entry->title                                       = $faker->name;
             $entry->author                                      = $faker->name;
             $entry->filesize                                    = $faker->numberBetween(100000, 9000000);
             $entry->platform                                    = $faker->word;

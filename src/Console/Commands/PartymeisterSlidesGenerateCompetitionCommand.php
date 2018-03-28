@@ -19,7 +19,7 @@ class PartymeisterSlidesGenerateCompetitionCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'partymeister:slides:generate:competition {name?}';
+    protected $signature = 'partymeister:slides:generate:competition {locale=en_US}';
 
     /**
      * The console command description.
@@ -39,12 +39,9 @@ class PartymeisterSlidesGenerateCompetitionCommand extends Command
 
         Auth::login(User::find(1));
 
-        $faker = Factory::create();
+        $faker = Factory::create($this->argument('locale'));
 
-        $name = $this->argument('name');
-        if (is_null($name)) {
-            $name = $faker->catchPhrase;
-        }
+        $name = $faker->name;
 
         $competition = new Competition();
         $competition->name = $name;

@@ -34,8 +34,7 @@ class Slide extends Model implements HasMediaConversions
      * @var array
      */
     protected $searchableColumns = [
-        'name',
-        'template.name'
+        'slides.name'
     ];
 
     /**

@@ -5,6 +5,7 @@ namespace Partymeister\Slides\Services;
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use Motor\Backend\Models\Category;
+use Motor\Core\Filter\Renderers\SelectRenderer;
 use Motor\Media\Models\File;
 use Motor\Media\Models\FileAssociation;
 use Partymeister\Competitions\Helpers\CallbackHelper;
@@ -22,10 +23,20 @@ class PlaylistService extends BaseService
     protected $model = Playlist::class;
 
 
+    public function filters()
+    {
+        $this->filter->add(new SelectRenderer('type'))
+                     ->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))
+                     ->setEmptyOption('-- ' . trans('partymeister-slides::backend/playlists.type') . ' --')
+                     ->setOptions(trans('partymeister-slides::backend/playlists.types'));
+    }
+
+
     public function afterCreate()
     {
         $this->savePlaylistItems();
     }
+
 
     public function beforeUpdate()
     {

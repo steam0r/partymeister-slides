@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Services;
 
+use Motor\Core\Filter\Renderers\SelectRenderer;
 use Partymeister\Slides\Events\SlideSaved;
 use Partymeister\Slides\Events\SlideTemplateSaved;
 use Partymeister\Slides\Models\SlideTemplate;
@@ -14,6 +15,14 @@ class SlideTemplateService extends BaseService
 
     protected $model = SlideTemplate::class;
 
+
+    public function filters()
+    {
+        $this->filter->add(new SelectRenderer('template_for'))
+                     ->setOptionPrefix(trans('partymeister-slides::backend/slide_templates.template_for'))
+                     ->setEmptyOption('-- ' . trans('partymeister-slides::backend/slide_templates.template_for') . ' --')
+                     ->setOptions(trans('partymeister-slides::backend/slide_templates.template_for_types'));
+    }
 
     public function beforeCreate()
     {

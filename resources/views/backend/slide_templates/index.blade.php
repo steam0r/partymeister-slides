@@ -7,7 +7,7 @@
 @section('contentheader_title')
     {{ trans('partymeister-slides::backend/slide_templates.slide_templates') }}
     @if (has_permission('slide_templates.write'))
-	    {!! link_to_route('backend.slide_templates.create', trans('partymeister-slides::backend/slide_templates.new'), [], ['class' => 'pull-right btn btn-sm btn-success']) !!}
+	    {!! link_to_route('backend.slide_templates.create', trans('partymeister-slides::backend/slide_templates.new'), [], ['class' => 'pull-right float-right btn btn-sm btn-success']) !!}
     @endif
 @endsection
 
