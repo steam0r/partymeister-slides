@@ -1,3 +1,4 @@
+<script src="/js/partymeister/dom-to-image.js"></script>
 <script src="/js/partymeister/jquery.ui.rotatable.js"></script>
 <script src="/js/partymeister/slidemeister.js"></script>
 <script src="/js/partymeister/slidemeister.properties.js"></script>

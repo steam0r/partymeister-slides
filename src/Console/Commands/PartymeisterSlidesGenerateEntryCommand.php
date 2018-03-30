@@ -37,7 +37,7 @@ class PartymeisterSlidesGenerateEntryCommand extends Command
      */
     public function handle()
     {
-        Auth::login(User::find(1));
+        Auth::login(User::first());
 
         $faker = Factory::create($this->argument('locale'));
 

@@ -17,263 +17,299 @@ use Partymeister\Slides\Models\PlaylistItem;
 use Partymeister\Slides\Models\Slide;
 use Partymeister\Slides\Models\Transition;
 
-class PlaylistService extends BaseService
-{
+class PlaylistService extends BaseService {
 
-    protected $model = Playlist::class;
-
-
-    public function filters()
-    {
-        $this->filter->add(new SelectRenderer('type'))
-                     ->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))
-                     ->setEmptyOption('-- ' . trans('partymeister-slides::backend/playlists.type') . ' --')
-                     ->setOptions(trans('partymeister-slides::backend/playlists.types'));
-    }
+	protected $model = Playlist::class;
 
 
-    public function afterCreate()
-    {
-        $this->savePlaylistItems();
-    }
+	public function filters()
+	{
+		$this->filter->add(new SelectRenderer('type'))
+			->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))
+			->setEmptyOption('-- ' . trans('partymeister-slides::backend/playlists.type') . ' --')
+			->setOptions(trans('partymeister-slides::backend/playlists.types'));
+	}
 
 
-    public function beforeUpdate()
-    {
-        $this->record->updated_at = date('Y-m-d H:i:s');
-    }
+	public function afterCreate()
+	{
+		$this->savePlaylistItems();
+	}
 
 
-    public function afterUpdate()
-    {
-        $this->savePlaylistItems();
-    }
+	public function beforeUpdate()
+	{
+		$this->record->updated_at = date('Y-m-d H:i:s');
+	}
 
 
-    protected function savePlaylistItems()
-    {
-        $items = json_decode($this->request->get('playlist_items'));
-
-        // Delete all playlist items for this playlist
-        foreach ($this->record->items()->get() as $item) {
-            $item->file_association()->delete();
-            $item->delete();
-        }
-
-        // Create new playlist items
-        foreach ($items as $key => $item) {
-            $i              = new PlaylistItem();
-            $i->playlist_id = $this->record->id;
-            $i->type        = ( isset($item->type) ? $item->type : $this->getType($item) );
-
-            $transition = Transition::where('identifier', $item->transition_identifier)->first();
-
-            $i->duration             = $item->duration;
-            $i->transition_id        = ( is_null($transition) ? null : $transition->id );
-            $i->transition_duration  = $item->transition_duration;
-            $i->is_advanced_manually = $item->is_advanced_manually;
-            $i->midi_note            = $item->midi_note;
-            $i->callback_hash        = $item->callback_hash;
-            $i->callback_delay       = $item->callback_delay;
-            $i->sort_position        = $key;
-
-            if (property_exists($item, 'slide_type')) {
-                $i->slide_id   = $item->id;
-                $i->slide_type = $item->slide_type;
-            }
-
-            // Fixme: implement this
-            $i->is_muted = false;
-            $i->save();
-
-            if ( ! property_exists($item, 'slide_type')) {
-                // Create file association
-                $fa             = new FileAssociation();
-                $fa->file_id    = $item->id;
-                $fa->model_type = get_class($i);
-                $fa->model_id   = $i->id;
-                $fa->identifier = 'playlist_item';
-                $fa->save();
-            }
-
-        }
-    }
+	public function afterUpdate()
+	{
+		$this->savePlaylistItems();
+	}
 
 
-    /**
-     * @param $competition
-     * @param $data
-     */
-    public static function generateCompetitionPlaylist($competition, $data)
-    {
-        // 1. find out if we have an existing playlist and delete it
-        $playlists = Playlist::where('name', 'Competition: ' . $competition->name)->get();
-        foreach ($playlists as $playlist) {
-            foreach ($playlist->items as $item) {
-                if ($item->slide != null) {
-                    $item->slide->delete();
-                }
-            }
-            $playlist->delete();
-        }
+	protected function savePlaylistItems()
+	{
+		$items = json_decode($this->request->get('playlist_items'));
 
-        // 2. create a slide category for this competition in case it does not exist yet
-        $competitionCategory = Category::where('scope', 'slides')->where('name', 'Competitions')->first();
-        if (is_null($competitionCategory)) {
-            $rootNode = Category::where('scope', 'slides')->where('_lft', 1)->first();
-            if (is_null($rootNode)) {
-                die("Root node for slide category tree does not exist");
-            }
-            $c        = new Category();
-            $c->scope = 'slides';
-            $c->name  = 'Competitions';
-            $rootNode->appendNode($c);
-        }
-        $category = Category::where('scope', 'slides')->where('name', $competition->name)->first();
-        if (is_null($category)) {
-            $rootNode        = Category::where('scope', 'slides')->where('name', 'Competitions')->first();
-            $category        = new Category();
-            $category->scope = 'slides';
-            $category->name  = $competition->name;
-            $rootNode->appendNode($category);
-            $category->refresh();
-        }
+		// Delete all playlist items for this playlist
+		foreach ($this->record->items()->get() as $item)
+		{
+			$item->file_association()->delete();
+			$item->delete();
+		}
 
-        // 4. create playlist
-        $playlist                 = new Playlist();
-        $playlist->name           = 'Competition: ' . $competition->name;
-        $playlist->type           = 'video';
-        $playlist->is_competition = true;
-        $playlist->save();
+		// Create new playlist items
+		foreach ($items as $key => $item)
+		{
+			$i = new PlaylistItem();
+			$i->playlist_id = $this->record->id;
+			$i->type = (isset($item->type) ? $item->type : $this->getType($item));
 
-        // 3. save slides
-        $count = 0;
-        foreach (array_get($data, 'slide', []) as $slideName => $definitions) {
-            $count++;
-            $type                 = array_get($data, 'type.' . $slideName);
-            $name                 = array_get($data, 'name.' . $slideName);
-            $id                   = array_get($data, 'id.' . $slideName, null);
-            $slideType            = config('partymeister-competitions-slides.' . $type . '.slide_type', 'default');
-            $midiNote             = config('partymeister-competitions-slides.' . $type . '.midi_note', 0);
-            $transitionIdentifier = config('partymeister-competitions-slides.' . $type . '.transition', 5);
-            $transitionDuration   = config('partymeister-competitions-slides.' . $type . '.transition_duration', 2000);
-            $duration             = config('partymeister-competitions-slides.' . $type . '.duration', 20);
-            $isAdvancedManually   = config('partymeister-competitions-slides.' . $type . '.is_advanced_manually', true);
+			$transition = Transition::where('identifier', $item->transition_identifier)->first();
 
-            $transition = Transition::where('identifier', $transitionIdentifier)->first();
+			$i->duration = $item->duration;
+			$i->transition_id = (is_null($transition) ? NULL : $transition->id);
+			$i->transition_duration = $item->transition_duration;
+			$i->is_advanced_manually = $item->is_advanced_manually;
+			$i->midi_note = $item->midi_note;
+			$i->callback_hash = $item->callback_hash;
+			$i->callback_delay = $item->callback_delay;
+			$i->sort_position = $key;
 
-            $callback = null;
+			if (property_exists($item, 'slide_type'))
+			{
+				$i->slide_id = $item->id;
+				$i->slide_type = $item->slide_type;
+			}
 
-            switch ($type) {
-                case 'comingup':
-                    $callback = CallbackHelper::competitionStarts($competition);
-                    break;
-                case 'entry':
-                    if ( ! is_null($id)) {
-                        $entry = Entry::find($id);
-                        if ( ! is_null($entry)) {
-                            $callback = CallbackHelper::livevoting($entry);
-                        }
-                    }
-                    break;
-            }
+			// Fixme: implement this
+			$i->is_muted = FALSE;
+			$i->save();
 
-            switch ($type) {
-                case 'comingup':
-                case 'now':
-                case 'end':
-                case 'entry':
-                case 'participants':
-                    $s              = new Slide();
-                    $s->category_id = $category->id;
-                    $s->name        = $name;
-                    $s->slide_type  = $slideType;
-                    $s->definitions = $definitions;
-
-                    $s->save();
-
-                    $s->addMedia(public_path() . '/images/generating-preview.png')
-                      ->preservingOriginal()
-                      ->withCustomProperties([ 'generating' => true ])
-                      ->toMediaCollection('preview', 'media');
-
-                    $i                       = new PlaylistItem();
-                    $i->playlist_id          = $playlist->id;
-                    $i->type                 = 'image';
-                    $i->slide_type           = $s->slide_type;
-                    $i->slide_id             = $s->id;
-                    $i->is_advanced_manually = $isAdvancedManually;
-                    $i->midi_note            = $midiNote;
-                    if ( ! is_null($transition)) {
-                        $i->transition_id = $transition->id;
-                    }
-                    $i->transition_duration = $transitionDuration;
-                    $i->duration            = $duration;
-                    if ( ! is_null($callback)) {
-                        $i->callback_hash  = $callback->hash;
-                        $i->callback_delay = 20;
-                    }
-
-                    $i->sort_position = $count;
-                    $i->save();
-
-                    // 7. generate slides
-                    event(new SlideSaved($s, 'slides'));
-                    break;
-                case 'video_1':
-                case 'video_2':
-                case 'video_3':
-
-                    $d = json_decode($definitions, true);
-
-                    // Get video duration
-                    $file = File::find($d['file_id']);
-                    if ( ! is_null($file)) {
-                        $ffmpeg   = FFProbe::create([
-                            'ffmpeg.binaries'  => config('medialibrary.ffmpeg_binaries'),
-                            'ffprobe.binaries' => config('medialibrary.ffprobe_binaries'),
-                        ]);
-                        $duration = $ffmpeg->format($file->getFirstMedia('file')
-                                                         ->getPath())// extracts file informations
-                                           ->get('duration');             // returns the duration property
-                    }
-
-                    $i                       = new PlaylistItem();
-                    $i->playlist_id          = $playlist->id;
-                    $i->type                 = 'video';
-                    $i->is_advanced_manually = $isAdvancedManually;
-                    $i->midi_note            = $midiNote;
-                    if ( ! is_null($transition)) {
-                        $i->transition_id = $transition->id;
-                    }
-                    $i->transition_duration = $transitionDuration;
-                    $i->duration            = $duration;
-                    $i->sort_position       = $count;
-                    $i->save();
-
-                    // Create file association
-                    $fa             = new FileAssociation();
-                    $fa->file_id    = $d['file_id'];
-                    $fa->model_type = get_class($i);
-                    $fa->model_id   = $i->id;
-                    $fa->identifier = 'playlist_item';
-                    $fa->save();
-                    break;
-            }
-        }
-    }
+			if (!property_exists($item, 'slide_type'))
+			{
+				// Create file association
+				$fa = new FileAssociation();
+				$fa->file_id = $item->id;
+				$fa->model_type = get_class($i);
+				$fa->model_id = $i->id;
+				$fa->identifier = 'playlist_item';
+				$fa->save();
+			}
+		}
+	}
 
 
-    protected function getType($item)
-    {
-        if (in_array($item->file->mime_type, [ 'image/png', 'image/jpg' ])) {
-            return 'image';
-        }
+	/**
+	 * @param $competition
+	 * @param $data
+	 */
+	public static function generateCompetitionPlaylist($competition, $data)
+	{
+		// 1. find out if we have an existing playlist and delete it
+		$playlists = Playlist::where('name', 'Competition: ' . $competition->name)->get();
+		foreach ($playlists as $playlist)
+		{
+			foreach ($playlist->items as $item)
+			{
+				if ($item->slide != NULL)
+				{
+					$item->slide->delete();
+				}
+			}
+			$playlist->delete();
+		}
 
-        if (in_array($item->file->mime_type, [ 'video/mp4' ])) {
-            return 'video';
-        }
+		// 2. create a slide category for this competition in case it does not exist yet
+		$competitionCategory = Category::where('scope', 'slides')->where('name', 'Competitions')->first();
+		if (is_null($competitionCategory))
+		{
+			$rootNode = Category::where('scope', 'slides')->where('_lft', 1)->first();
+			if (is_null($rootNode))
+			{
+				die("Root node for slide category tree does not exist");
+			}
+			$c = new Category();
+			$c->scope = 'slides';
+			$c->name = 'Competitions';
+			$rootNode->appendNode($c);
+		}
+		$category = Category::where('scope', 'slides')->where('name', $competition->name)->first();
+		if (is_null($category))
+		{
+			$rootNode = Category::where('scope', 'slides')->where('name', 'Competitions')->first();
+			$category = new Category();
+			$category->scope = 'slides';
+			$category->name = $competition->name;
+			$rootNode->appendNode($category);
+			$category->refresh();
+		}
 
-        return '';
-    }
+		// 4. create playlist
+		$playlist = new Playlist();
+		$playlist->name = 'Competition: ' . $competition->name;
+		$playlist->type = 'video';
+		$playlist->is_competition = TRUE;
+		$playlist->save();
+
+		// 3. save slides
+		$count = 0;
+		foreach (array_get($data, 'slide', []) as $slideName => $definitions)
+		{
+			$count++;
+			$type = array_get($data, 'type.' . $slideName);
+			$name = array_get($data, 'name.' . $slideName);
+			$id = array_get($data, 'id.' . $slideName, NULL);
+			$slideType = config('partymeister-competitions-slides.' . $type . '.slide_type', 'default');
+			$midiNote = config('partymeister-competitions-slides.' . $type . '.midi_note', 0);
+			$transitionIdentifier = config('partymeister-competitions-slides.' . $type . '.transition', 5);
+			$transitionDuration = config('partymeister-competitions-slides.' . $type . '.transition_duration', 2000);
+			$duration = config('partymeister-competitions-slides.' . $type . '.duration', 20);
+			$isAdvancedManually = config('partymeister-competitions-slides.' . $type . '.is_advanced_manually', TRUE);
+
+			$transition = Transition::where('identifier', $transitionIdentifier)->first();
+
+			$callback = NULL;
+
+			switch ($type)
+			{
+				case 'comingup':
+					$callback = CallbackHelper::competitionStarts($competition);
+					break;
+				case 'entry':
+					if (!is_null($id))
+					{
+						$entry = Entry::find($id);
+						if (!is_null($entry))
+						{
+							$callback = CallbackHelper::livevoting($entry);
+						}
+					}
+					break;
+			}
+
+			switch ($type)
+			{
+				case 'comingup':
+				case 'now':
+				case 'end':
+				case 'entry':
+				case 'participants':
+					$s = new Slide();
+					$s->category_id = $category->id;
+					$s->name = $name;
+					$s->slide_type = $slideType;
+					$s->definitions = $definitions;
+
+					$s->save();
+
+					$s->addMedia(public_path() . '/images/generating-preview.png')
+						->preservingOriginal()
+						->withCustomProperties(['generating' => TRUE])
+						->toMediaCollection('preview', 'media');
+
+					$i = new PlaylistItem();
+					$i->playlist_id = $playlist->id;
+					$i->type = 'image';
+					$i->slide_type = $s->slide_type;
+					$i->slide_id = $s->id;
+					$i->is_advanced_manually = $isAdvancedManually;
+					$i->midi_note = $midiNote;
+					if (!is_null($transition))
+					{
+						$i->transition_id = $transition->id;
+					}
+					$i->transition_duration = $transitionDuration;
+					$i->duration = $duration;
+					if (!is_null($callback))
+					{
+						$i->callback_hash = $callback->hash;
+						$i->callback_delay = 20;
+					}
+
+					$i->sort_position = $count;
+					$i->save();
+
+					// 7. generate slides
+					// Convert PNG to actual file
+					$pngData = array_get($data, 'final.' . $slideName);
+					$pngData = substr($pngData, 22);
+					file_put_contents(storage_path().'/final_'.$slideName.'.png', base64_decode($pngData));
+
+					$pngData = array_get($data, 'preview.' . $slideName);
+					$pngData = substr($pngData, 22);
+					file_put_contents(storage_path().'/preview_'.$slideName.'.png', base64_decode($pngData));
+
+				$s->clearMediaCollection('preview');
+				$s->clearMediaCollection('final');
+				$s->addMedia(storage_path().'/preview_'.$slideName.'.png')->toMediaCollection('preview', 'media');
+				$s->addMedia(storage_path().'/final_'.$slideName.'.png')->toMediaCollection('final', 'media');
+
+//                    event(new SlideSaved($s, 'slides'));
+					break;
+				case 'video_1':
+				case 'video_2':
+				case 'video_3':
+
+					$d = json_decode($definitions, TRUE);
+
+					// Get video duration
+					$file = File::find($d['file_id']);
+					if (!is_null($file))
+					{
+						$ffmpeg = FFProbe::create([
+							'ffmpeg.binaries' => config('medialibrary.ffmpeg_binaries'),
+							'ffprobe.binaries' => config('medialibrary.ffprobe_binaries'),
+						]);
+						$duration = $ffmpeg->format($file->getFirstMedia('file')
+							->getPath())// extracts file informations
+						->get('duration');             // returns the duration property
+					}
+
+					$i = new PlaylistItem();
+					$i->playlist_id = $playlist->id;
+					$i->type = 'video';
+					$i->is_advanced_manually = $isAdvancedManually;
+					$i->midi_note = $midiNote;
+					if (!is_null($transition))
+					{
+						$i->transition_id = $transition->id;
+					}
+					$i->transition_duration = $transitionDuration;
+					$i->duration = $duration;
+					$i->sort_position = $count;
+					$i->save();
+
+					// Create file association
+					$fa = new FileAssociation();
+					$fa->file_id = $d['file_id'];
+					$fa->model_type = get_class($i);
+					$fa->model_id = $i->id;
+					$fa->identifier = 'playlist_item';
+					$fa->save();
+					break;
+			}
+		}
+	}
+
+
+	protected function getType($item)
+	{
+		if (in_array($item->file->mime_type, [
+			'image/png',
+			'image/jpg'
+		]))
+		{
+			return 'image';
+		}
+
+		if (in_array($item->file->mime_type, ['video/mp4']))
+		{
+			return 'video';
+		}
+
+		return '';
+	}
 }
