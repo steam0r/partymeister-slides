@@ -13,6 +13,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
+        'Partymeister\Slides\Events\SlideCollectionSaved' => [
+            'Partymeister\Slides\Listeners\GenerateSlideCollection',
+        ],
         'Partymeister\Slides\Events\SlideSaved' => [
             'Partymeister\Slides\Listeners\GenerateSlide',
         ],

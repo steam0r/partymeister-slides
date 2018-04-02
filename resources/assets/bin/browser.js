@@ -26,7 +26,6 @@ const callChrome = async () => {
             console.log(msg.text());
         });
 
-        page.evaluate(() => console.log('hello', 5, {foo: 'bar'}));
         // END EXTRACODE
 
         if (request.options && request.options.dismissDialogs) {

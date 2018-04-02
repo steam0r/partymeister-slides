@@ -71,13 +71,19 @@ class Generator
 
             $item = $data->addChild('item');
             $item->addAttribute('name', $parameters['playlist_id'] . "_" . $playlist_item->id);
-            $item->addAttribute('type', $playlist_item->type);
+
+            if ($playlist_item->type == 'now' || $playlist_item->type == 'end' || $playlist_item->type == 'comingup') {
+                $faketype = 'image';
+            } else {
+                $faketype = $playlist_item->type;
+            }
+
+            $item->addAttribute('type', $faketype);
 
             // Add callback if available
             if ((string) $playlist_item->callback_hash != '') {
-                // FIXME callback url is still from pm2
                 $callback = $item->addChild('callback',
-                    env('SCREENS_URL') . '/backend/screens/callback/' . $playlist_item->callback_hash);
+                    env('SCREENS_URL') . '/api/callback/' . $playlist_item->callback_hash);
                 $callback->addAttribute('delay', $playlist_item->callback_delay . '.0');
             }
 
@@ -139,8 +145,21 @@ class Generator
                         $bar->addAttribute('y1', $entry->y1);
                         $bar->addAttribute('y2', $entry->y2);
                     }
+                } elseif (isset($previousItem)) {
+                    $metadata = json_decode($previousItem->metadata);
+                    if ($metadata && is_array($metadata)) {
+                        foreach ($metadata as $entry) {
+                            $bar = $siegmeister->addChild('bar');
+                            $bar->addAttribute('x1', $entry->x1);
+                            $bar->addAttribute('x2', $entry->x2);
+                            $bar->addAttribute('y1', $entry->y1);
+                            $bar->addAttribute('y2', $entry->y2);
+                        }
+                    }
+
                 }
             }
+            $previousItem = $playlist_item;
         }
         if (array_get($_GET, 'debug')) {
             print_r(self::add_encoding($xml->asXML()));

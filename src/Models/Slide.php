@@ -10,6 +10,7 @@ use Culpa\Traits\Blameable;
 use Culpa\Traits\CreatedBy;
 use Culpa\Traits\DeletedBy;
 use Culpa\Traits\UpdatedBy;
+use Spatie\Image\Exceptions\InvalidManipulation;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\HasMedia\Interfaces\HasMediaConversions;
 use Spatie\MediaLibrary\Media;
@@ -61,8 +62,12 @@ class Slide extends Model implements HasMediaConversions
 
     public function registerMediaConversions(Media $media = null)
     {
-        $this->addMediaConversion('thumb')->width(400)->height(400);
-        $this->addMediaConversion('preview')->width(400)->height(400)->format('png');
+        try {
+            $this->addMediaConversion('thumb')->width(400)->height(400)->nonQueued();
+            $this->addMediaConversion('preview')->width(400)->height(400)->format('png')->nonQueued();
+        } catch(InvalidManipulation $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     public function category()

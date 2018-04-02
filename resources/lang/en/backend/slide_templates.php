@@ -19,6 +19,7 @@ return [
         'competition'  => 'Competition',
         'timetable'    => 'Timetable',
         'participants' => 'Participants',
-        'prizegiving'  => 'Prizegiving'
+        'prizegiving'  => 'Prizegiving',
+        'comments'     => 'Competition comments'
     ]
 ];

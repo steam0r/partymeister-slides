@@ -133,7 +133,7 @@
                         </div>
                         <div>
                             {{ trans('partymeister-slides::backend/playlists.callback') }}
-                            <select name="callback_hash" v-model="file.callback_hash" style="width: 80%">
+                            <select name="callback_hash" v-model="file.callback_hash" style="width: 80%; display: none;">
                                 <option value="">{{ trans('partymeister-slides::backend/callbacks.no_callback') }}</option>
                                 <option v-for="(callback, index) in callbacks" :value="callback.hash">
                                     @{{ callback.name }}
@@ -141,6 +141,8 @@
                             </select>
                             {{ trans('partymeister-slides::backend/playlists.callback_delay') }}
                             <input type="text" name="callback_delay" v-model="file.callback_delay" size="4"> {{ trans('partymeister-slides::backend/playlists.seconds') }}
+
+                            <div><strong>Filename: @{{ file.file.file_name }}</strong></div>
                         </div>
                     </div>
                 </div>
@@ -177,6 +179,9 @@
                         </option>
                     </select>
                 </div>
+                <button type="button" class="btn btn-sm btn-primary float-right" @click="next" v-if="pagination && pagination.total_pages > 1 && pagination.current_page < pagination.total_pages"> >> </button>
+                <button type="button" class="btn btn-sm btn-primary float-left" @click="previous" v-if="pagination && pagination.total_pages > 1 && (pagination.current_page >= pagination.total_pages || (pagination.current_page > 1 && pagination.current_page < pagination.total_pages))"> << </button>
+                <div class="clearfix mb-2"></div>
                 <draggable v-model="files" :options="{group:{ name:'files',  pull:'clone', put:false }, sort: false, dragClass: 'sortable-drag', ghostClass: 'sortable-ghost'}" @start="onStart" @end="onEnd">
                     <div v-for="file in files">
                         <div class="card">
@@ -207,6 +212,7 @@
                 files: [],
                 categories: [],
                 category_id: '',
+                pagination: false
             },
             components: {
                 draggable,
@@ -219,8 +225,21 @@
                     this.$emit('mediapool:drag:end', true);
                 },
                 refreshFiles: function() {
-                    axios.get('{{route('ajax.slides.index')}}?category_id='+this.category_id).then(function(response) {
+                    axios.get('{{route('ajax.slides.index')}}?sortable_field=created_at&sortable_direction=DESC&category_id='+this.category_id).then(function(response) {
                         vueSlides.files = response.data.data;
+                        vueSlides.pagination = response.data.meta.pagination;
+                    });
+                },
+                next: function() {
+                    axios.get('{{route('ajax.slides.index')}}?sortable_field=created_at&sortable_direction=DESC&category_id='+this.category_id+'&page='+(vueMediapool.pagination.current_page+1)).then(function(response) {
+                        vueSlides.files = response.data.data;
+                        vueSlides.pagination = response.data.meta.pagination;
+                    });
+                },
+                previous: function() {
+                    axios.get('{{route('ajax.slides.index')}}?sortable_field=created_at&sortable_direction=DESC&category_id='+this.category_id+'&page='+(vueMediapool.pagination.current_page-1)).then(function(response) {
+                        vueSlides.files = response.data.data;
+                        vueSlides.pagination = response.data.meta.pagination;
                     });
                 },
                 isImage: function(file) {
@@ -235,8 +254,9 @@
                 axios.get('{{route('ajax.categories.index')}}?scope=slides').then(function(response) {
                     vueSlides.categories = response.data.data;
                 });
-                axios.get('{{route('ajax.slides.index')}}').then(function(response) {
+                axios.get('{{route('ajax.slides.index')}}?sortable_field=created_at&sortable_direction=DESC').then(function(response) {
                     vueSlides.files = response.data.data;
+                    vueSlides.pagination = response.data.meta.pagination;
                 });
             }
         });
@@ -299,7 +319,7 @@
                     vuePlaylists.transitions = response.data.data;
                 });
 
-                axios.get('{{route('ajax.callbacks.index')}}').then(function (response) {
+                axios.get('{{route('ajax.callbacks.index')}}?per_page=500').then(function (response) {
                     vuePlaylists.callbacks = response.data.data;
                 });
             }

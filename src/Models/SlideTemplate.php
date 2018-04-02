@@ -23,8 +23,8 @@ class SlideTemplate extends Model implements HasMediaConversions
 
     public function registerMediaConversions(Media $media = null)
     {
-        $this->addMediaConversion('thumb')->width(400)->height(400);
-        $this->addMediaConversion('preview')->width(400)->height(400)->format('png');
+        $this->addMediaConversion('thumb')->width(400)->height(400)->nonQueued();
+        $this->addMediaConversion('preview')->width(400)->height(400)->format('png')->nonQueued();
     }
 
     /**

@@ -6,6 +6,7 @@ use Motor\Backend\Models\Category;
 use Motor\Core\Filter\Renderers\SelectRenderer;
 use Partymeister\Slides\Events\SlideSaved;
 use Partymeister\Slides\Helpers\Browsershot;
+use Partymeister\Slides\Jobs\GenerateSlide;
 use Partymeister\Slides\Models\Slide;
 use Motor\Backend\Services\BaseService;
 
@@ -69,6 +70,8 @@ class SlideService extends BaseService
         //     ->preservingOriginal()
         //     ->toMediaCollection('preview', 'media');
 
-        event(new SlideSaved($this->record, 'slides'));
+        GenerateSlide::dispatch($this->record, 'slides')
+            ->onConnection('sync');
+//        event(new SlideSaved($this->record, 'slides'));
     }
 }

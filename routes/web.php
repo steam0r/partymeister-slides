@@ -33,6 +33,11 @@ Route::group([
 Route::get('backend/slide_templates/{slide_template}', 'Partymeister\Slides\Http\Controllers\Backend\SlideTemplatesController@show')->middleware(['bindings', 'navigation'])->name('backend.slide_templates.show');
 Route::get('backend/slides/{slide}', 'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')->middleware(['bindings', 'navigation'])->name('backend.slides.show');
 
+Route::get('test-prizegiving', function() {
+    $xml = \Partymeister\Slides\Services\XMLService::send('playlist', array('playlist_id' => 148));
+    return response($xml, 200)
+        ->header('Content-Type', 'text/xml');    //echo $xml;
+});
 
 Route::get('xmlservice/playlist', function() {
     //$result = XMLMeister::send('playlist', array('playlist_id' => arr::get($_GET, 'play'), 'callbacks' => arr::get($_GET, 'callbacks')));

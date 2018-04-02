@@ -5,6 +5,7 @@ namespace Partymeister\Slides\Services;
 use Motor\Core\Filter\Renderers\SelectRenderer;
 use Partymeister\Slides\Events\SlideSaved;
 use Partymeister\Slides\Events\SlideTemplateSaved;
+use Partymeister\Slides\Jobs\GenerateSlide;
 use Partymeister\Slides\Models\SlideTemplate;
 use Motor\Backend\Services\BaseService;
 use Spatie\Browsershot\Browsershot;
@@ -69,6 +70,8 @@ class SlideTemplateService extends BaseService
         //     ->preservingOriginal()
         //     ->toMediaCollection('preview', 'media');
 
-        event(new SlideSaved($this->record, 'slide_templates'));
+        GenerateSlide::dispatch($this->record, 'slide_templates')
+            ->onConnection('sync');
+//        event(new SlideSaved($this->record, 'slide_templates'));
     }
 }
