@@ -29,6 +29,10 @@ class SlideForm extends Form
             ->add('slide_type', 'select', ['label' => trans('partymeister-slides::backend/slides.slide_type'), 'choices' => (trans('partymeister-slides::backend/slides.slide_types'))])
             ->add('slide_template_id', 'hidden')
             ->add('definitions', 'hidden')
+            ->add('cached_html_preview', 'hidden')
+            ->add('cached_html_final', 'hidden')
+            ->add('png_preview', 'hidden')
+            ->add('png_final', 'hidden')
             ->add('image_data', 'hidden')
             ->add('submit', 'submit', ['attr' => ['class' => 'btn btn-primary btn-block slidemeister-save'], 'label' => trans('partymeister-slides::backend/slides.save')]);
     }

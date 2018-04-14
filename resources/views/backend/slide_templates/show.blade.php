@@ -10,7 +10,15 @@
 </head>
 <body id="slidemeister-render">
 <div id="slidemeister">
+    @if ($record->cached_html_preview != '')
+        @if ($preview == 'true')
+            {!! $record->cached_html_preview !!}
+        @else
+            {!! $record->cached_html_final !!}
+        @endif
+    @endif
 </div>
+@if ($record->cached_html_preview == '')
 <script src="/js/app.js"></script>
 @include('partymeister-slides::layouts.partials.slide_scripts')
 <script>
@@ -19,5 +27,6 @@
         slidemeister.data.load({!! $record->definitions !!}, {!! $placeholderData !!}, false, {{$preview}});
     });
 </script>
+@endif
 </body>
 </html>

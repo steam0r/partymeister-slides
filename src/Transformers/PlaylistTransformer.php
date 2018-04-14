@@ -7,6 +7,7 @@ use Partymeister\Slides\Models\Playlist;
 
 class PlaylistTransformer extends Fractal\TransformerAbstract
 {
+
     /**
      * List of resources possible to include
      *
@@ -25,7 +26,11 @@ class PlaylistTransformer extends Fractal\TransformerAbstract
     public function transform(Playlist $record)
     {
         return [
-            'id'        => (int) $record->id
+            'id'         => (int) $record->id,
+            'type'       => $record->type,
+            'name'       => $record->name,
+            'created_at' => $record->created_at,
+            'updated_at' => $record->updated_at
         ];
     }
 }

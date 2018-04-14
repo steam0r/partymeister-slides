@@ -1,3 +1,6 @@
+<div class="loader loader-default"
+     data-text="&hearts; Generating slide previews and hiding the ugliness &hearts;"></div>
+
 @section('view_styles')
     @include('partymeister-slides::layouts.partials.slide_fonts')
     <style type="text/css">
@@ -34,6 +37,7 @@
         </div>
     </div>
 </div>
+{{--<img id="preview">--}}
 @section ('right-sidebar')
     <ul class="slidemeister-navbar nav nav-tabs" role="tablist">
         <li class="nav-item">
@@ -47,11 +51,15 @@
         <div class="tab-pane active" id="slidemeister-form" role="tabpanel">
             <div class="container">
                 <br>
-                {!! form_start($form) !!}
+                {!! form_start($form, ['id' => 'slide-form']) !!}
                 {!! form_row($form->name) !!}
                 {!! form_row($form->category_id) !!}
                 {!! form_row($form->slide_type) !!}
                 {!! form_row($form->definitions) !!}
+                {!! form_row($form->cached_html_preview) !!}
+                {!! form_row($form->cached_html_final) !!}
+                {!! form_row($form->png_preview) !!}
+                {!! form_row($form->png_final) !!}
                 {!! form_row($form->image_data) !!}
                 {!! form_row($form->submit) !!}
                 {!! form_end($form) !!}
@@ -84,8 +92,31 @@
     <script>
         $(document).ready(function () {
             $('.slidemeister-save').on('click', function (e) {
+
+                $('.loader').addClass('is-active');
+
                 var dataToSave = slidemeister.data.save();
                 $('input[name="definitions"]').val(JSON.stringify(dataToSave));
+                $('input[name="cached_html_preview"]').val($('#slidemeister').html());
+
+                slidemeister.data.export('preview', 1).then(result => {
+                    $('input[name="png_preview"]').val(result[2]);
+
+                    slidemeister.data.removePreviewElements();
+                    $('input[name="cached_html_final"]').val($('#slidemeister').html());
+
+                    slidemeister.data.export('final', 1).then(result => {
+                        $('input[name="png_final"]').val(result[2]);
+                        // $('#preview').prop('src', result[2]);
+
+
+                        $('#slide-form').submit();
+                    });
+
+                });
+
+
+                e.preventDefault();
             });
 
             slidemeisterProperties.opacity.visible = false;
@@ -137,11 +168,11 @@
                     },
                 },
                 mounted: function () {
-                    vueMediapool.$on('mediapool:drag:start', function() {
+                    vueMediapool.$on('mediapool:drag:start', function () {
                         console.log("drag start");
                         vueSlides.zIndex = 10000;
                     });
-                    vueMediapool.$on('mediapool:drag:end', function() {
+                    vueMediapool.$on('mediapool:drag:end', function () {
                         console.log("drag end");
                         vueSlides.zIndex = -1;
                     });

@@ -19,7 +19,7 @@ class EventServiceProvider extends ServiceProvider
         'Partymeister\Slides\Events\SlideSaved' => [
             'Partymeister\Slides\Listeners\GenerateSlide',
         ],
-        'Partymeister\Core\Events\EventSaved'   => [
+        'Partymeister\Slides\Events\EventSaved'   => [
             'Partymeister\Slides\Listeners\GenerateScheduleSlides',
         ],
     ];

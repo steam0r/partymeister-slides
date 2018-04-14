@@ -1,124 +1,99 @@
 @foreach(config('partymeister-slides-fonts.fonts') as $index => $font)
     <link href="{{$font['path']}}" rel="stylesheet">
+    <link href="{{asset('css/slidemeister.loading.css')}}" rel="stylesheet">
     <style type="text/css">
-        /* Absolute Center Spinner */
-        .loading {
+        .loader {
+            color: #fff;
             position: fixed;
-            z-index: 999;
-            height: 2em;
-            width: 2em;
-            overflow: show;
-            margin: auto;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
+            box-sizing: border-box;
+            left: -9999px;
+            top: -9999px;
+            width: 0;
+            height: 0;
+            overflow: hidden;
+            z-index: 999999
         }
 
-        /* Transparent Overlay */
-        .loading:before {
-            content: '';
-            display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
+        .loader:after, .loader:before {
+            box-sizing: border-box;
+            display: none
+        }
+
+        .loader.is-active {
+            background-color: rgba(0, 0, 0, .95);
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.3);
+            left: 0;
+            top: 0
         }
 
-        /* :not(:required) hides these rules from IE9 and below */
-        .loading:not(:required) {
-            /* hide "loading..." text */
-            font: 0/0 a;
-            color: transparent;
-            text-shadow: none;
-            background-color: transparent;
-            border: 0;
+        .loader.is-active:after, .loader.is-active:before {
+            display: block
         }
 
-        .loading:not(:required):after {
-            content: '';
-            display: block;
-            font-size: 10px;
-            width: 1em;
-            height: 1em;
-            margin-top: -0.5em;
-            -webkit-animation: spinner 1500ms infinite linear;
-            -moz-animation: spinner 1500ms infinite linear;
-            -ms-animation: spinner 1500ms infinite linear;
-            -o-animation: spinner 1500ms infinite linear;
-            animation: spinner 1500ms infinite linear;
-            border-radius: 0.5em;
-            -webkit-box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.5) -1.5em 0 0 0, rgba(0, 0, 0, 0.5) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
-            box-shadow: rgba(0, 0, 0, 0.75) 1.5em 0 0 0, rgba(0, 0, 0, 0.75) 1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) 0 1.5em 0 0, rgba(0, 0, 0, 0.75) -1.1em 1.1em 0 0, rgba(0, 0, 0, 0.75) -1.5em 0 0 0, rgba(0, 0, 0, 0.75) -1.1em -1.1em 0 0, rgba(0, 0, 0, 0.75) 0 -1.5em 0 0, rgba(0, 0, 0, 0.75) 1.1em -1.1em 0 0;
+        @keyframes rotation {
+            0% {
+                transform: rotate(0)
+            }
+            to {
+                transform: rotate(359deg)
+            }
         }
 
-        /* Animation */
+        @keyframes blink {
+            0% {
+                opacity: .5
+            }
+            to {
+                opacity: 1
+            }
+        }
 
-        @-webkit-keyframes spinner {
-            0% {
-                -webkit-transform: rotate(0deg);
-                -moz-transform: rotate(0deg);
-                -ms-transform: rotate(0deg);
-                -o-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(360deg);
-                -moz-transform: rotate(360deg);
-                -ms-transform: rotate(360deg);
-                -o-transform: rotate(360deg);
-                transform: rotate(360deg);
-            }
+        .loader[data-text]:before {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            color: currentColor;
+            font-family: Helvetica, Arial, sans-serif;
+            text-align: center;
+            width: 100%;
+            font-size: 14px
         }
-        @-moz-keyframes spinner {
-            0% {
-                -webkit-transform: rotate(0deg);
-                -moz-transform: rotate(0deg);
-                -ms-transform: rotate(0deg);
-                -o-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(360deg);
-                -moz-transform: rotate(360deg);
-                -ms-transform: rotate(360deg);
-                -o-transform: rotate(360deg);
-                transform: rotate(360deg);
-            }
+
+        .loader[data-text=""]:before {
+            content: "Loading"
         }
-        @-o-keyframes spinner {
-            0% {
-                -webkit-transform: rotate(0deg);
-                -moz-transform: rotate(0deg);
-                -ms-transform: rotate(0deg);
-                -o-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(360deg);
-                -moz-transform: rotate(360deg);
-                -ms-transform: rotate(360deg);
-                -o-transform: rotate(360deg);
-                transform: rotate(360deg);
-            }
+
+        .loader[data-text]:not([data-text=""]):before {
+            content: attr(data-text)
         }
-        @keyframes spinner {
-            0% {
-                -webkit-transform: rotate(0deg);
-                -moz-transform: rotate(0deg);
-                -ms-transform: rotate(0deg);
-                -o-transform: rotate(0deg);
-                transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(360deg);
-                -moz-transform: rotate(360deg);
-                -ms-transform: rotate(360deg);
-                -o-transform: rotate(360deg);
-                transform: rotate(360deg);
-            }
+
+        .loader[data-text][data-blink]:before {
+            animation: blink 1s linear infinite alternate
         }
-    </style>
+
+        .loader-default[data-text]:before {
+            top: calc(50% - 63px)
+        }
+
+        .loader-default:after {
+            content: "";
+            position: fixed;
+            width: 48px;
+            height: 48px;
+            border: 8px solid #fff;
+            border-left-color: transparent;
+            border-radius: 50%;
+            top: calc(50% - 24px);
+            left: calc(50% - 24px);
+            animation: rotation 1s linear infinite
+        }
+
+        .loader-default[data-half]:after {
+            border-right-color: transparent
+        }
+
+        .loader-default[data-inverse]:after {
+            animation-direction: reverse
+        }    </style>
 @endforeach

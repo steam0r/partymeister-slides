@@ -76,7 +76,7 @@ class PlaylistService extends BaseService
             $i->midi_note            = $item->midi_note;
             $i->callback_hash        = $item->callback_hash;
             $i->callback_delay       = $item->callback_delay;
-            $i->metadata             = (isset($item->metadata) ? $item->metadata : '{}');
+            $i->metadata             = ( isset($item->metadata) ? $item->metadata : '{}' );
             $i->sort_position        = $key;
 
             if (property_exists($item, 'slide_type')) {
@@ -103,16 +103,17 @@ class PlaylistService extends BaseService
 
     public static function generatePrizegivingPlaylist($data)
     {
-        //// 1. find out if we have an existing playlist and delete it
-        //$playlists = Playlist::where('name', 'Prizegiving: Actual prizegiving with winners')->get();
-        //foreach ($playlists as $playlist) {
-        //    foreach ($playlist->items as $item) {
-        //        if ($item->slide != null) {
-        //            $item->slide->delete();
-        //        }
-        //    }
-        //    $playlist->delete();
-        //}
+        ini_set('max_execution_time', 1200);
+        // 1. find out if we have an existing playlist and delete it
+        $playlists = Playlist::where('name', 'Prizegiving: Actual prizegiving with winners')->get();
+        foreach ($playlists as $playlist) {
+            foreach ($playlist->items as $item) {
+                if ($item->slide != null) {
+                    $item->slide->delete();
+                }
+            }
+            $playlist->delete();
+        }
 
         // 2. create a slide category for this competition in case it does not exist yet
         $category = Category::where('scope', 'slides')->where('name', 'Prizegiving (actual)')->first();
@@ -162,11 +163,13 @@ class PlaylistService extends BaseService
                     break;
             }
 
-            $s              = new Slide();
-            $s->category_id = $category->id;
-            $s->name        = $name;
-            $s->slide_type  = $slideType;
-            $s->definitions = $definitions;
+            $s                      = new Slide();
+            $s->category_id         = $category->id;
+            $s->name                = $name;
+            $s->slide_type          = $slideType;
+            $s->definitions         = $definitions;
+            $s->cached_html_preview = array_get($data, 'cached_html_preview.' . $slideName, '');
+            $s->cached_html_final   = array_get($data, 'cached_html_final.' . $slideName, '');
 
             $s->save();
 
@@ -177,7 +180,7 @@ class PlaylistService extends BaseService
 
             $i                       = new PlaylistItem();
             $i->playlist_id          = $playlist->id;
-            $i->type                 = $type;
+            $i->type                 = 'image';
             $i->slide_type           = $s->slide_type;
             $i->slide_id             = $s->id;
             $i->is_advanced_manually = $isAdvancedManually;
@@ -202,15 +205,13 @@ class PlaylistService extends BaseService
             $pngData = substr($pngData, 22);
             file_put_contents(storage_path() . '/final_' . $slideName . '.png', base64_decode($pngData));
 
-            //$pngData = array_get($data, 'preview.' . $slideName);
-            //$pngData = substr($pngData, 22);
-            //file_put_contents(storage_path() . '/preview_' . $slideName . '.png', base64_decode($pngData));
+            $pngData = array_get($data, 'preview.' . $slideName);
+            $pngData = substr($pngData, 22);
+            file_put_contents(storage_path() . '/preview_' . $slideName . '.png', base64_decode($pngData));
 
             $s->clearMediaCollection('preview');
             $s->clearMediaCollection('final');
-            $s->addMedia(storage_path() . '/final_' . $slideName . '.png')
-              ->preservingOriginal()
-              ->toMediaCollection('preview', 'media');
+            $s->addMedia(storage_path() . '/preview_' . $slideName . '.png')->toMediaCollection('preview', 'media');
             $s->addMedia(storage_path() . '/final_' . $slideName . '.png')->toMediaCollection('final', 'media');
 
             $slideIds[] = $s->id;
@@ -221,7 +222,6 @@ class PlaylistService extends BaseService
         //foreach ($slideChunks as $chunk) {
         //    event(new SlideCollectionSaved(collect($chunk), 'slides'));
         //}
-        dd("TOT");
     }
 
 
@@ -231,6 +231,8 @@ class PlaylistService extends BaseService
      */
     public static function generateCompetitionPlaylist($competition, $data)
     {
+        ini_set('max_execution_time', 1200);
+
         // 1. find out if we have an existing playlist and delete it
         $playlists = Playlist::where('name', 'Competition: ' . $competition->name)->get();
         foreach ($playlists as $playlist) {
@@ -312,11 +314,13 @@ class PlaylistService extends BaseService
                 case 'end':
                 case 'entry':
                 case 'participants':
-                    $s              = new Slide();
-                    $s->category_id = $category->id;
-                    $s->name        = $name;
-                    $s->slide_type  = $slideType;
-                    $s->definitions = $definitions;
+                    $s                      = new Slide();
+                    $s->category_id         = $category->id;
+                    $s->name                = $name;
+                    $s->slide_type          = $slideType;
+                    $s->definitions         = $definitions;
+                    $s->cached_html_preview = array_get($data, 'cached_html_preview.' . $slideName, '');
+                    $s->cached_html_final   = array_get($data, 'cached_html_final.' . $slideName, '');
 
                     $s->save();
 

@@ -17,8 +17,9 @@ use Spatie\MediaLibrary\Media;
 
 class Slide extends Model implements HasMediaConversions
 {
+
     use Searchable;
-	use Filterable;
+    use Filterable;
     use Blameable, CreatedBy, UpdatedBy, DeletedBy;
     use HasMediaTrait;
 
@@ -27,7 +28,7 @@ class Slide extends Model implements HasMediaConversions
      *
      * @var array
      */
-    protected $blameable = array('created', 'updated', 'deleted');
+    protected $blameable = [ 'created', 'updated', 'deleted' ];
 
     /**
      * Searchable columns for the searchable trait
@@ -48,7 +49,9 @@ class Slide extends Model implements HasMediaConversions
         'slide_template_id',
         'slide_type',
         'category_id',
-        'definitions'
+        'definitions',
+        'cached_html_preview',
+        'cached_html_final',
     ];
 
     ///**
@@ -65,15 +68,17 @@ class Slide extends Model implements HasMediaConversions
         try {
             $this->addMediaConversion('thumb')->width(400)->height(400)->nonQueued();
             $this->addMediaConversion('preview')->width(400)->height(400)->format('png')->nonQueued();
-        } catch(InvalidManipulation $e) {
+        } catch (InvalidManipulation $e) {
             Log::error($e->getMessage());
         }
     }
+
 
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
+
 
     public function template()
     {

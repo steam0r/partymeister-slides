@@ -1,23 +1,4 @@
 // Define editable properties
-
-// var getAssets = function(type){
-//     var result = {'-- please choose --': ''};
-//
-//     // $.ajax({
-//     //     url: 'getAssets.php',
-//     //     dataType: 'json',
-//     //     async: false,
-//     //     success: function (data) {
-//     //         $.each(data[type], function(index, value) {
-//     //             result[index] = value;
-//     //         });
-//     //     }
-//     // });
-//
-//     return result;
-// };
-
-
 var slidemeisterProperties = {
     element: {
         type: 'text',
@@ -82,12 +63,10 @@ var slidemeisterProperties = {
     fontFamily: {
         type: 'select',
         options: {
-            '\'Poppins\'': '\'Poppins\'',
             'Arial': 'Arial',
-            '\'Exo 2\'': '\'Exo 2\'',
             'Verdana': 'Verdana'
         },
-        default: 'Exo 2',
+        default: 'Arial',
         updateCss: ['font-family'],
         updateDataAttribute: true
     },

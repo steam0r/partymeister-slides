@@ -9,20 +9,26 @@ use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Partymeister\Slides\Models\Playlist;
 
-class EventSaved
+class PlaylistNextRequest implements ShouldBroadcast
 {
+
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $hard = false;
+
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($hard = false)
     {
-        //
+        $this->hard   = $hard;
     }
+
 
     /**
      * Get the channels the event should broadcast on.
@@ -31,6 +37,6 @@ class EventSaved
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('channel-name');
+        return new Channel('slidemeister');
     }
 }

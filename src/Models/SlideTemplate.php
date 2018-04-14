@@ -21,11 +21,13 @@ class SlideTemplate extends Model implements HasMediaConversions
     use Blameable, CreatedBy, UpdatedBy, DeletedBy;
     use HasMediaTrait;
 
+
     public function registerMediaConversions(Media $media = null)
     {
         $this->addMediaConversion('thumb')->width(400)->height(400)->nonQueued();
         $this->addMediaConversion('preview')->width(400)->height(400)->format('png')->nonQueued();
     }
+
 
     /**
      * Columns for the Blameable trait
@@ -51,7 +53,9 @@ class SlideTemplate extends Model implements HasMediaConversions
     protected $fillable = [
         'name',
         'template_for',
-        'definitions'
+        'definitions',
+        'cached_html_preview',
+        'cached_html_final',
     ];
 
     ///**

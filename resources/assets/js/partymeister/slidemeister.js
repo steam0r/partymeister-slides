@@ -58,16 +58,49 @@
 
         var slidemeister = {element: {}, ui: {}, data: {}, tab: {}, history: {}, layer: {}};
 
-        slidemeister.data.export = function (template) {
-            $($target).css('border', 'none');
+        slidemeister.data.removePreviewElements = function() {
+            $($target).css('background-color', 'transparent');
+            $.each($elements, function(index, e) {
+                if ($elementData[e].visibility == 'preview') {
+                    $($target).find('.'+e).css('display', 'none');
+                }
+            });
+        };
 
-            return domtoimage.toBlob(document.getElementById($($target).prop('id')), {
+        slidemeister.data.getTargetElement = function() {
+            return $target;
+        };
+
+        slidemeister.data.export = function (version, key) {
+            $($target).css('border', 'none');
+            $($target).css('zoom', 0.5);
+
+            $.each($elements, function(index, e) {
+                slidemeister.ui.resizeText(e, true);
+            });
+
+            if (version == 'final') {
+                $($target).css('background-color', 'transparent');
+                $.each($elements, function(index, e) {
+                   if ($elementData[e].visibility == 'preview') {
+                       $($target).find('.'+e).css('display', 'none');
+                   }
+                });
+            }
+
+            return domtoimage.toPng(document.getElementById($($target).prop('id')), {
                 width: $($target).css('width').replace('px', ''),
-                height: $($target).css('height').replace('px', '')
+                height: $($target).css('height').replace('px', ''),
             })
-                .then(function (blob) {
+                .then(function (png) {
                     $($target).css('border', '1px solid black');
-                    return blob;
+                    // $($target).css('display', 'none');
+
+                    if (version == 'final') {
+
+                    }
+
+                    return [version, key, png];
                 });
         };
 
@@ -252,6 +285,73 @@
                     $($target).find('.'+typeElement).css('color', row.color);
                     $($target).find('.'+nameElement+ ' span').html(row.name);
                     slidemeister.ui.resizeText(nameElement, true);
+                });
+            }, 100);
+        };
+
+        slidemeister.data.populatePrizegiving = function (data, metaElement, showRank) {
+            setTimeout(function () {
+                var baseAuthorElement, baseRankElement = false;
+
+                $.each($elements, function (index, element) {
+                    if ($elementData[element].prettyname == 'prizegiving_author') {
+                        baseAuthorElement = element;
+                    }
+                    if ($elementData[element].prettyname == 'prizegiving_rank') {
+                        baseRankElement = element;
+                    }
+                });
+
+                var height = $($target).find('.'+baseAuthorElement+ ' div').height();
+
+
+                var normalized = [];
+                $.each(data, function (index, row) {
+                    // console.log(index+' - '+height);
+                    if (index < 7) {
+                        if (index == 0) {
+                            authorElement = baseAuthorElement;
+                            rankElement = baseRankElement;
+                        } else {
+                            authorElement = slidemeister.element.clone(baseAuthorElement, 0, index*(height*1.40), false);
+                            rankElement = slidemeister.element.clone(baseRankElement, 0, index*(height*1.40), false);
+                        }
+
+                        $($target).find('.'+authorElement+ ' span').html(row.title+' by '+row.author);
+                        if (showRank != undefined) {
+                            $($target).find('.'+rankElement+ ' span').html('#'+row.rank);
+                        } else {
+                            $($target).find('.'+rankElement+ ' span').html(' ');
+
+                            var width = $($target).find('.'+authorElement).outerWidth();
+
+                            // var x1 = $elementData[rankElement].x;
+                            var x1 = parseInt($($target).find('.'+authorElement).css('left').replace('px', ''));
+                            // var y1 = $elementData[rankElement].y;
+                            var y1 = parseInt($($target).find('.'+authorElement).css('top').replace('px', ''))+(height/10);
+
+                            if (row.max_points == 0) {
+                                var x2 = x1;
+                            } else {
+                                var x2 = Math.max(((row.points / row.max_points) * width) + x1, x1);
+                            }
+
+                            var y2 = y1+height;
+
+                            normalized.push({
+                                x1: slidemeister.data.normalizeNumber(x1, $($target).width(), 4),
+                                x2: slidemeister.data.normalizeNumber(x2, $($target).width(), 4),
+                                y1: slidemeister.data.normalizeNumber(y1, $($target).height(), 4),
+                                y2: slidemeister.data.normalizeNumber(y2, $($target).height(), 4)
+                            });
+
+                            if (metaElement != undefined && metaElement != '') {
+                                $('input[name="'+metaElement+'"]').val(JSON.stringify(normalized));
+                            }
+
+                        }
+                        slidemeister.ui.resizeText(authorElement, true);
+                    }
                 });
             }, 100);
         };
@@ -496,73 +596,6 @@
                             placeholder: {
                                 text: ''
                             },
-                            // extensions: {
-                            //     'fontSize': new MediumInput({
-                            //         type: 'text',
-                            //         class: '',
-                            //         value: $elementData[element].fontSize,
-                            //         action: function (parent, value) {
-                            //             var element = $(parent).parentsUntil('.slidemeister-element').parent()[0];
-                            //             $(element).css('font-size', value);
-                            //             slidemeister.element.populateDataAttributes($(element).prop('id'), {'fontSize': value});
-                            //             slidemeister.ui.populatePropertyFormFields($(element).prop('id'));
-                            //         }
-                            //     }),
-                            //     'fontColor': new MediumInput({
-                            //         type: 'hidden',
-                            //         class: 'color-picker hidden',
-                            //         value: $elementData[element].color,
-                            //         action: function (parent, value) {
-                            //             var element = $(parent).parentsUntil('.slidemeister-element').parent()[0];
-                            //             $(element).css('color', value);
-                            //             slidemeister.element.populateDataAttributes($(element).prop('id'), {'color': value});
-                            //             slidemeister.ui.populatePropertyFormFields($(element).prop('id'));
-                            //         }
-                            //     }),
-                            //     'fontFamily': new MediumSelect({
-                            //         options: [
-                            //             {name: 'Verdana', value: 'Verdana'},
-                            //             {name: 'Arial', value: 'Arial'},
-                            //             {name: 'Exo', value: 'Exo'}
-                            //         ],
-                            //         action: function (parent, value) {
-                            //             var element = $(parent).parentsUntil('.slidemeister-element').parent()[0];
-                            //             $(element).css('font-family', value);
-                            //             slidemeister.element.populateDataAttributes($(element).prop('id'), {'fontFamily': value});
-                            //             slidemeister.ui.populatePropertyFormFields($(element).prop('id'));
-                            //         }
-                            //     }),
-                            //     'alignLeft': new MediumButton({
-                            //         label: '<i class="fa fa-align-left"></i>',
-                            //         action: function (html, mark, parent) {
-                            //             var element = $(parent).parentsUntil('.slidemeister-element').parent()[0];
-                            //             $(element).css('text-align', 'left');
-                            //             slidemeister.element.populateDataAttributes($(element).prop('id'), {'textAlign': 'left'});
-                            //             slidemeister.ui.populatePropertyFormFields($(element).prop('id'));
-                            //             return html
-                            //         }
-                            //     }),
-                            //     'alignCenter': new MediumButton({
-                            //         label: '<i class="fa fa-align-center"></i>',
-                            //         action: function (html, mark, parent) {
-                            //             var element = $(parent).parentsUntil('.slidemeister-element').parent()[0];
-                            //             $(element).css('text-align', 'center');
-                            //             slidemeister.element.populateDataAttributes($(element).prop('id'), {'textAlign': 'center'});
-                            //             slidemeister.ui.populatePropertyFormFields($(element).prop('id'));
-                            //             return html
-                            //         }
-                            //     }),
-                            //     'alignRight': new MediumButton({
-                            //         label: '<i class="fa fa-align-right"></i>',
-                            //         action: function (html, mark, parent) {
-                            //             var element = $(parent).parentsUntil('.slidemeister-element').parent()[0];
-                            //             $(element).css('text-align', 'right');
-                            //             slidemeister.element.populateDataAttributes($(element).prop('id'), {'textAlign': 'right'});
-                            //             slidemeister.ui.populatePropertyFormFields($(element).prop('id'));
-                            //             return html
-                            //         }
-                            //     })
-                            // }
                         });
                     }
 

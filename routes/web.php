@@ -1,5 +1,34 @@
 <?php
 
+use Illuminate\Http\Request;
+use Partymeister\Slides\Models\Playlist;
+
+Route::get('slidemeister-web', function() {
+    return view('partymeister-slides::slidemeister-web/index');
+});
+
+
+Route::get('slidemeister-playnow/{type}/{item}', function($type, $item) {
+    event(new Partymeister\Slides\Events\PlayNowRequest($type, $item));
+});
+
+Route::get('slidemeister-playlist/{playlist}', function(Playlist $playlist) {
+    event(new Partymeister\Slides\Events\PlaylistRequest($playlist));
+})->middleware(['bindings']);
+
+Route::get('slidemeister-seek/{playlist}/{index}', function(Playlist $playlist, $index) {
+    event(new Partymeister\Slides\Events\PlaylistSeekRequest($playlist, $index));
+})->middleware(['bindings']);
+
+Route::get('slidemeister-previous', function(Request $request) {
+    event(new Partymeister\Slides\Events\PlaylistPreviousRequest($request->get('hard', false)));
+})->middleware(['bindings']);
+
+Route::get('slidemeister-next', function(Request $request) {
+    event(new Partymeister\Slides\Events\PlaylistNextRequest($request->get('hard', false)));
+})->middleware(['bindings']);
+
+
 Route::group([
     'as'         => 'backend.',
     'prefix'     => 'backend',

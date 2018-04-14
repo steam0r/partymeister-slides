@@ -51,27 +51,23 @@ class SlideService extends BaseService
 
     protected function generatePreview()
     {
-        $media = $this->record->getFirstMedia('preview');
-        if (!is_null($media)) {
-            $media->setCustomProperty('generating', true)->save();
-        } else {
-            $this->record->addMedia(public_path() . '/images/generating-preview.png')
-                         ->preservingOriginal()
-                         ->withCustomProperties([ 'generating' => true ])
-                         ->toMediaCollection('preview', 'media');
+        // Convert PNG to actual file
+        $pngData = array_get($this->data, 'png_preview');
+        $pngData = substr($pngData, 22);
+        file_put_contents(storage_path() . '/preview_' . $this->record->id . '.png', base64_decode($pngData));
 
-        }
+        $pngData = array_get($this->data, 'png_final');
+        $pngData = substr($pngData, 22);
+        file_put_contents(storage_path() . '/final_' . $this->record->id . '.png', base64_decode($pngData));
 
-        //$this->record->clearMediaCollection('preview');
-        //$this->record->clearMediaCollection('final');
-        //
-        //$this->record
-        //     ->addMedia(public_path().'/images/generating-preview.png')
-        //     ->preservingOriginal()
-        //     ->toMediaCollection('preview', 'media');
+        $this->record->clearMediaCollection('preview');
+        $this->record->clearMediaCollection('final');
 
-        GenerateSlide::dispatch($this->record, 'slides')
-            ->onConnection('sync');
+        $this->record->addMedia(storage_path() . '/preview_' . $this->record->id . '.png')->toMediaCollection('preview', 'media');
+        $this->record->addMedia(storage_path() . '/final_' . $this->record->id . '.png')->toMediaCollection('final', 'media');
+
+        //GenerateSlide::dispatch($this->record, 'slides')
+        //    ->onConnection('sync');
 //        event(new SlideSaved($this->record, 'slides'));
     }
 }
