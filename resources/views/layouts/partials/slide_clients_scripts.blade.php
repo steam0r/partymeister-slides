@@ -74,13 +74,13 @@
 
             var action = $(this).data('action');
 
-            axios.post('{{route('ajax.slide_clients.communication.playlist')}}', data).then(function (response) {
-
-                if (data.callbacks == 1) {
-                    if (!confirm('{{ trans('partymeister-slides::backend/slide_clients.callback_question') }}')) {
-                        return false;
-                    }
+            if (data.callbacks == 1) {
+                if (!confirm('{{ trans('partymeister-slides::backend/slide_clients.callback_question') }}')) {
+                    return false;
                 }
+            }
+
+            axios.post('{{route('ajax.slide_clients.communication.playlist')}}', data).then(function (response) {
 
                 if (action == 'seek') {
                     var seekData = {

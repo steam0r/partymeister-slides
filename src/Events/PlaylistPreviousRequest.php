@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Events;
 
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,7 +12,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Partymeister\Slides\Models\Playlist;
 
-class PlaylistPreviousRequest implements ShouldBroadcast
+class PlaylistPreviousRequest implements ShouldBroadcastNow
 {
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -37,6 +38,6 @@ class PlaylistPreviousRequest implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('slidemeister');
+        return new Channel('slidemeister.'.session('screens.active'));
     }
 }

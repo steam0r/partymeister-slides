@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Events;
 
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -17,7 +18,7 @@ use Partymeister\Slides\Transformers\PlaylistItemTransformer;
 use Partymeister\Slides\Transformers\PlaylistTransformer;
 use Partymeister\Slides\Transformers\SlideTransformer;
 
-class PlayNowRequest implements ShouldBroadcast
+class PlayNowRequest implements ShouldBroadcastNow
 {
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -61,6 +62,6 @@ class PlayNowRequest implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('slidemeister');
+        return new Channel('slidemeister.'.session('screens.active'));
     }
 }

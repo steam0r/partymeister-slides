@@ -213,7 +213,7 @@
                         console.log('space pressed - rendering bars!');
                         slidemeisterVue.renderPrizegivingBars();
                     }
-                    if (e.key == 'ArrowRight' ||e.key == 'ArrowLeft') {
+                    if (e.key == 'ArrowRight' || e.key == 'ArrowLeft') {
                         if (slidemeisterVue.playnow && slidemeisterVue.playlistSaved.id != undefined) {
                             console.log("Playnow is active - reverting to previous playlist");
                             slidemeisterVue.playnow = false;
@@ -316,7 +316,7 @@
                 this.setCallbackDelay();
                 this.setSlideTimeout();
             },
-            checkVideo: function() {
+            checkVideo: function () {
                 if (this.items[this.currentItem].type == 'video') {
                     setTimeout(() => {
                         var currentVideo = document.getElementById("video-current");
@@ -349,11 +349,18 @@
                 }
             },
             setCallbackDelay: function () {
-                console.log('Setting callback timeout to ' + this.items[this.currentItem].callback_delay);
-                if (this.items[this.currentItem].callback_hash != '') {
-                    this.callbackTimeout = setTimeout(function () {
-                        console.log('Excuting callback ' + slidemeisterVue.items[slidemeisterVue.currentItem].callback_hash);
-                    }, this.items[this.currentItem].callback_delay * 1000)
+                if (this.playlist.callbacks != undefined && this.playlist.callbacks) {
+                    console.log('Setting callback timeout to ' + this.items[this.currentItem].callback_delay);
+                    if (this.items[this.currentItem].callback_hash != '') {
+                        this.callbackTimeout = setTimeout(function () {
+                            console.log('Excuting callback ' + slidemeisterVue.items[slidemeisterVue.currentItem].callback_hash);
+                            axios.get(slidemeisterVue.playlist.callback_url + slidemeisterVue.items[slidemeisterVue.currentItem].callback_hash).then(result => {
+                                console.log('Callback successfully executed');
+                            }).catch( e => {
+                                console.log('Error executing callback');
+                            });
+                        }, this.items[this.currentItem].callback_delay * 1000)
+                    }
                 }
             },
             clearTimeouts: function () {
@@ -396,12 +403,14 @@
                 if (frame == 240) {
                     window.clearTimeout(barTimeout);
 
-                    bars.sort(function(a,b) {return (a.x2 < b.x2) ? 1 : ((b.x2 < a.x2) ? -1 : 0);} );
+                    bars.sort(function (a, b) {
+                        return (a.x2 < b.x2) ? 1 : ((b.x2 < a.x2) ? -1 : 0);
+                    });
 
-                    for (i=0; i<3; i++) {
+                    for (i = 0; i < 3; i++) {
                         if (bars[i] != undefined) {
-                            $('#'+bars[i].id).css('background-color', 'red');
-                            $('#'+bars[i].id).addClass('blink');
+                            $('#' + bars[i].id).css('background-color', 'red');
+                            $('#' + bars[i].id).addClass('blink');
                         }
                     }
 

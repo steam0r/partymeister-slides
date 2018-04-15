@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Events;
 
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -15,24 +16,23 @@ use Partymeister\Slides\Transformers\PlaylistItemTransformer;
 use Partymeister\Slides\Transformers\PlaylistTransformer;
 use Partymeister\Slides\Transformers\SlideTransformer;
 
-class PlaylistRequest implements ShouldBroadcast
+class PlaylistRequest implements ShouldBroadcastNow
 {
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $playlist;
 
-    //public $items;
-
-
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Playlist $playlist)
+    public function __construct(Playlist $playlist, $callbacks)
     {
-        $playlistData = fractal($playlist, new PlaylistTransformer())->toArray();
+        $playlistData                      = fractal($playlist, new PlaylistTransformer())->toArray();
+        $playlistData['data']['callbacks'] = (bool)$callbacks;
+        $playlistData['data']['callback_url'] = env('APP_URL') . '/api/callback/';
 
         foreach ($playlist->items()->orderBy('sort_position', 'ASC')->get() as $item) {
             $f = null;
@@ -61,6 +61,6 @@ class PlaylistRequest implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('slidemeister');
+        return new Channel('slidemeister.'.session('screens.active'));
     }
 }

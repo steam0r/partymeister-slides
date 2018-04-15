@@ -41,6 +41,7 @@ class SlideClient extends Model
      */
     protected $fillable = [
         'name',
+        'type',
         'ip_address',
         'port',
         'sort_position',

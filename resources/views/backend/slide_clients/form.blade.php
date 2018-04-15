@@ -5,6 +5,7 @@
     </div>
     <div class="@boxBody">
         {!! form_row($form->name) !!}
+        {!! form_row($form->type) !!}
         {!! form_row($form->ip_address) !!}
         {!! form_row($form->port) !!}
         {!! form_row($form->sort_position) !!}
