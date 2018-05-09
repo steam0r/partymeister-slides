@@ -23,6 +23,7 @@ class PlaylistRequest implements ShouldBroadcastNow
 
     public $playlist;
 
+
     /**
      * Create a new event instance.
      *
@@ -30,8 +31,8 @@ class PlaylistRequest implements ShouldBroadcastNow
      */
     public function __construct(Playlist $playlist, $callbacks)
     {
-        $playlistData                      = fractal($playlist, new PlaylistTransformer())->toArray();
-        $playlistData['data']['callbacks'] = (bool)$callbacks;
+        $playlistData                         = fractal($playlist, new PlaylistTransformer())->toArray();
+        $playlistData['data']['callbacks']    = (bool) $callbacks;
         $playlistData['data']['callback_url'] = env('APP_URL') . '/api/callback/';
 
         foreach ($playlist->items()->orderBy('sort_position', 'ASC')->get() as $item) {
@@ -44,7 +45,8 @@ class PlaylistRequest implements ShouldBroadcastNow
             }
 
             if ($f != null) {
-                $i['data'] = array_merge($i['data'], $f['data']);
+                $i['data']       = array_merge($i['data'], $f['data']);
+                $i['data']['id'] = $item->id;
                 //$i['data']['file'] = $f['data'];
                 $playlistItems[] = $i['data'];
             }
@@ -61,6 +63,6 @@ class PlaylistRequest implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('slidemeister.'.session('screens.active'));
+        return new Channel('slidemeister.' . session('screens.active'));
     }
 }

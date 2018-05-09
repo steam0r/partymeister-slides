@@ -8,7 +8,6 @@
 
     <title>Slidemeister-Web</title>
 
-    <!-- Bootstrap core CSS -->
     <link href="{{ asset('/css/slidemeister-web.css') }}" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         canvas {
@@ -108,8 +107,11 @@
 <body>
 <main id="slidemeisterVue">
     <div class="debug alert alert-danger">
+        CachedPlaylists: @{{ cachedPlaylists.length }}<br>
         Playlist: @{{ playlist.name }}<br>
-        Items: @{{ items.length }}
+        Items: @{{ items.length }}<br>
+        CurrentItem: @{{ currentItem }}<br>
+        <button class="delete-storage">Empty cache</button>
     </div>
 
     <template v-if="currentItem != null && items[currentItem] != undefined">
@@ -206,8 +208,29 @@
             currentBackground: null
         },
         mounted: function () {
+            // Check if we have playlists in local storage
+            if (localStorage.getItem('cachedPlaylists') != undefined) {
+                this.cachedPlaylists = JSON.parse(localStorage.getItem('cachedPlaylists'));
+            }
+            if (localStorage.getItem('playlist') != undefined) {
+                this.playlist = JSON.parse(localStorage.getItem('playlist'));
+                this.items = this.playlist.items;
+            }
+            if (localStorage.getItem('currentItem') != undefined) {
+                this.seekToIndex(parseInt(localStorage.getItem('currentItem')));
+            }
+
             window.addEventListener('keydown', function (e) {
                 e.preventDefault();
+
+                if (e.key == 'd') {
+                    if ($('.alert.alert-danger').hasClass('d-none')) {
+                        $('.alert.alert-danger').removeClass('d-none');
+                    } else {
+                        $('.alert.alert-danger').addClass('d-none');
+                    }
+                }
+
                 if (slidemeisterVue.playlist.id != undefined) {
                     if (e.code == 'Space' && slidemeisterVue.items[slidemeisterVue.currentItem].slide_type == 'siegmeister_bars') {
                         console.log('space pressed - rendering bars!');
@@ -265,6 +288,9 @@
                 } else {
                     this.previousItem = null;
                 }
+
+                localStorage.setItem('currentItem', this.currentItem);
+
                 this.checkVideo();
                 this.animateBackground();
                 this.setCallbackDelay();
@@ -288,10 +314,14 @@
                 } else {
                     this.previousItem = null;
                 }
+
+                localStorage.setItem('currentItem', this.currentItem);
+
                 this.checkVideo();
                 this.animateBackground();
                 this.setCallbackDelay();
                 this.setSlideTimeout();
+                this.updateStatus();
             },
             seekToPreviousItem: function (hard) {
                 console.log('Seek to previous item');
@@ -311,10 +341,14 @@
                 } else {
                     this.previousItem = null;
                 }
+
+                localStorage.setItem('currentItem', this.currentItem);
+
                 this.checkVideo();
                 this.animateBackground();
                 this.setCallbackDelay();
                 this.setSlideTimeout();
+                this.updateStatus();
             },
             checkVideo: function () {
                 if (this.items[this.currentItem].type == 'video') {
@@ -356,7 +390,7 @@
                             console.log('Excuting callback ' + slidemeisterVue.items[slidemeisterVue.currentItem].callback_hash);
                             axios.get(slidemeisterVue.playlist.callback_url + slidemeisterVue.items[slidemeisterVue.currentItem].callback_hash).then(result => {
                                 console.log('Callback successfully executed');
-                            }).catch( e => {
+                            }).catch(e => {
                                 console.log('Error executing callback');
                             });
                         }, this.items[this.currentItem].callback_delay * 1000)
@@ -470,9 +504,37 @@
                         startStarfield();
                         break;
                 }
+            },
+            updateStatus: function () {
+                console.log('Update status');
+                let data = {
+                    playlists: this.cachedPlaylists.map(playlist => {
+                        return {id: playlist.id, updated_at: new Date(playlist.updated_at.date).getTime()/1000}
+                    }),
+                    currentPlaylist: this.playlist.id,
+                    currentItem: this.items[this.currentItem].id,
+                };
+                axios.post('{{route('ajax.slidemeister-web.status.update', ['slide_client' => $slideClient->id])}}', data).then(response => {
+                    console.log('Updated status');
+                });
             }
         }
-    })
+    });
+
+    $('.delete-storage').on('click', () => {
+        slidemeisterVue.cachedPlaylists = [];
+        slidemeisterVue.playlist = {};
+        slidemeisterVue.items = [];
+        slidemeisterVue.currentItem = null;
+
+        stopEnd();
+        stopComingup();
+        stopStarfield();
+        $('canvas').css('z-index', 0);
+
+        localStorage.clear();
+        this.updateStatus();
+    });
 </script>
 @yield('view_scripts')
 </body>

@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Http\Controllers\Api\SlideClients;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Motor\Backend\Http\Controllers\Controller;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\SlideClient;
@@ -149,11 +150,28 @@ class CommunicationController extends Controller
 
     public function get_playlists(Request $request)
     {
-        $result = XMLService::send('get_playlists');
-        if ( ! $result) {
-            return response()->json([ 'result' => $result ], 400);
-        } else {
-            return response()->json([ 'result' => $result ]);
+        $client = SlideClient::find(session('screens.active'));
+
+        if (is_null($client)) {
+            return response()->json([ 'message' => 'No slide client active' ], 400);
+        }
+
+        switch ($client->type) {
+            case 'screens':
+                $result = XMLService::send('get_playlists');
+                if ( ! $result) {
+                    return response()->json([ 'result' => $result ], 400);
+                } else {
+                    return response()->json([ 'result' => $result ]);
+                }
+            case 'slidemeister-web':
+                $result = Cache::store('redis')->get('slidemeister-web.'.session('screens.active'));
+                if ( ! $result) {
+                    return response()->json([ 'result' => $result ], 400);
+                } else {
+                    return response()->json([ 'result' => $result ]);
+                }
+                break;
         }
     }
 

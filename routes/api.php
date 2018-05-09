@@ -1,4 +1,8 @@
 <?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+
 Route::group([
     'middleware' => [ 'auth:api', 'bindings', 'permission' ],
     'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
@@ -12,6 +16,9 @@ Route::group([
     Route::resource('slide_clients', 'SlideClientsController');
 });
 
+Route::post('ajax/slidemeister-web/{slide_client}/status', function(Request $request, $slide_client) {
+    Cache::store('redis')->put('slidemeister-web.'.$slide_client, $request->all(), 60);
+})->name('ajax.slidemeister-web.status.update');
 
 Route::group([
     'middleware' => [ 'web', 'web_auth', 'bindings', 'permission' ],

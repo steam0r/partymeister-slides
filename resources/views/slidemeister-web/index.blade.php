@@ -4,6 +4,10 @@
     <script>
         console.log("Slidemeister Web loaded");
 
+        if (typeof(Storage) == undefined) {
+            console.log('No web storage support :/');
+        }
+
         Echo.channel('slidemeister.{{$slideClient->id}}')
             .listen('.Partymeister\\Slides\\Events\\PlayNowRequest', (e) => {
                 console.log('PlayNowRequest incoming');
@@ -20,12 +24,12 @@
                 e.item.callback_hash = '';
                 e.item.callback_delay = 20;
 
-                console.log(e.item);
-
                 slidemeisterVue.playnow = true;
                 slidemeisterVue.playlist = {id: 'playnow', name: 'playnow', items: [e.item]};
                 slidemeisterVue.items = [e.item];
                 slidemeisterVue.seekToIndex(0, false);
+
+                slidemeisterVue.updateStatus();
             })
             .listen('.Partymeister\\Slides\\Events\\PlaylistNextRequest', (e) => {
                 console.log('PlaylistNextRequest incoming');
@@ -35,7 +39,7 @@
                     slidemeisterVue.playnow = false;
                     slidemeisterVue.seekToNextItem(e.hard);
                 }
-
+                slidemeisterVue.updateStatus();
             })
             .listen('.Partymeister\\Slides\\Events\\PlaylistPreviousRequest', (e) => {
                 console.log('PlaylistPreviousRequest incoming');
@@ -45,11 +49,10 @@
                     slidemeisterVue.playnow = false;
                     slidemeisterVue.seekToPreviousItem(e.hard);
                 }
-
+                slidemeisterVue.updateStatus();
             })
             .listen('.Partymeister\\Slides\\Events\\PlaylistRequest', (e) => {
                 console.log('PlaylistRequest incoming');
-                console.log(e);
 
                 let found = false;
                 for (const [index, p] of slidemeisterVue.cachedPlaylists.entries()) {
@@ -69,6 +72,10 @@
 
                                 slidemeisterVue.playlist = e.playlist;
                                 slidemeisterVue.items = e.playlist.items;
+
+                                localStorage.setItem('cachedPlaylists', JSON.stringify(slidemeisterVue.cachedPlaylists));
+                                localStorage.setItem('currentItem', slidemeisterVue.currentItem);
+                                localStorage.setItem('playlist', JSON.stringify(slidemeisterVue.playlist));
                             }
                         }
                         found = true;
@@ -77,7 +84,9 @@
                 if (!found) {
                     console.log('Playlist does not exist yet. Caching it');
                     slidemeisterVue.cachedPlaylists.push(e.playlist);
+                    localStorage.setItem('cachedPlaylists', JSON.stringify(slidemeisterVue.cachedPlaylists));
                 }
+                slidemeisterVue.updateStatus();
             })
             .listen('.Partymeister\\Slides\\Events\\PlaylistSeekRequest', (e) => {
                 console.log('PlaylistSeekRequest incoming');
@@ -94,6 +103,7 @@
                             slidemeisterVue.playlist = p;
                             slidemeisterVue.items = p.items;
                             slidemeisterVue.playnow = false;
+                            localStorage.setItem('playlist', JSON.stringify(slidemeisterVue.playlist));
                             setTimeout(() => {
                                 slidemeisterVue.seekToIndex(parseInt(e.index));
                             }, 200);
@@ -105,6 +115,7 @@
                 if (!found) {
                     console.log('Playlist not found, cannot seek to index ' + e.index);
                 }
+                slidemeisterVue.updateStatus();
             });
     </script>
 @append

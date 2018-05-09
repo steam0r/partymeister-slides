@@ -19,45 +19,76 @@
         var updatePlaylists = function () {
 
             axios.get('{{route('ajax.slide_clients.communication.playlists')}}').then(function (playlistsResponse) {
-                var xmlResponse = $.parseXML(playlistsResponse.data.result);
+
+                var parsedResponse = null;
+                var playlists = [];
+                var currentItem = null;
+                var currentPlaylist = null;
+
+                parsedResponse = $.parseXML(playlistsResponse.data.result);
+                if (parsedResponse == null) {
+                    console.log('UpdatePlaylists: Response is not an xml document');
+                } else {
+                    playlists = $(xmlResponse).find('data playlist');
+                    $(xmlResponse).find('data playlist').each(function (index, element) {
+                        playlists.push({
+                            id: $(element).find('name').text(),
+                            updated_at: parseInt($(element).find('timestamp').text())
+                        });
+                    });
+
+                    var currentItemCombined = $(xmlResponse).find('data item_current').text();
+                    var split = currentItemCombined.split('_');
+
+                    currentPlaylist = split[0];
+                    currentItem = split[1];
+                }
+                parsedResponse = playlistsResponse.data.result;
+                if (typeof parsedResponse !== 'object') {
+                    console.log('UpdatePlaylists: Response it not a json object. Aborting');
+                    return;
+                } else {
+                    playlists = parsedResponse.playlists;
+                    currentPlaylist = parsedResponse.currentPlaylist;
+                    currentItem = parsedResponse.currentItem;
+                }
 
                 $('.playlist-cached').addClass('d-none');
                 $('.playlist-playing').addClass('d-none');
                 $('.playlist-outdated').addClass('d-none');
-                $(xmlResponse).find('data playlist').each(function (index, element) {
-                    $('.playlist-' + $(element).find('name').text() + '-cached').removeClass('d-none');
 
-                    var remotePlaylistTimestamp = parseInt($(element).find('timestamp').text());
-                    var playlistTimestamp = parseInt($('.playlist-' + $(element).find('name').text() + '-outdated').data('timestamp'));
+                for (let p of playlists) {
+                    $('.playlist-' + p.id + '-cached').removeClass('d-none');
+
+                    var remotePlaylistTimestamp = p.updated_at;
+                    var playlistTimestamp = parseInt($('.playlist-' + p.id + '-outdated').data('timestamp'));
 
                     if (remotePlaylistTimestamp < playlistTimestamp) {
-                        $('.playlist-' + $(element).find('name').text() + '-outdated').removeClass('d-none');
+                        $('.playlist-' + p.id + '-outdated').removeClass('d-none');
                     }
-                });
+                }
 
-                var currentItemCombined = $(xmlResponse).find('data item_current').text();
-                var split = currentItemCombined.split('_');
-                var playlistId = split[0];
-                var playlistItemId = split[1];
+                $('.playlist-' + currentPlaylist + '-playing').removeClass('d-none');
 
-                $('.playlist-' + playlistId + '-playing').removeClass('d-none');
-
-                axios.get('/ajax/playlists/items/' + playlistItemId).then(function (response) {
+                axios.get('/ajax/playlists/items/' + currentItem).then(function (response) {
                     $('.playlist-preview').addClass('d-none');
-                    $('.playlist-' + playlistId + '-preview').removeClass('d-none');
-                    $('.playlist-' + playlistId + '-preview').find('img').prop('src', response.data.data.file.preview);
+                    console.log(response);
+                    $('.playlist-' + currentPlaylist + '-preview').removeClass('d-none');
+                    $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.file.preview);
                 }).catch(function (error) {
+                    console.log('UpdatePlaylists: Playlist item not found')
                     console.log(error);
                 });
 
 
             }).catch(function (error) {
-                console.log(error);
+                console.log('UpdatePlaylists: Response is empty');
+                console.error(error);
             });
         };
 
         var seek = function (data) {
-            axios.post('{{route('ajax.slide_clients.communication.seek')}}', data).then(function (response) {
+            return axios.post('{{route('ajax.slide_clients.communication.seek')}}', data).then(function (response) {
                 updatePlaylists();
             }).catch(function (error) {
                 console.log(error);
@@ -88,7 +119,9 @@
                         hard: false,
                     };
 
-                    seek(seekData);
+                    seek(seekData).then(() => {
+                        updatePlaylists();
+                    });
                     return;
                 }
                 updatePlaylists();
