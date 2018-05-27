@@ -1,5 +1,4 @@
-// Define editable properties
-var slidemeisterProperties = {
+window.slidemeisterProperties = {
     element: {
         type: 'text',
         default: '',
@@ -243,7 +242,7 @@ var slidemeisterProperties = {
         // options: getAssets('assets'),
         updateDataAttribute: true,
         visible: false,
-        callback: function(element, value, slidemeister, target) {
+        callback: function (element, value, slidemeister, target) {
             slidemeister.ui.updateImages(element);
         }
     },
@@ -253,7 +252,7 @@ var slidemeisterProperties = {
         updateDataAttribute: true,
         updateCss: ['z-index'],
         visible: false,
-        callback: function(element, value, slidemeister, target) {
+        callback: function (element, value, slidemeister, target) {
 //            console.log("TODO: change layer order");
         }
     },
@@ -293,3 +292,4 @@ var slidemeisterProperties = {
         visible: false,
     },
 };
+

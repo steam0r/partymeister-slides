@@ -8,7 +8,7 @@
 
     <title>Slidemeister-Web</title>
 
-    <link href="{{ asset('/css/slidemeister-web.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/slidemeister-web.css') }}" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         canvas {
             position: absolute;
@@ -137,7 +137,7 @@
 @include('partymeister-slides::slidemeister-web.effects.comingup')
 @include('partymeister-slides::slidemeister-web.effects.end')
 
-<script src="{{asset('js/slidemeister-web.js')}}"></script>
+<script src="{{mix('js/slidemeister-web.js')}}"></script>
 <script>
     $.fn.extend({
         animateCss: function (animationName, callback) {
