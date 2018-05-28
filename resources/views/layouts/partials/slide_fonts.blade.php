@@ -1,6 +1,5 @@
 @foreach(config('partymeister-slides-fonts.fonts') as $index => $font)
     <link href="{{$font['path']}}" rel="stylesheet">
-    <link href="{{asset('css/slidemeister.loading.css')}}" rel="stylesheet">
     <style type="text/css">
         .loader {
             color: #fff;

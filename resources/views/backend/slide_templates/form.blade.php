@@ -155,7 +155,7 @@
                 },
                 methods: {
                     onAdd: function (event) {
-                        slidemeister.element.createImage(this.droppedFiles[event.newIndex].file.file_original);
+                        slidemeister.element.createImage(this.droppedFiles[event.newIndex].file.file_original_relative);
                     },
                     isImage: function (file) {
                         if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg') {
