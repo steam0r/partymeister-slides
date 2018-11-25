@@ -31,10 +31,7 @@
         </div>
         <div id="slidemeister">
         </div>
-        <div id="vuedropzone" :style="{ zIndex: zIndex }">a
-            <draggable v-model="droppedFiles" :options="{group:'files'}" @add="onAdd" class="draggable-container">
-            </draggable>
-        </div>
+        <partymeister-slides-dropzone></partymeister-slides-dropzone>
     </div>
 </div>
 @section ('right-sidebar')
@@ -82,7 +79,8 @@
             </div>
         </div>
         <div class="tab-pane" id="slidemeister-blocks" role="tabpanel">
-            @include('motor-media::layouts.partials.mediapool', ['header' => false])
+            <motor-cms-mediapool></motor-cms-mediapool>
+{{--            @include('motor-media::layouts.partials.mediapool', ['header' => false])--}}
         </div>
     </div>
 @endsection
@@ -144,36 +142,8 @@
                 slidemeister.history.forward();
             });
 
-            let vueSlides = new Vue({
-                el: '#vuedropzone',
-                data: {
-                    droppedFiles: [],
-                    zIndex: -1
-                },
-                components: {
-                    draggable,
-                },
-                methods: {
-                    onAdd: function (event) {
-                        slidemeister.element.createImage(this.droppedFiles[event.newIndex].file.file_original_relative);
-                    },
-                    isImage: function (file) {
-                        if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg') {
-                            return true;
-                        }
-                        return false;
-                    },
-                },
-                mounted: function () {
-                    vueMediapool.$on('mediapool:drag:start', function() {
-                        console.log("drag start");
-                        vueSlides.zIndex = 10000;
-                    });
-                    vueMediapool.$on('mediapool:drag:end', function() {
-                        console.log("drag end");
-                        vueSlides.zIndex = -1;
-                    });
-                }
+            Vue.prototype.$eventHub.$on('partymeister-slides:image-dropped', (image) => {
+                slidemeister.element.createImage(image);
             });
 
         });

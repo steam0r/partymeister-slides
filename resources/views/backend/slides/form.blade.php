@@ -31,10 +31,7 @@
         </div>
         <div id="slidemeister">
         </div>
-        <div id="vuedropzone" :style="{ zIndex: zIndex }">
-            <draggable v-model="droppedFiles" :options="{group:'files'}" @add="onAdd" class="draggable-container">
-            </draggable>
-        </div>
+        <partymeister-slides-dropzone></partymeister-slides-dropzone>
     </div>
 </div>
 {{--<img id="preview">--}}
@@ -62,7 +59,7 @@
                 {!! form_row($form->png_final) !!}
                 {!! form_row($form->image_data) !!}
                 {!! form_row($form->submit) !!}
-                {!! form_end($form) !!}
+                {!! form_end($form, false) !!}
                 <br>
 
                 <h6>Blocks</h6>
@@ -83,7 +80,8 @@
             </div>
         </div>
         <div class="tab-pane" id="slidemeister-blocks" role="tabpanel">
-            @include('motor-media::layouts.partials.mediapool', ['header' => false])
+            <motor-cms-mediapool></motor-cms-mediapool>
+            {{--@include('motor-media::layouts.partials.mediapool', ['header' => false])--}}
         </div>
     </div>
 @endsection
@@ -136,6 +134,10 @@
                 slidemeister.element.delete();
             });
 
+            Vue.prototype.$eventHub.$on('partymeister-slides:image-dropped', (image) => {
+                slidemeister.element.createImage(image);
+            });
+
             // Undo
             $('button#undo').on('click', function () {
                 slidemeister.history.back();
@@ -144,39 +146,6 @@
             $('button#redo').on('click', function () {
                 slidemeister.history.forward();
             });
-
-            let vueSlides = new Vue({
-                el: '#vuedropzone',
-                data: {
-                    droppedFiles: [],
-                    zIndex: -1
-                },
-                components: {
-                    draggable,
-                },
-                methods: {
-                    onAdd: function (event) {
-                        slidemeister.element.createImage(this.droppedFiles[event.newIndex].file.file_original_relative);
-                    },
-                    isImage: function (file) {
-                        if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg') {
-                            return true;
-                        }
-                        return false;
-                    },
-                },
-                mounted: function () {
-                    vueMediapool.$on('mediapool:drag:start', function () {
-                        console.log("drag start");
-                        vueSlides.zIndex = 10000;
-                    });
-                    vueMediapool.$on('mediapool:drag:end', function () {
-                        console.log("drag end");
-                        vueSlides.zIndex = -1;
-                    });
-                }
-            });
-
         });
 
     </script>
