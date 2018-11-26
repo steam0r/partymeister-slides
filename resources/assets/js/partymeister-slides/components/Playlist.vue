@@ -1,0 +1,207 @@
+<template>
+    <div id="playlist-item-container">
+        <input type="hidden" id="dropped-files" :value="JSON.stringify(droppedFiles)">
+        <draggable v-model="droppedFiles" :options="{group:'files'}" @add="onAdd" style="min-height: 100px;"
+                   class="row">
+            <div v-for="(file, index) in droppedFiles" class="col-md-3" style="border: 1px dotted red;">
+                <div class="item-number">{{ index+1 }}</div>
+                <div class="item-delete">
+                    <button type="button" @click="deleteFile(file)"><i class="fa fa-trash-alt"></i>
+                    </button>
+                </div>
+                <div v-if="isImage(file)" class="image-wrapper">
+                    <div>{{ filetype(file) }}</div>
+                    <img :src="file.file.preview" class="img-fluid">
+                </div>
+                <div v-else> {{ file.file.file_name }}</div>
+                <div>
+                    <div>
+                        {{ $t('partymeister-slides.backend.playlists.duration') }} <input type="text" name="duration" v-model="file.duration" size="4"> {{ $t('partymeister-slides.backend.playlists.seconds') }}
+                        <input type="checkbox" name="is_advanced_manually" v-model="file.is_advanced_manually"> {{ $t('partymeister-slides.backend.playlists.is_advanced_manually') }}
+                    </div>
+                    <div>
+                        {{ $t('partymeister-slides.backend.playlists.transition') }}
+                        <select name="transition_id" v-model="file.transition_identifier">
+                            <option v-for="(transition, index) in transitions" :value="transition.identifier">
+                                {{ transition.name }}
+                            </option>
+                        </select>
+                        <input type="text" name="transition_duration" size="4" v-model="file.transition_duration"> {{ $t('partymeister-slides.backend.playlists.milliseconds') }}
+                    </div>
+                    <div>
+                        {{ $t('partymeister-slides.backend.playlists.midi_note') }} <input type="text" size="2" name="midi_note" v-model="file.midi_note">
+                    </div>
+                    <div>
+                        {{ $t('partymeister-slides.backend.playlists.callback') }}
+                        <select name="callback_hash" v-model="file.callback_hash" style="width: 80%; display: none;">
+                            <option value="">{{ $t('partymeister-slides.backend.callbacks.no_callback') }}</option>
+                            <option v-for="(callback, index) in callbacks" :value="callback.hash">
+                                {{ callback.name }}
+                            </option>
+                        </select>
+                        {{ $t('partymeister-slides.backend.playlists.callback_delay') }}
+                        <input type="text" name="callback_delay" v-model="file.callback_delay" size="4"> {{ $t('partymeister-slides.backend.playlists.seconds') }}
+
+                        <div><strong>Filename: {{ file.file.file_name }}</strong></div>
+                    </div>
+                </div>
+            </div>
+        </draggable>
+    </div>
+</template>
+
+<script>
+    import draggable from 'vuedraggable';
+    import {Ziggy} from 'ziggy';
+    import route from 'ziggy/src/js/route';
+
+    window.Ziggy = Ziggy;
+
+    Vue.mixin({
+        methods: {
+            route: route
+        }
+    });
+
+
+    export default {
+        name: 'partymeister-slides-playlist',
+        props: ['files'],
+        data: function() {
+            return {
+                droppedFiles: [],
+                transitions: [],
+                callbacks: []
+            };
+        },
+        components: {
+            draggable,
+        },
+        methods: {
+            onAdd: function (event) {
+                Vue.set(this.droppedFiles[event.newIndex], 'duration', 20);
+                Vue.set(this.droppedFiles[event.newIndex], 'midi_note', 0);
+                Vue.set(this.droppedFiles[event.newIndex], 'transition_identifier', 255);
+                Vue.set(this.droppedFiles[event.newIndex], 'transition_duration', 2000);
+                Vue.set(this.droppedFiles[event.newIndex], 'callback_hash', '');
+                Vue.set(this.droppedFiles[event.newIndex], 'callback_delay', 20);
+                Vue.set(this.droppedFiles[event.newIndex], 'is_advanced_manually', false);
+            },
+            filetype: function(file) {
+                if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg') {
+                    return 'Image';
+                } else if (file.file.mime_type == 'video/mp4') {
+                    return 'Video';
+                }
+                return 'unknown';
+            },
+            isImage: function (file) {
+                if (file.file.mime_type == 'image/png' || file.file.mime_type == 'image/jpg' || file.file.mime_type == 'video/mp4') {
+                    return true;
+                }
+                return false;
+            },
+            deleteFile: function (file) {
+                this.droppedFiles.splice(this.droppedFiles.indexOf(file), 1);
+            }
+        },
+        mounted: function () {
+            let files = JSON.parse(this.files);
+            if (files) {
+                this.droppedFiles = files;
+            }
+
+            axios.get(route('ajax.transitions.index')).then((response) => {
+                this.transitions = response.data.data;
+            });
+
+            axios.get(route('ajax.callbacks.index')+'?per_page=500').then((response) => {
+                this.callbacks = response.data.data;
+            });
+        }
+    }
+</script>
+<style lang="scss">
+    #playlist-item-container .sortable-ghost {
+        opacity: 0.7;
+        max-width: 25%;
+    }
+
+    #playlist-item-container .sortable-ghost .card-body {
+        display: none;
+    }
+
+    #playlist-item-container .col-md-3 {
+        position: relative;
+        padding: 3px;
+    }
+
+    #playlist-item-container .item-number, #playlist-item-container .item-delete {
+        z-index: 1100;
+        text-align: center;
+        width: 40px;
+        height: 35px;
+        font-size: 20px;
+        line-height: 35px;
+        font-weight: bold;
+        background: white;
+        border-bottom-right-radius: 10px;
+        position: absolute;
+        top: 3px;
+        left: 3px;
+    }
+
+    #playlist-item-container .item-delete {
+        background-color: red;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 0;
+        right: 3px;
+        left: auto;
+    }
+
+    .item-delete button {
+        color: white;
+        background: none;
+        border: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .item-delete button:focus, .item-delete button:active {
+        outline: none !important;
+        box-shadow: none;
+    }
+
+    .image-wrapper {
+        width: 100%;
+        position: relative;
+        padding-top: 56.25%;
+        overflow: hidden;
+        margin-bottom: 5px;
+    }
+
+    .image-wrapper div {
+        z-index: 1100;
+        position: absolute;
+        background-color: white;
+        top: 30px;
+        width: 40%;
+        height: 35px;
+        line-height: 35px;
+        left: 30%;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 20px;
+    }
+
+    #playlist-item-container .image-wrapper .img-fluid {
+        z-index: 1000;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+
+</style>
