@@ -79,7 +79,7 @@
             </div>
         </div>
         <div class="tab-pane" id="slidemeister-blocks" role="tabpanel">
-            <motor-cms-mediapool></motor-cms-mediapool>
+            <motor-media-mediapool></motor-media-mediapool>
 {{--            @include('motor-media::layouts.partials.mediapool', ['header' => false])--}}
         </div>
     </div>

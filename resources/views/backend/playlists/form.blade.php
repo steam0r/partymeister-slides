@@ -37,7 +37,7 @@
     <div class="tab-content">
         <partymeister-slides-mediapool :preview-image="'{{url('/images/generating-preview.png')}}'"></partymeister-slides-mediapool>
         <div class="tab-pane" id="motor-mediapool" role="tabpanel">
-            <motor-cms-mediapool></motor-cms-mediapool>
+            <motor-media-mediapool></motor-media-mediapool>
         </div>
     </div>
 @endsection
