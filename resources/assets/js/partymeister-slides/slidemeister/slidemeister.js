@@ -602,11 +602,13 @@
                     $activeEditors[element] = true;
 
                     $editors[element].subscribe('positionToolbar', function (e) {
-                        $('.color-picker').minicolors({
-                            format: 'rgb',
-                            opacity: true,
-                            position: 'bottom right'
-                        });
+                        if ($('.color-picker').length > 0) {
+                            $('.color-picker').minicolors({
+                                format: 'rgb',
+                                opacity: true,
+                                position: 'bottom right'
+                            });
+                        }
                     });
 
                     $editors[element].subscribe('blur', function (data, editable) {
@@ -961,6 +963,10 @@
         slidemeister.layer.createSortable = function () {
             $('#slidemeister-layers-container').append('<ul id="slidemeister-layers" class="list-group"></ul>');
 
+            if ($('#slidemeister-layers').length == 0) {
+                return;
+            }
+
             $('#slidemeister-layers').sortable({
                 stop: function (event, ui) {
 
@@ -1070,11 +1076,13 @@
                 }
                 field += '</div>';
                 $($propertySelector).append(field);
-                $('.color-picker').minicolors({
-                    format: 'rgb',
-                    opacity: true,
-                    position: 'bottom right'
-                });
+                if ($('.color-picker').length > 0) {
+                    $('.color-picker').minicolors({
+                        format: 'rgb',
+                        opacity: true,
+                        position: 'bottom right'
+                    });
+                }
 
                 // Add callbacks for property changes
                 $('#' + property).on('change', slidemeister.ui.changeFormFieldData);
