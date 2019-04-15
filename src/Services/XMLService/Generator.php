@@ -97,7 +97,11 @@ class Generator
             //{
             //	$item->addChild('path', env('SCREENS_URL').$attachment->file->getUrl() . $attachment->file->filename);
             //}
-            $item->addChild('path', env('SCREENS_URL') . $attachment->getUrl());
+            if ($playlist_item->slide_id != null) {
+                $item->addChild('path', env('SCREENS_URL') . route('backend.slides.show', [$playlist_item->slide->id], false));
+            } else {
+                $item->addChild('path', env('SCREENS_URL') . $attachment->getUrl());
+            }
 
             if ($playlist_item->type == 'siegmeister_bars') {
                 $item->addChild('duration', 8);

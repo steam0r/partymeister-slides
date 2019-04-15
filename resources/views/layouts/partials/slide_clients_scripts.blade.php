@@ -24,33 +24,38 @@
                 var playlists = [];
                 var currentItem = null;
                 var currentPlaylist = null;
+                var validPlaylist = false;
 
                 parsedResponse = $.parseXML(playlistsResponse.data.result);
                 if (parsedResponse == null) {
                     console.log('UpdatePlaylists: Response is not an xml document');
                 } else {
-                    playlists = $(xmlResponse).find('data playlist');
-                    $(xmlResponse).find('data playlist').each(function (index, element) {
+                    validPlaylist = true;
+                    playlists = $(parsedResponse).find('data playlist');
+                    $(parsedResponse).find('data playlist').each(function (index, element) {
                         playlists.push({
                             id: $(element).find('name').text(),
                             updated_at: parseInt($(element).find('timestamp').text())
                         });
                     });
 
-                    var currentItemCombined = $(xmlResponse).find('data item_current').text();
+                    var currentItemCombined = $(parsedResponse).find('data item_current').text();
                     var split = currentItemCombined.split('_');
 
                     currentPlaylist = split[0];
                     currentItem = split[1];
                 }
-                parsedResponse = playlistsResponse.data.result;
-                if (typeof parsedResponse !== 'object') {
-                    console.log('UpdatePlaylists: Response it not a json object. Aborting');
-                    return;
-                } else {
-                    playlists = parsedResponse.playlists;
-                    currentPlaylist = parsedResponse.currentPlaylist;
-                    currentItem = parsedResponse.currentItem;
+
+                if (!validPlaylist) {
+                    parsedResponse = playlistsResponse.data.result;
+                    if (typeof parsedResponse !== 'object') {
+                        console.log('UpdatePlaylists: Response it not a json object. Aborting');
+                        return;
+                    } else {
+                        playlists = parsedResponse.playlists;
+                        currentPlaylist = parsedResponse.currentPlaylist;
+                        currentItem = parsedResponse.currentItem;
+                    }
                 }
 
                 $('.playlist-cached').addClass('d-none');
@@ -72,7 +77,6 @@
 
                 axios.get('/ajax/playlists/items/' + currentItem).then(function (response) {
                     $('.playlist-preview').addClass('d-none');
-                    console.log(response);
                     $('.playlist-' + currentPlaylist + '-preview').removeClass('d-none');
                     $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.file.preview);
                 }).catch(function (error) {

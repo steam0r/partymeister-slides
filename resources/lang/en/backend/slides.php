@@ -10,6 +10,7 @@ return [
     'updated'              => 'Slide updated',
     'deleted'              => 'Slide deleted',
     'create_from_template' => 'Create new slide from this template',
+    'html_preview'         => 'HTML preview',
 
     'name'        => 'Name',
     'slide_type'  => 'Slide type',

@@ -52,8 +52,9 @@ class PlaylistsController extends Controller
         ]);
 
         $motorShowRightSidebar = true;
+        $playlistItems = [];
 
-        return view('partymeister-slides::backend.playlists.create', compact('form', 'motorShowRightSidebar'));
+        return view('partymeister-slides::backend.playlists.create', compact('form', 'motorShowRightSidebar', 'playlistItems'));
     }
 
 
