@@ -1240,8 +1240,8 @@
 
             // For live-text scaling wile resizing the element when operating on a zoomed target...
             if (elementWidth == undefined && elementHeight == undefined) {
-                var elementHeight = $($target).find('.' + element).outerHeight();
-                var elementWidth = $($target).find('.' + element).outerWidth();
+                elementHeight = $($target).find('.' + element).outerHeight();
+                elementWidth = $($target).find('.' + element).outerWidth();
             }
 
             // Inflate text if necessary
