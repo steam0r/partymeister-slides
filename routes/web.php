@@ -39,7 +39,7 @@ Route::group([
 });
 
 Route::get('backend/slide_templates/{slide_template}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlideTemplatesController@show')->middleware(['bindings', 'navigation'])->name('backend.slide_templates.show');
-Route::get('backend/slides/{slide}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')->middleware(['bindings', 'navigation'])->name('backend.slides.show');
+Route::get('backend/slides/{slide}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')->middleware(['bindings', 'navigation', 'etag'])->name('backend.slides.show');
 
 Route::get('test-prizegiving', function() {
     $xml = \Partymeister\Slides\Services\XMLService::send('playlist', array('playlist_id' => 148));
@@ -49,7 +49,7 @@ Route::get('test-prizegiving', function() {
 
 Route::get('xmlservice/playlist', function() {
     //$result = XMLMeister::send('playlist', array('playlist_id' => arr::get($_GET, 'play'), 'callbacks' => arr::get($_GET, 'callbacks')));
-    $xml = \Partymeister\Slides\Services\XMLService::send('playlist', ['playlist_id' => \Partymeister\Slides\Models\Playlist::find(158)->id, 'callbacks' => 0], false, true);
+    $xml = \Partymeister\Slides\Services\XMLService::send('playlist', ['playlist_id' => \Partymeister\Slides\Models\Playlist::find(159)->id, 'callbacks' => 0], false, true);
     return response($xml, 200)
         ->header('Content-Type', 'text/xml');    //echo $xml;
 });

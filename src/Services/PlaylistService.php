@@ -69,6 +69,10 @@ class PlaylistService extends BaseService
 
             $transition = Transition::where('identifier', $item->transition_identifier)->first();
 
+            if ($item->overwrite_slide_type != '') {
+                $i->type = $item->overwrite_slide_type;
+            }
+
             $i->duration             = $item->duration;
             $i->transition_id        = ( is_null($transition) ? null : $transition->id );
             $i->transition_duration  = $item->transition_duration;

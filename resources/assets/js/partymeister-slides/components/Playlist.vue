@@ -30,10 +30,17 @@
                     </div>
                     <div>
                         {{ $t('partymeister-slides.backend.playlists.midi_note') }} <input type="text" size="2" name="midi_note" v-model="file.midi_note">
+                        Slide type override
+                        <select name="overwrite_slide_type" v-model="file.overwrite_slide_type">
+                            <option value="">Default</option>
+                            <option v-for="(slideType, index) in slideTypes" :value="slideType.value">
+                                {{ slideType.name }}
+                            </option>
+                        </select>
                     </div>
                     <div>
                         {{ $t('partymeister-slides.backend.playlists.callback') }}
-                        <select name="callback_hash" v-model="file.callback_hash" style="width: 80%; display: none;">
+                        <select name="callback_hash" v-model="file.callback_hash" style="width: 80%;">
                             <option value="">{{ $t('partymeister-slides.backend.callbacks.no_callback') }}</option>
                             <option v-for="(callback, index) in callbacks" :value="callback.hash">
                                 {{ callback.name }}
@@ -63,6 +70,14 @@
         }
     });
 
+    function IsJsonString(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
 
     export default {
         name: 'partymeister-slides-playlist',
@@ -71,7 +86,8 @@
             return {
                 droppedFiles: [],
                 transitions: [],
-                callbacks: []
+                callbacks: [],
+                slideTypes: [{name: 'Web', value: 'web'}]
             };
         },
         components: {
@@ -79,11 +95,14 @@
         },
         methods: {
             onAdd: function (event) {
+                let fakeObject = Object.assign({}, this.droppedFiles[event.newIndex]);
+                Vue.set(this.droppedFiles, event.newIndex, fakeObject);
                 Vue.set(this.droppedFiles[event.newIndex], 'duration', 20);
                 Vue.set(this.droppedFiles[event.newIndex], 'midi_note', 0);
                 Vue.set(this.droppedFiles[event.newIndex], 'transition_identifier', 255);
                 Vue.set(this.droppedFiles[event.newIndex], 'transition_duration', 2000);
                 Vue.set(this.droppedFiles[event.newIndex], 'callback_hash', '');
+                Vue.set(this.droppedFiles[event.newIndex], 'overwrite_slide_type', '');
                 Vue.set(this.droppedFiles[event.newIndex], 'callback_delay', 20);
                 Vue.set(this.droppedFiles[event.newIndex], 'is_advanced_manually', false);
             },
@@ -106,7 +125,10 @@
             }
         },
         mounted: function () {
-            let files = JSON.parse(this.files);
+            let files = [];
+            if (IsJsonString(this.files)) {
+                files = JSON.parse(this.files);
+            }
             if (files) {
                 this.droppedFiles = files;
             }
@@ -129,6 +151,10 @@
 
     #playlist-item-container .sortable-ghost .card-body {
         display: none;
+    }
+
+    #playlist-item-container select {
+        max-width: 100px !important;
     }
 
     #playlist-item-container .col-md-3 {

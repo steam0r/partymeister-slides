@@ -6,35 +6,67 @@
         body {
             background: transparent !important;
         }
+
+        .clock {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            color: #17D4FE;
+            font-size: 60px;
+            font-family: Orbitron;
+            letter-spacing: 7px;
+
+
+
+        }
+
     </style>
 </head>
-<body id="slidemeister-render" scroll="no" style="overflow: hidden" onload="startTime()">
+<body id="slidemeister-render" scroll="no" style="overflow: hidden">
 <div id="slidemeister">
     @if ($record->cached_html_preview != '')
         @if ($preview == 'true')
             {!! $record->cached_html_preview !!}
         @else
-            <div id="txt" style="position: absolute; left: 50; top: 50;"></div>
+            <div id="MyClockDisplay" class="clock" onload="showTime()"></div>
             {!! str_replace('/media/', env('SCREENS_URL').'/media/', $record->cached_html_final) !!}
         @endif
     @endif
 </div>
 <script>
-    function startTime() {
-        var today = new Date();
-        var h = today.getHours();
-        var m = today.getMinutes();
-        var s = today.getSeconds();
-        m = checkTime(m);
-        s = checkTime(s);
-        document.getElementById('txt').innerHTML =
-            h + ":" + m + ":" + s;
-        var t = setTimeout(startTime, 500);
+    function showTime(){
+        var date = new Date();
+        var h = date.getHours(); // 0 - 23
+        var m = date.getMinutes(); // 0 - 59
+        var s = date.getSeconds(); // 0 - 59
+        var session = "AM";
+
+        if(h == 0){
+            h = 12;
+        }
+
+        if(h > 12){
+            h = h - 12;
+            session = "PM";
+        }
+
+        h = (h < 10) ? "0" + h : h;
+        m = (m < 10) ? "0" + m : m;
+        s = (s < 10) ? "0" + s : s;
+
+        var time = h + ":" + m + ":" + s + " " + session;
+        document.getElementById("MyClockDisplay").innerText = time;
+        document.getElementById("MyClockDisplay").textContent = time;
+
+        setTimeout(showTime, 1000);
+
     }
-    function checkTime(i) {
-        if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-        return i;
-    }
+
+    showTime();
+    window.addEventListener('load', (event) => {
+        console.log('page is fully loaded');
+    });
 </script>
 @if ($record->cached_html_preview == '')
     <script src="{{mix('js/motor-backend.js')}}"></script>
