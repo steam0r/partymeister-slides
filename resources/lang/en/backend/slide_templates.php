@@ -13,13 +13,14 @@ return [
     'name'               => 'Name',
     'template_for'       => 'Template for',
     'template_for_types' => [
-        'basic'        => 'Basic template',
-        'coming_up'    => 'Coming up',
-        'end'          => 'End of compo',
-        'competition'  => 'Competition',
-        'timetable'    => 'Timetable',
-        'participants' => 'Participants',
-        'prizegiving'  => 'Prizegiving',
-        'comments'     => 'Competition comments'
+        'basic'               => 'Basic template',
+        'coming_up'           => 'Coming up',
+        'end'                 => 'End of compo',
+        'competition_entry_1' => 'Competition (Entry 1)',
+        'competition'         => 'Competition',
+        'timetable'           => 'Timetable',
+        'participants'        => 'Participants',
+        'prizegiving'         => 'Prizegiving',
+        'comments'            => 'Competition comments'
     ]
 ];

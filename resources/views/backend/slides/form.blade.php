@@ -1,6 +1,4 @@
-<div class="loader loader-default"
-     data-text="&hearts; Generating slide previews and hiding the ugliness &hearts;"></div>
-
+@section('main')
 @section('view_styles')
     @include('partymeister-slides::layouts.partials.slide_fonts')
     <style type="text/css">
@@ -20,6 +18,7 @@
         }
     </style>
 @append
+@section('main-content')
 <div class="@boxWrapper box-primary" style="margin-bottom: 0;">
     <div class="@boxHeader">
         TOOLBAR
@@ -34,7 +33,10 @@
         <partymeister-slides-dropzone></partymeister-slides-dropzone>
     </div>
 </div>
+<div class="loader loader-default"
+     data-text="&hearts; Generating slide previews and hiding the ugliness &hearts;"></div>
 {{--<img id="preview">--}}
+@endsection
 @section ('right-sidebar')
     <ul class="slidemeister-navbar nav nav-tabs" role="tablist">
         <li class="nav-item">
@@ -85,6 +87,7 @@
         </div>
     </div>
 @endsection
+
 @section('view_scripts')
     @include('partymeister-slides::layouts.partials.slide_scripts')
     <script>

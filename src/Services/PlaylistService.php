@@ -26,10 +26,7 @@ class PlaylistService extends BaseService
 
     public function filters()
     {
-        $this->filter->add(new SelectRenderer('type'))
-                     ->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))
-                     ->setEmptyOption('-- ' . trans('partymeister-slides::backend/playlists.type') . ' --')
-                     ->setOptions(trans('partymeister-slides::backend/playlists.types'));
+        $this->filter->add(new SelectRenderer('type'))->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))->setEmptyOption('-- ' . trans('partymeister-slides::backend/playlists.type') . ' --')->setOptions(trans('partymeister-slides::backend/playlists.types'));
     }
 
 
@@ -65,22 +62,22 @@ class PlaylistService extends BaseService
         foreach ($items as $key => $item) {
             $i              = new PlaylistItem();
             $i->playlist_id = $this->record->id;
-            $i->type        = ( isset($item->type) ? $item->type : $this->getType($item) );
+            $i->type        = (isset($item->type) ? $item->type : $this->getType($item));
 
             $transition = Transition::where('identifier', $item->transition_identifier)->first();
 
-            if ($item->overwrite_slide_type != '') {
+            if (isset($item->overwrite_slide_type) && $item->overwrite_slide_type != '') {
                 $i->type = $item->overwrite_slide_type;
             }
 
             $i->duration             = $item->duration;
-            $i->transition_id        = ( is_null($transition) ? null : $transition->id );
+            $i->transition_id        = (is_null($transition) ? null : $transition->id);
             $i->transition_duration  = $item->transition_duration;
             $i->is_advanced_manually = $item->is_advanced_manually;
             $i->midi_note            = $item->midi_note;
             $i->callback_hash        = $item->callback_hash;
             $i->callback_delay       = $item->callback_delay;
-            $i->metadata             = ( isset($item->metadata) ? $item->metadata : '{}' );
+            $i->metadata             = (isset($item->metadata) ? $item->metadata : '{}');
             $i->sort_position        = $key;
 
             if (property_exists($item, 'slide_type')) {
@@ -177,10 +174,7 @@ class PlaylistService extends BaseService
 
             $s->save();
 
-            $s->addMedia(public_path() . '/images/generating-preview.png')
-              ->preservingOriginal()
-              ->withCustomProperties([ 'generating' => true ])
-              ->toMediaCollection('preview', 'media');
+            $s->addMedia(public_path() . '/images/generating-preview.png')->preservingOriginal()->withCustomProperties(['generating' => true])->toMediaCollection('preview', 'media');
 
             $i                       = new PlaylistItem();
             $i->playlist_id          = $playlist->id;
@@ -328,10 +322,7 @@ class PlaylistService extends BaseService
 
                     $s->save();
 
-                    $s->addMedia(public_path() . '/images/generating-preview.png')
-                      ->preservingOriginal()
-                      ->withCustomProperties([ 'generating' => true ])
-                      ->toMediaCollection('preview', 'media');
+                    $s->addMedia(public_path() . '/images/generating-preview.png')->preservingOriginal()->withCustomProperties(['generating' => true])->toMediaCollection('preview', 'media');
 
                     $i                       = new PlaylistItem();
                     $i->playlist_id          = $playlist->id;
@@ -365,8 +356,7 @@ class PlaylistService extends BaseService
 
                     $s->clearMediaCollection('preview');
                     $s->clearMediaCollection('final');
-                    $s->addMedia(storage_path() . '/preview_' . $slideName . '.png')
-                      ->toMediaCollection('preview', 'media');
+                    $s->addMedia(storage_path() . '/preview_' . $slideName . '.png')->toMediaCollection('preview', 'media');
                     $s->addMedia(storage_path() . '/final_' . $slideName . '.png')->toMediaCollection('final', 'media');
 
 //                    event(new SlideSaved($s, 'slides'));
@@ -390,9 +380,22 @@ class PlaylistService extends BaseService
                     //	->get('duration');             // returns the duration property
                     //}
 
+                    // Load file and check mime type
+                    $file = File::find($d['file_id']);
+                    if (is_null($file)) {
+                        continue;
+                    }
+
+
+                    if ($file->media()->first() != null && $file->media()->first()->mime_type == 'video/mp4') {
+                        $type = 'video';
+                    } else {
+                        $type = 'image';
+                    }
+
                     $i                       = new PlaylistItem();
                     $i->playlist_id          = $playlist->id;
-                    $i->type                 = 'video';
+                    $i->type                 = $type;
                     $i->is_advanced_manually = $isAdvancedManually;
                     $i->midi_note            = $midiNote;
                     if ( ! is_null($transition)) {
@@ -425,7 +428,7 @@ class PlaylistService extends BaseService
             return 'image';
         }
 
-        if (in_array($item->file->mime_type, [ 'video/mp4' ])) {
+        if (in_array($item->file->mime_type, ['video/mp4'])) {
             return 'video';
         }
 

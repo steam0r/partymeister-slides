@@ -73,9 +73,14 @@ class Generator
             $item->addAttribute('name', $parameters['playlist_id'] . "_" . $playlist_item->id);
 
             if ($playlist_item->type == 'now' || $playlist_item->type == 'end' || $playlist_item->type == 'comingup') {
+                // FIXME: this does not happen
                 $faketype = 'image';
             } else {
                 $faketype = $playlist_item->type;
+            }
+
+            if ($playlist_item->slide_type == 'siegmeister_winners' || $playlist_item->slide_type == 'siegmeister_bars') {
+                $faketype = $playlist_item->slide_type;
             }
 
             $item->addAttribute('type', $faketype);
@@ -129,7 +134,7 @@ class Generator
             $item->addChild('manual_advance', $playlist_item->is_advanced_manually);
             $item->addChild('mute', $playlist_item->is_muted);
 
-            if ($playlist_item->type == 'siegmeister_bars' || $playlist_item->type == 'siegmeister_winners') {
+            if ($playlist_item->slide_type == 'siegmeister_bars' || $playlist_item->slide_type == 'siegmeister_winners') {
 
                 $siegmeister = $item->addChild('siegmeister');
                 $siegmeister->addChild('bar_color', config('partymeister-slides-prizegiving.bar_color'));
@@ -226,7 +231,12 @@ class Generator
             $item->addAttribute('type', 'image');
         }
 
-        $item->addChild('path', env('SCREENS_URL') . $attachment->getUrl());
+        //$item->addChild('path', env('SCREENS_URL') . $attachment->getUrl());
+        if (isset($slide) && !is_null($slide)) {
+            $item->addChild('path', env('SCREENS_URL') . route('backend.slides.show', [$slide->id], false));
+        } else {
+            $item->addChild('path', env('SCREENS_URL') . $attachment->getUrl());
+        }
         $item->addChild('duration', '2000');
 
         $slide_type = 'announce';
