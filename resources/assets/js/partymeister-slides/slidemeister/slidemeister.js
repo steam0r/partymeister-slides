@@ -77,6 +77,7 @@
 
             $.each($elements, function(index, e) {
                 slidemeister.ui.resizeText(e, true);
+                $($target).find('.'+e).removeClass('active');
             });
 
             if (version == 'final') {
@@ -799,6 +800,7 @@
 
         slidemeister.ui.toggleSnapping = function (value) {
 
+            // FIXME: snapping will be enabled and disabled for ALL elements!
             $('.slidemeister-element').each(function (index, element) {
                 if ($(element).data('ui-draggable')) {
                     if (value == 1) {
@@ -1177,6 +1179,9 @@
                 if (data != undefined && data.updateDataAttribute === true) {
                     //$('#' + property).val($($target).find('.' + element).data(property));
                     $('#' + property).val($elementData[element][property]);
+                    if (property == 'color' || property == 'backgroundColor') {
+                        $('#' + property).minicolors('value', $elementData[element][property])
+                    }
                 }
             });
         };
