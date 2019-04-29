@@ -12,10 +12,8 @@
     }
   ],
   "require": {
-    "partymeister/core": "0.3.*",
-    "predis/predis": "^1.1",
-    "spatie/browsershot": "^3.17",
-    "laravel/horizon": "^1.3"
+    "partymeister/core": "0.4.*",
+    "spatie/browsershot": "^3.29"
   },
   "autoload": {
     "psr-4": {
@@ -29,5 +27,6 @@
       ]
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "prefer-stable" : true
 }
