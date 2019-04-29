@@ -17,7 +17,7 @@ Route::group([
 });
 
 Route::post('ajax/slidemeister-web/{slide_client}/status', function(Request $request, $slide_client) {
-    Cache::store('redis')->put('slidemeister-web.'.$slide_client, $request->all(), 60);
+    Cache::store('redis')->put('slidemeister-web.'.$slide_client, $request->all(), 3600);
 })->name('ajax.slidemeister-web.status.update');
 
 Route::group([

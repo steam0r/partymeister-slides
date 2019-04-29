@@ -16,6 +16,49 @@ use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 
+/**
+ * Partymeister\Slides\Models\Slide
+ *
+ * @property int $id
+ * @property int|null $slide_template_id
+ * @property string $name
+ * @property string $slide_type
+ * @property int|null $category_id
+ * @property mixed $definitions
+ * @property string $cached_html_final
+ * @property string $cached_html_preview
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int $created_by
+ * @property int $updated_by
+ * @property int|null $deleted_by
+ * @property-read \Motor\Backend\Models\Category|null $category
+ * @property-read \Motor\Backend\Models\User $creator
+ * @property-read \Motor\Backend\Models\User|null $eraser
+ * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
+ * @property-read \Partymeister\Slides\Models\SlideTemplate $template
+ * @property-read \Motor\Backend\Models\User $updater
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide filteredBy(\Motor\Core\Filter\Filter $filter, $column)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide filteredByMultiple(\Motor\Core\Filter\Filter $filter)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide query()
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide search($q, $full_text = false)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCachedHtmlFinal($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCachedHtmlPreview($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCreatedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereDefinitions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereDeletedBy($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereSlideTemplateId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereSlideType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereUpdatedBy($value)
+ * @mixin \Eloquent
+ */
 class Slide extends Model implements HasMedia
 {
 
