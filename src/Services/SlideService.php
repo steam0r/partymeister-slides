@@ -56,15 +56,15 @@ class SlideService extends BaseService
         $pngData = substr($pngData, 22);
         file_put_contents(storage_path() . '/preview_' . $this->record->id . '.png', base64_decode($pngData));
 
-        $pngData = array_get($this->data, 'png_final');
-        $pngData = substr($pngData, 22);
-        file_put_contents(storage_path() . '/final_' . $this->record->id . '.png', base64_decode($pngData));
+        //$pngData = array_get($this->data, 'png_final');
+        //$pngData = substr($pngData, 22);
+        //file_put_contents(storage_path() . '/final_' . $this->record->id . '.png', base64_decode($pngData));
 
         $this->record->clearMediaCollection('preview');
         $this->record->clearMediaCollection('final');
 
         $this->record->addMedia(storage_path() . '/preview_' . $this->record->id . '.png')->toMediaCollection('preview', 'media');
-        $this->record->addMedia(storage_path() . '/final_' . $this->record->id . '.png')->toMediaCollection('final', 'media');
+        //$this->record->addMedia(storage_path() . '/final_' . $this->record->id . '.png')->toMediaCollection('final', 'media');
 
         //GenerateSlide::dispatch($this->record, 'slides')
         //    ->onConnection('sync');

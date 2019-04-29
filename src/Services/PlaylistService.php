@@ -199,9 +199,9 @@ class PlaylistService extends BaseService
 
             // 7. generate slides
             // Convert PNG to actual file
-            $pngData = array_get($data, 'final.' . $slideName);
-            $pngData = substr($pngData, 22);
-            file_put_contents(storage_path() . '/final_' . $slideName . '.png', base64_decode($pngData));
+            //$pngData = array_get($data, 'final.' . $slideName);
+            //$pngData = substr($pngData, 22);
+            //file_put_contents(storage_path() . '/final_' . $slideName . '.png', base64_decode($pngData));
 
             $pngData = array_get($data, 'preview.' . $slideName);
             $pngData = substr($pngData, 22);
@@ -210,7 +210,7 @@ class PlaylistService extends BaseService
             $s->clearMediaCollection('preview');
             $s->clearMediaCollection('final');
             $s->addMedia(storage_path() . '/preview_' . $slideName . '.png')->toMediaCollection('preview', 'media');
-            $s->addMedia(storage_path() . '/final_' . $slideName . '.png')->toMediaCollection('final', 'media');
+            //$s->addMedia(storage_path() . '/final_' . $slideName . '.png')->toMediaCollection('final', 'media');
 
             $slideIds[] = $s->id;
 
@@ -346,9 +346,9 @@ class PlaylistService extends BaseService
 
                     // 7. generate slides
                     // Convert PNG to actual file
-                    $pngData = array_get($data, 'final.' . $slideName);
-                    $pngData = substr($pngData, 22);
-                    file_put_contents(storage_path() . '/final_' . $slideName . '.png', base64_decode($pngData));
+                    //$pngData = array_get($data, 'final.' . $slideName);
+                    //$pngData = substr($pngData, 22);
+                    //file_put_contents(storage_path() . '/final_' . $slideName . '.png', base64_decode($pngData));
 
                     $pngData = array_get($data, 'preview.' . $slideName);
                     $pngData = substr($pngData, 22);
@@ -357,7 +357,7 @@ class PlaylistService extends BaseService
                     $s->clearMediaCollection('preview');
                     $s->clearMediaCollection('final');
                     $s->addMedia(storage_path() . '/preview_' . $slideName . '.png')->toMediaCollection('preview', 'media');
-                    $s->addMedia(storage_path() . '/final_' . $slideName . '.png')->toMediaCollection('final', 'media');
+                    //$s->addMedia(storage_path() . '/final_' . $slideName . '.png')->toMediaCollection('final', 'media');
 
 //                    event(new SlideSaved($s, 'slides'));
                     break;
@@ -385,7 +385,6 @@ class PlaylistService extends BaseService
                     if (is_null($file)) {
                         continue;
                     }
-
 
                     if ($file->media()->first() != null && $file->media()->first()->mime_type == 'video/mp4') {
                         $type = 'video';
@@ -423,7 +422,8 @@ class PlaylistService extends BaseService
     {
         if (in_array($item->file->mime_type, [
             'image/png',
-            'image/jpg'
+            'image/jpg',
+            'image/jpeg',
         ])) {
             return 'image';
         }

@@ -49,7 +49,7 @@ Route::get('test-prizegiving', function() {
 
 Route::get('xmlservice/playlist', function() {
     //$result = XMLMeister::send('playlist', array('playlist_id' => arr::get($_GET, 'play'), 'callbacks' => arr::get($_GET, 'callbacks')));
-    $xml = \Partymeister\Slides\Services\XMLService::send('playlist', ['playlist_id' => \Partymeister\Slides\Models\Playlist::find(161)->id, 'callbacks' => 0], false, true);
+    $xml = \Partymeister\Slides\Services\XMLService::send('playlist', ['playlist_id' => \Partymeister\Slides\Models\Playlist::find(194)->id, 'callbacks' => 0], false, true);
     return response($xml, 200)
         ->header('Content-Type', 'text/xml');    //echo $xml;
 });

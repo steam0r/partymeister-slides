@@ -107,13 +107,13 @@
                     slidemeister.data.removePreviewElements();
                     $('input[name="cached_html_final"]').val($('#slidemeister').html());
 
-                    slidemeister.data.export('final', 1).then(result => {
-                        $('input[name="png_final"]').val(result[2]);
-                        // $('#preview').prop('src', result[2]);
-
-
-                        $('#slide-form').submit();
-                    });
+                    $('#slide-form').submit();
+                    // slidemeister.data.export('final', 1).then(result => {
+                    //     $('input[name="png_final"]').val(result[2]);
+                    //     // $('#preview').prop('src', result[2]);
+                    //
+                    //
+                    // });
 
                 });
             });
