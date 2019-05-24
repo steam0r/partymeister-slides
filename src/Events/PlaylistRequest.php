@@ -33,7 +33,7 @@ class PlaylistRequest implements ShouldBroadcastNow
     {
         $playlistData                         = fractal($playlist, new PlaylistTransformer())->toArray();
         $playlistData['data']['callbacks']    = (bool) $callbacks;
-        $playlistData['data']['callback_url'] = env('APP_URL') . '/api/callback/';
+        $playlistData['data']['callback_url'] = config('app.url') . '/api/callback/';
 
         foreach ($playlist->items()->orderBy('sort_position', 'ASC')->get() as $item) {
             $f = null;

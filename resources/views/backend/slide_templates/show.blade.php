@@ -2,9 +2,9 @@
 <head>
     @include('partymeister-slides::layouts.partials.slide_fonts')
     @if (strpos($_SERVER['HTTP_USER_AGENT'], 'AltonaHTTPClient') > 0)
-        <link href="{{env('SCREENS_URL')}}{{ mix('/css/motor-backend.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{config('partymeister-slides.screens_url')}}{{ mix('/css/motor-backend.css') }}" rel="stylesheet" type="text/css"/>
     @else
-        <link href="{{env('APP_URL')}}{{ mix('/css/motor-backend.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{config('app.url')}}{{ mix('/css/motor-backend.css') }}" rel="stylesheet" type="text/css"/>
     @endif
 
     <style type="text/css">
@@ -19,7 +19,7 @@
         @if ($preview == 'true')
             {!! $record->cached_html_preview !!}
         @else
-            {!! str_replace('/media/', env('SCREENS_URL').'/media/', $record->cached_html_final) !!}
+            {!! str_replace('/media/',config('partymeister-slides.screens_url').'/media/', $record->cached_html_final) !!}
         @endif
     @endif
 </div>

@@ -32,6 +32,7 @@ class PartymeisterServiceProvider extends ServiceProvider
 
     public function config()
     {
+        $this->mergeConfigFrom(__DIR__ . '/../../config/partymeister-slides.php', 'partymeister-slides');
         $this->mergeConfigFrom(__DIR__ . '/../../config/partymeister-slides-fonts.php', 'partymeister-slides-fonts');
     }
 

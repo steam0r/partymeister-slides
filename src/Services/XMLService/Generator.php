@@ -39,7 +39,7 @@ class Generator
         $param->addAttribute('name', 'name');
 
         // FIXME status url is still from pm2
-        $param = $xml->addChild('parameter', env('SCREENS_URL') . '/backend/screens/status');
+        $param = $xml->addChild('parameter', config('partymeister-slides.screens_url') . '/backend/screens/status');
         $param->addAttribute('name', 'callback');
 
         //$param = $xml->addChild('parameter', $playlist->type);
@@ -88,7 +88,7 @@ class Generator
             // Add callback if available
             if ((string) $playlist_item->callback_hash != '') {
                 $callback = $item->addChild('callback',
-                    env('SCREENS_URL') . '/api/callback/' . $playlist_item->callback_hash);
+                    config('partymeister-slides.screens_url') . '/api/callback/' . $playlist_item->callback_hash);
                 $callback->addAttribute('delay', $playlist_item->callback_delay . '.0');
             }
 
@@ -100,12 +100,12 @@ class Generator
             //}
             //else
             //{
-            //	$item->addChild('path', env('SCREENS_URL').$attachment->file->getUrl() . $attachment->file->filename);
+            //	$item->addChild('path', config('partymeister-slides.screens_url').$attachment->file->getUrl() . $attachment->file->filename);
             //}
             if ($playlist_item->slide_id != null) {
-                $item->addChild('path', env('SCREENS_URL') . route('backend.slides.show', [$playlist_item->slide->id], false));
+                $item->addChild('path', config('partymeister-slides.screens_url') . route('backend.slides.show', [$playlist_item->slide->id], false));
             } else {
-                $item->addChild('path', env('SCREENS_URL') . $attachment->getUrl());
+                $item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
             }
 
             if ($playlist_item->type == 'siegmeister_bars') {
@@ -231,11 +231,11 @@ class Generator
             $item->addAttribute('type', 'image');
         }
 
-        //$item->addChild('path', env('SCREENS_URL') . $attachment->getUrl());
+        //$item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
         if (isset($slide) && !is_null($slide)) {
-            $item->addChild('path', env('SCREENS_URL') . route('backend.slides.show', [$slide->id], false));
+            $item->addChild('path', config('partymeister-slides.screens_url') . route('backend.slides.show', [$slide->id], false));
         } else {
-            $item->addChild('path', env('SCREENS_URL') . $attachment->getUrl());
+            $item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
         }
         $item->addChild('duration', '2000');
 
