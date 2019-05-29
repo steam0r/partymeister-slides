@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Http\Controllers\Api\SlideClients;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Motor\Backend\Http\Controllers\Controller;
 use Partymeister\Slides\Models\Playlist;
@@ -59,12 +60,12 @@ class CommunicationController extends Controller
                 }
                 break;
             case 'slidemeister-web':
-                if (array_get($request->all(), 'file_id') != null) {
+                if (Arr::get($request->all(), 'file_id') != null) {
                     $type = 'file';
-                    $item = array_get($request->all(), 'file_id');
+                    $item = Arr::get($request->all(), 'file_id');
                 } else {
                     $type = 'slide';
-                    $item = array_get($request->all(), 'slide_id');
+                    $item = Arr::get($request->all(), 'slide_id');
                 }
 
                 event(new \Partymeister\Slides\Events\PlayNowRequest($type, $item));

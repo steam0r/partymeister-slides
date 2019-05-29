@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Services;
 
+use Illuminate\Support\Arr;
 use Motor\Core\Filter\Renderers\SelectRenderer;
 use Partymeister\Slides\Events\SlideSaved;
 use Partymeister\Slides\Events\SlideTemplateSaved;
@@ -52,11 +53,11 @@ class SlideTemplateService extends BaseService
     protected function generatePreview()
     {
         // Convert PNG to actual file
-        $pngData = array_get($this->data, 'png_preview');
+        $pngData = Arr::get($this->data, 'png_preview');
         $pngData = substr($pngData, 22);
         file_put_contents(storage_path() . '/preview_' . $this->record->id . '.png', base64_decode($pngData));
 
-        $pngData = array_get($this->data, 'png_final');
+        $pngData = Arr::get($this->data, 'png_final');
         $pngData = substr($pngData, 22);
         file_put_contents(storage_path() . '/final_' . $this->record->id . '.png', base64_decode($pngData));
 

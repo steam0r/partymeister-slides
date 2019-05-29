@@ -4,6 +4,7 @@ namespace Partymeister\Slides\Services;
 
 use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
+use Illuminate\Support\Arr;
 use Motor\Backend\Models\Category;
 use Motor\Core\Filter\Renderers\SelectRenderer;
 use Motor\Media\Models\File;
@@ -141,12 +142,12 @@ class PlaylistService extends BaseService
         // 3. save slides
         $count    = 0;
         $slideIds = [];
-        foreach (array_get($data, 'slide', []) as $slideName => $definitions) {
+        foreach (Arr::get($data, 'slide', []) as $slideName => $definitions) {
 
             $count++;
-            $type                 = array_get($data, 'type.' . $slideName);
-            $name                 = array_get($data, 'name.' . $slideName);
-            $meta                 = array_get($data, 'meta.' . $slideName, '{}');
+            $type                 = Arr::get($data, 'type.' . $slideName);
+            $name                 = Arr::get($data, 'name.' . $slideName);
+            $meta                 = Arr::get($data, 'meta.' . $slideName, '{}');
             $slideType            = config('partymeister-competitions-slides.' . $type . '.slide_type', 'default');
             $midiNote             = config('partymeister-competitions-slides.' . $type . '.midi_note', 0);
             $transitionIdentifier = config('partymeister-competitions-slides.' . $type . '.transition', 0);
@@ -169,8 +170,8 @@ class PlaylistService extends BaseService
             $s->name                = $name;
             $s->slide_type          = $slideType;
             $s->definitions         = $definitions;
-            $s->cached_html_preview = array_get($data, 'cached_html_preview.' . $slideName, '');
-            $s->cached_html_final   = array_get($data, 'cached_html_final.' . $slideName, '');
+            $s->cached_html_preview = Arr::get($data, 'cached_html_preview.' . $slideName, '');
+            $s->cached_html_final   = Arr::get($data, 'cached_html_final.' . $slideName, '');
 
             $s->save();
 
@@ -203,7 +204,7 @@ class PlaylistService extends BaseService
             //$pngData = substr($pngData, 22);
             //file_put_contents(storage_path() . '/final_' . $slideName . '.png', base64_decode($pngData));
 
-            $pngData = array_get($data, 'preview.' . $slideName);
+            $pngData = Arr::get($data, 'preview.' . $slideName);
             $pngData = substr($pngData, 22);
             file_put_contents(storage_path() . '/preview_' . $slideName . '.png', base64_decode($pngData));
 
@@ -273,11 +274,11 @@ class PlaylistService extends BaseService
 
         // 3. save slides
         $count = 0;
-        foreach (array_get($data, 'slide', []) as $slideName => $definitions) {
+        foreach (Arr::get($data, 'slide', []) as $slideName => $definitions) {
             $count++;
-            $type                 = array_get($data, 'type.' . $slideName);
-            $name                 = array_get($data, 'name.' . $slideName);
-            $id                   = array_get($data, 'id.' . $slideName, null);
+            $type                 = Arr::get($data, 'type.' . $slideName);
+            $name                 = Arr::get($data, 'name.' . $slideName);
+            $id                   = Arr::get($data, 'id.' . $slideName, null);
             $slideType            = config('partymeister-competitions-slides.' . $type . '.slide_type', 'default');
             $midiNote             = config('partymeister-competitions-slides.' . $type . '.midi_note', 0);
             $transitionIdentifier = config('partymeister-competitions-slides.' . $type . '.transition', 5);
@@ -317,8 +318,8 @@ class PlaylistService extends BaseService
                     $s->name                = $name;
                     $s->slide_type          = $slideType;
                     $s->definitions         = $definitions;
-                    $s->cached_html_preview = array_get($data, 'cached_html_preview.' . $slideName, '');
-                    $s->cached_html_final   = array_get($data, 'cached_html_final.' . $slideName, '');
+                    $s->cached_html_preview = Arr::get($data, 'cached_html_preview.' . $slideName, '');
+                    $s->cached_html_final   = Arr::get($data, 'cached_html_final.' . $slideName, '');
 
                     $s->save();
 
@@ -350,7 +351,7 @@ class PlaylistService extends BaseService
                     //$pngData = substr($pngData, 22);
                     //file_put_contents(storage_path() . '/final_' . $slideName . '.png', base64_decode($pngData));
 
-                    $pngData = array_get($data, 'preview.' . $slideName);
+                    $pngData = Arr::get($data, 'preview.' . $slideName);
                     $pngData = substr($pngData, 22);
                     file_put_contents(storage_path() . '/preview_' . $slideName . '.png', base64_decode($pngData));
 

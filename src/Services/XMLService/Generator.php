@@ -2,6 +2,7 @@
 
 namespace Partymeister\Slides\Services\XMLService;
 
+use Illuminate\Support\Arr;
 use Motor\Media\Models\File;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\Slide;
@@ -48,7 +49,7 @@ class Generator
         $param = $xml->addChild('parameter', $parameters['date_modified']);
         $param->addAttribute('name', 'timestamp');
 
-        if (array_get($parameters, 'callbacks') == 1) {
+        if (Arr::get($parameters, 'callbacks') == 1) {
             $param = $xml->addChild('parameter', 1);
         } else {
             $param = $xml->addChild('parameter', 0);
@@ -170,7 +171,7 @@ class Generator
             }
             $previousItem = $playlist_item;
         }
-        if (array_get($_GET, 'debug')) {
+        if (Arr::get($_GET, 'debug')) {
             print_r(self::add_encoding($xml->asXML()));
             die();
         }
