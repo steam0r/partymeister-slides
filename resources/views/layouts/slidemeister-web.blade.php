@@ -83,7 +83,7 @@
         .slidemeister-bars {
             position: absolute;
             opacity: 0.5;
-            background-color: white;
+            background-color: black;
         }
 
         .slidemeister-bars.active {
@@ -106,7 +106,7 @@
 
 <body>
 <main id="slidemeisterVue">
-    <div class="debug alert alert-danger">
+    <div class="debug alert alert-danger d-none">
         CachedPlaylists: @{{ cachedPlaylists.length }}<br>
         Playlist: @{{ playlist.name }}<br>
         Items: @{{ items.length }}<br>
@@ -489,19 +489,19 @@
                 }
                 switch (this.currentBackground) {
                     case 'comingup':
-                        startComingup();
+                        // startComingup();
                         break;
                     case 'end':
-                        startEnd();
+                        // startEnd();
                         break;
                     case 'default':
                     case 'announce':
-                        startStarfield();
+                        // startStarfield();
                         break;
                     case 'compo':
                     case 'siegmeister_bars':
                     case 'siegmeister_winners':
-                        startStarfield();
+                        // startStarfield();
                         break;
                 }
             },

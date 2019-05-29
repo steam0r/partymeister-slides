@@ -128,6 +128,7 @@ class PlaylistService extends BaseService
             $c->scope = 'slides';
             $c->name  = 'Prizegiving (actual)';
             $rootNode->appendNode($c);
+            $category = Category::where('scope', 'slides')->where('name', 'Prizegiving (actual)')->first();
         }
 
         // 4. create playlist
@@ -384,7 +385,7 @@ class PlaylistService extends BaseService
                     // Load file and check mime type
                     $file = File::find($d['file_id']);
                     if (is_null($file)) {
-                        continue;
+                        break;
                     }
 
                     if ($file->media()->first() != null && $file->media()->first()->mime_type == 'video/mp4') {

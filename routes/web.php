@@ -5,9 +5,9 @@ use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\SlideClient;
 
 // FIXME: put this in a controller so we can use the Route caching
-//Route::get('slidemeister-web/{slide_client}', function(SlideClient $slideClient) {
-//    return view('partymeister-slides::slidemeister-web/index', ['slideClient' => $slideClient]);
-//})->middleware(['bindings'])->name('backend.slidemeister-web.show');
+Route::get('slidemeister-web/{slide_client}', function(SlideClient $slideClient) {
+    return view('partymeister-slides::slidemeister-web/index', ['slideClient' => $slideClient, 'channelPrefix' => config('cache.prefix')]);
+})->middleware(['bindings'])->name('backend.slidemeister-web.show');
 
 Route::group([
     'as'         => 'backend.',

@@ -38,6 +38,6 @@ class PlaylistNextRequest implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel('slidemeister.'.session('screens.active'));
+        return new Channel(config('cache.prefix').':slidemeister-web.'.session('screens.active'));
     }
 }

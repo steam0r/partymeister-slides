@@ -68,7 +68,7 @@
                     var remotePlaylistTimestamp = p.updated_at;
                     var playlistTimestamp = parseInt($('.playlist-' + p.id + '-outdated').data('timestamp'));
 
-                    if (remotePlaylistTimestamp < playlistTimestamp) {
+                    if (remotePlaylistTimestamp !== null && remotePlaylistTimestamp < playlistTimestamp) {
                         $('.playlist-' + p.id + '-outdated').removeClass('d-none');
                     }
                 }

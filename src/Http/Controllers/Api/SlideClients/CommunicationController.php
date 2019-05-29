@@ -166,7 +166,7 @@ class CommunicationController extends Controller
                     return response()->json([ 'result' => $result ]);
                 }
             case 'slidemeister-web':
-                $result = Cache::store('redis')->get('slidemeister-web.'.session('screens.active'));
+                $result = Cache::store('redis')->get(config('cache.prefix').':slidemeister-web.'.session('screens.active'));
                 if ( ! $result) {
                     return response()->json([ 'result' => $result ], 400);
                 } else {
