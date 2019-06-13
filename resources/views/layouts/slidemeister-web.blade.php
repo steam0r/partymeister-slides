@@ -117,7 +117,7 @@
     <template v-if="currentItem != null && items[currentItem] != undefined">
         <div v-if="items[currentItem].type == 'image' && items[currentItem].cached_html_final != ''"
              v-html="items[currentItem].cached_html_final" class="slidemeister-instance slide current"></div>
-        <img v-if="items[currentItem].type == 'image' && items[currentItem].cached_html_final == ''"
+        <img v-if="items[currentItem].type == 'image' && items[currentItem].cached_html_final == undefined"
              :src="items[currentItem].file.file_original" class="img-fluid slide current">
         <video v-if="items[currentItem].type == 'video'" id="video-current" class="slide current">
             <source :src="items[currentItem].file.file_original" type="video/mp4">
@@ -314,6 +314,7 @@
                 } else {
                     this.previousItem = null;
                 }
+                console.log(this.items[this.currentItem]);
 
                 localStorage.setItem('currentItem', this.currentItem);
 
@@ -507,6 +508,8 @@
             },
             updateStatus: function () {
                 console.log('Update status');
+                console.log(this.items);
+                /*
                 let data = {
                     playlists: this.cachedPlaylists.map(playlist => {
                         return {id: playlist.id, updated_at: new Date(playlist.updated_at.date).getTime()/1000}
@@ -517,6 +520,7 @@
                 axios.post('{{route('ajax.slidemeister-web.status.update', ['slide_client' => $slideClient->id])}}', data).then(response => {
                     console.log('Updated status');
                 });
+                */
             }
         }
     });
@@ -533,7 +537,7 @@
         $('canvas').css('z-index', 0);
 
         localStorage.clear();
-        this.updateStatus();
+        slidemeisterVue.updateStatus();
     });
 </script>
 @yield('view_scripts')

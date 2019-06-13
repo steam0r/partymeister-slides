@@ -60,7 +60,7 @@
                         console.log('Playlist exists, checking if it needs to be updated');
                         // Update callback status
                         slidemeisterVue.cachedPlaylists[index].callbacks = e.playlist.callbacks;
-                        if (p.updated_at.date != e.playlist.updated_at.date) {
+                        if (p.updated_at != e.playlist.updated_at.date) {
                             console.log('Playlist outdated, checking if it is currently playing');
                             slidemeisterVue.cachedPlaylists[index] = e.playlist;
                             if (slidemeisterVue.playlist.id == p.id) {
