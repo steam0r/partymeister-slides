@@ -94,13 +94,15 @@ class PartymeisterSlidesGenerateEntryCommand extends Command
 
             $entry->save();
 
-            $option1 = array_rand($options);
-            $option2 = array_rand($options);
-            $option3 = array_rand($options);
+            if (count($options) > 0) {
+                $option1 = array_rand($options);
+                $option2 = array_rand($options);
+                $option3 = array_rand($options);
 
-            $entry->options()->attach($option1);
-            $entry->options()->attach($option2);
-            $entry->options()->attach($option3);
+                $entry->options()->attach($option1);
+                $entry->options()->attach($option2);
+                $entry->options()->attach($option3);
+            }
 
             $this->info('Created entry: ' . $entry->title . ' for competition: ' . $competition->name);
         }
