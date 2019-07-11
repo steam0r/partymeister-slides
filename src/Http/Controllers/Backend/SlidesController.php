@@ -29,9 +29,9 @@ class SlidesController extends Controller
     {
         $grid = new SlideGrid(Slide::class);
 
-        $service      = SlideService::collection($grid);
-        $grid->filter = $service->getFilter();
-        $paginator    = $service->getPaginator();
+        $service = SlideService::collection($grid);
+        $grid->setFilter($service->getFilter());
+        $paginator = $service->getPaginator();
 
         return view('partymeister-slides::backend.slides.index', compact('paginator', 'grid'));
     }
@@ -63,7 +63,7 @@ class SlidesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -89,16 +89,17 @@ class SlidesController extends Controller
      */
     public function duplicate(Slide $record)
     {
-        $newRecord = $record->replicate();
-        $newRecord->name = 'Duplicate of '.$newRecord->name;
+        $newRecord       = $record->replicate();
+        $newRecord->name = 'Duplicate of ' . $newRecord->name;
 
         return $this->create($newRecord);
     }
 
+
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -107,18 +108,19 @@ class SlidesController extends Controller
         $preview = $request->get('preview', 'false');
 
         $placeholderData = json_encode([
-            'wurst' => 'Schinken',
+            'wurst'    => 'Schinken',
             'schinken' => 'uahahahahha!'
         ]);
 
-        return view('partymeister-slides::backend.slide_templates.show', compact('record', 'preview', 'placeholderData'));
+        return view('partymeister-slides::backend.slide_templates.show',
+            compact('record', 'preview', 'placeholderData'));
     }
 
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -140,8 +142,8 @@ class SlidesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -165,7 +167,7 @@ class SlidesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

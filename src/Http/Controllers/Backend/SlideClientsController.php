@@ -14,13 +14,17 @@ use Kris\LaravelFormBuilder\FormBuilderTrait;
 
 class SlideClientsController extends Controller
 {
+
     use FormBuilderTrait;
+
 
     public function activate(SlideClient $record, SlideClientRequest $request)
     {
-        session(['screens.active' => $record->id]);
+        session([ 'screens.active' => $record->id ]);
+
         return redirect($request->server('HTTP_REFERER'));
     }
+
 
     /**
      * Display a listing of the resource.
@@ -32,8 +36,8 @@ class SlideClientsController extends Controller
         $grid = new SlideClientGrid(SlideClient::class);
 
         $service = SlideClientService::collection($grid);
-        $grid->filter = $service->getFilter();
-        $paginator    = $service->getPaginator();
+        $grid->setFilter($service->getFilter());
+        $paginator = $service->getPaginator();
 
         return view('partymeister-slides::backend.slide_clients.index', compact('paginator', 'grid'));
     }
@@ -59,7 +63,7 @@ class SlideClientsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -83,7 +87,7 @@ class SlideClientsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -96,7 +100,7 @@ class SlideClientsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -116,8 +120,8 @@ class SlideClientsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -141,7 +145,7 @@ class SlideClientsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

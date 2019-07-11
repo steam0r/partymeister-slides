@@ -31,6 +31,7 @@ class PlaylistRequest implements ShouldBroadcastNow
      */
     public function __construct(Playlist $playlist, $callbacks)
     {
+        $playlistItems = [];
         $playlistData                         = fractal($playlist, new PlaylistTransformer())->toArray();
         $playlistData['data']['callbacks']    = (bool) $callbacks;
         $playlistData['data']['callback_url'] = config('app.url') . '/api/callback/';

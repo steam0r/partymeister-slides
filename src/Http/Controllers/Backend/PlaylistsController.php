@@ -19,7 +19,9 @@ use Spatie\Fractalistic\Fractal;
 
 class PlaylistsController extends Controller
 {
+
     use FormBuilderTrait;
+
 
     /**
      * Display a listing of the resource.
@@ -31,8 +33,8 @@ class PlaylistsController extends Controller
         $grid = new PlaylistGrid(Playlist::class);
 
         $service = PlaylistService::collection($grid);
-        $grid->filter = $service->getFilter();
-        $paginator    = $service->getPaginator();
+        $grid->setFilter($service->getFilter());
+        $paginator = $service->getPaginator();
 
         return view('partymeister-slides::backend.playlists.index', compact('paginator', 'grid'));
     }
@@ -52,16 +54,17 @@ class PlaylistsController extends Controller
         ]);
 
         $motorShowRightSidebar = true;
-        $playlistItems = [];
+        $playlistItems         = [];
 
-        return view('partymeister-slides::backend.playlists.create', compact('form', 'motorShowRightSidebar', 'playlistItems'));
+        return view('partymeister-slides::backend.playlists.create',
+            compact('form', 'motorShowRightSidebar', 'playlistItems'));
     }
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -85,7 +88,7 @@ class PlaylistsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -98,7 +101,7 @@ class PlaylistsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -134,15 +137,17 @@ class PlaylistsController extends Controller
         }
 
         $playlistItems = json_encode($playlistItems, JSON_UNESCAPED_SLASHES);
-        return view('partymeister-slides::backend.playlists.edit', compact('form', 'motorShowRightSidebar', 'playlistItems'));
+
+        return view('partymeister-slides::backend.playlists.edit',
+            compact('form', 'motorShowRightSidebar', 'playlistItems'));
     }
 
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
+     * @param \Illuminate\Http\Request $request
+     * @param int                      $id
      *
      * @return \Illuminate\Http\Response
      */
@@ -166,7 +171,7 @@ class PlaylistsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */

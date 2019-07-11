@@ -48,7 +48,7 @@ class GenerateSlideCollection implements ShouldQueue
 
         $command = 'node '.__DIR__.'/../../resources/assets/bin/hack.js \''.json_encode(['slides' => $this->slideIds]).'\'';
 
-        $return = exec($command);
+        exec($command);
 
         //dd($result);
 

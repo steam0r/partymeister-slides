@@ -28,7 +28,7 @@ class SlideTemplatesController extends Controller
         $grid = new SlideTemplateGrid(SlideTemplate::class);
 
         $service      = SlideTemplateService::collection($grid);
-        $grid->filter = $service->getFilter();
+        $grid->setFilter($service->getFilter());
         $paginator    = $service->getPaginator();
 
         return view('partymeister-slides::backend.slide_templates.index', compact('paginator', 'grid'));
