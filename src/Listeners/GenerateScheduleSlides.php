@@ -3,11 +3,14 @@
 namespace Partymeister\Slides\Listeners;
 
 use Partymeister\Core\Events\EventSaved;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
+/**
+ * Class GenerateScheduleSlides
+ * @package Partymeister\Slides\Listeners
+ */
 class GenerateScheduleSlides
 {
+
     /**
      * Create the event listener.
      *
@@ -18,10 +21,11 @@ class GenerateScheduleSlides
         //
     }
 
+
     /**
      * Handle the event.
      *
-     * @param  EventSaved  $event
+     * @param EventSaved $event
      * @return void
      */
     public function handle(EventSaved $event)

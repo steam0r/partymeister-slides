@@ -4,19 +4,39 @@ namespace Partymeister\Slides\Helpers;
 
 use Illuminate\Support\Facades\Log;
 use Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot;
+use Spatie\Browsershot\Exceptions\ElementNotFound;
 
-class Browsershot extends \Spatie\Browsershot\Browsershot {
+/**
+ * Class Browsershot
+ * @package Partymeister\Slides\Helpers
+ */
+class Browsershot extends \Spatie\Browsershot\Browsershot
+{
+
+    /**
+     * @var bool
+     */
     protected $debug = false;
 
+
+    /**
+     * @return $this
+     */
     public function debug()
     {
         $this->debug = true;
+
         return $this;
     }
 
+
+    /**
+     * @param string $targetPath
+     * @throws ElementNotFound
+     */
     public function save(string $targetPath)
     {
-        if (!$this->debug) {
+        if ( ! $this->debug) {
             parent::save($targetPath);
         }
 
@@ -36,11 +56,11 @@ class Browsershot extends \Spatie\Browsershot\Browsershot {
 
         $this->cleanupTemporaryHtmlFile();
 
-        if (! file_exists($targetPath)) {
+        if ( ! file_exists($targetPath)) {
             throw CouldNotTakeBrowsershot::chromeOutputEmpty($targetPath);
         }
 
-        if (! $this->imageManipulations->isEmpty()) {
+        if ( ! $this->imageManipulations->isEmpty()) {
             $this->applyManipulations($targetPath);
         }
 

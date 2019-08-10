@@ -2,62 +2,68 @@
 
 namespace Partymeister\Slides\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Motor\Backend\Models\Category;
-use Motor\Core\Traits\Searchable;
-use Motor\Core\Traits\Filterable;
 use Culpa\Traits\Blameable;
 use Culpa\Traits\CreatedBy;
 use Culpa\Traits\DeletedBy;
 use Culpa\Traits\UpdatedBy;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Motor\Backend\Models\Category;
+use Motor\Backend\Models\User;
+use Motor\Core\Filter\Filter;
+use Motor\Core\Traits\Filterable;
+use Motor\Core\Traits\Searchable;
 use Spatie\Image\Exceptions\InvalidManipulation;
-
-use Spatie\MediaLibrary\Models\Media;
 use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
+use Spatie\MediaLibrary\Models\Media;
 
 /**
  * Partymeister\Slides\Models\Slide
  *
- * @property int $id
- * @property int|null $slide_template_id
- * @property string $name
- * @property string $slide_type
- * @property int|null $category_id
- * @property mixed $definitions
- * @property string $cached_html_final
- * @property string $cached_html_preview
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $created_by
- * @property int $updated_by
- * @property int|null $deleted_by
- * @property-read \Motor\Backend\Models\Category|null $category
- * @property-read \Motor\Backend\Models\User $creator
- * @property-read \Motor\Backend\Models\User|null $eraser
- * @property-read \Illuminate\Database\Eloquent\Collection|\Spatie\MediaLibrary\Models\Media[] $media
- * @property-read \Partymeister\Slides\Models\SlideTemplate $template
- * @property-read \Motor\Backend\Models\User $updater
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide filteredBy(\Motor\Core\Filter\Filter $filter, $column)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide filteredByMultiple(\Motor\Core\Filter\Filter $filter)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide query()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide search($q, $full_text = false)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCachedHtmlFinal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCachedHtmlPreview($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereDefinitions($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereDeletedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereSlideTemplateId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereSlideType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Slide whereUpdatedBy($value)
- * @mixin \Eloquent
+ * @property int                                                                               $id
+ * @property int|null                                                                          $slide_template_id
+ * @property string                                                                            $name
+ * @property string                                                                            $slide_type
+ * @property int|null                                                                          $category_id
+ * @property mixed                                                                             $definitions
+ * @property string                                                                            $cached_html_final
+ * @property string                          $cached_html_preview
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property int                             $created_by
+ * @property int                             $updated_by
+ * @property int|null                        $deleted_by
+ * @property-read Category|null              $category
+ * @property-read User                       $creator
+ * @property-read User|null                  $eraser
+ * @property-read Collection|Media[]         $media
+ * @property-read SlideTemplate              $template
+ * @property-read User                       $updater
+ * @method static Builder|Slide filteredBy( Filter $filter, $column )
+ * @method static Builder|Slide filteredByMultiple( Filter $filter )
+ * @method static Builder|Slide newModelQuery()
+ * @method static Builder|Slide newQuery()
+ * @method static Builder|Slide query()
+ * @method static Builder|Slide search( $q, $full_text = false )
+ * @method static Builder|Slide whereCachedHtmlFinal( $value )
+ * @method static Builder|Slide whereCachedHtmlPreview( $value )
+ * @method static Builder|Slide whereCategoryId( $value )
+ * @method static Builder|Slide whereCreatedAt( $value )
+ * @method static Builder|Slide whereCreatedBy( $value )
+ * @method static Builder|Slide whereDefinitions( $value )
+ * @method static Builder|Slide whereDeletedBy( $value )
+ * @method static Builder|Slide whereId( $value )
+ * @method static Builder|Slide whereName( $value )
+ * @method static Builder|Slide whereSlideTemplateId( $value )
+ * @method static Builder|Slide whereSlideType( $value )
+ * @method static Builder|Slide whereUpdatedAt( $value )
+ * @method static Builder|Slide whereUpdatedBy( $value )
+ * @mixin Eloquent
  */
 class Slide extends Model implements HasMedia
 {
@@ -107,6 +113,12 @@ class Slide extends Model implements HasMedia
     //    'definitions' => 'array',
     //];
 
+    /**
+     * @param Media|null $media
+     */
+    /**
+     * @param Media|null $media
+     */
     public function registerMediaConversions(Media $media = null)
     {
         try {
@@ -118,12 +130,24 @@ class Slide extends Model implements HasMedia
     }
 
 
+    /**
+     * @return BelongsTo
+     */
+    /**
+     * @return BelongsTo
+     */
     public function category()
     {
         return $this->belongsTo(Category::class);
     }
 
 
+    /**
+     * @return BelongsTo
+     */
+    /**
+     * @return BelongsTo
+     */
     public function template()
     {
         return $this->belongsTo(SlideTemplate::class);

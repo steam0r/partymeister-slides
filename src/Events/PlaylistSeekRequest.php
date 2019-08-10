@@ -3,29 +3,38 @@
 namespace Partymeister\Slides\Events;
 
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use Partymeister\Slides\Models\Playlist;
 
+/**
+ * Class PlaylistSeekRequest
+ * @package Partymeister\Slides\Events
+ */
 class PlaylistSeekRequest implements ShouldBroadcastNow
 {
 
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * @var int
+     */
     public $playlist_id;
 
+    /**
+     * @var
+     */
     public $index;
 
 
     /**
      * Create a new event instance.
      *
-     * @return void
+     * PlaylistSeekRequest constructor.
+     * @param Playlist $playlist
+     * @param          $index
      */
     public function __construct(Playlist $playlist, $index)
     {
@@ -37,10 +46,10 @@ class PlaylistSeekRequest implements ShouldBroadcastNow
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
     public function broadcastOn()
     {
-        return new Channel(config('cache.prefix').':slidemeister-web.'.session('screens.active'));
+        return new Channel(config('cache.prefix') . ':slidemeister-web.' . session('screens.active'));
     }
 }

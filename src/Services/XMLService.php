@@ -2,12 +2,24 @@
 
 namespace Partymeister\Slides\Services;
 
+use Exception;
 use Partymeister\Slides\Models\SlideClient;
 use Partymeister\Slides\Services\XMLService\Generator;
 
+/**
+ * Class XMLService
+ * @package Partymeister\Slides\Services
+ */
 class XMLService
 {
 
+    /**
+     * @param       $method
+     * @param array $parameters
+     * @param bool  $send
+     * @param bool  $debug
+     * @return bool|string
+     */
     public static function send($method, $parameters = [], $send = true, $debug = false)
     {
         $xml = Generator::$method($parameters);
@@ -22,6 +34,11 @@ class XMLService
     }
 
 
+    /**
+     * @param      $xml
+     * @param null $screen
+     * @return bool|string
+     */
     public static function _send($xml, $screen = null)
     {
         if ($screen == null) {
@@ -45,7 +62,7 @@ class XMLService
             }
 
             return $retval;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
     }

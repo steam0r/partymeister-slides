@@ -2,38 +2,44 @@
 
 namespace Partymeister\Slides\Http\Controllers\Api;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Motor\Backend\Http\Controllers\Controller;
-
-use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Http\Requests\Backend\PlaylistRequest;
+use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Services\PlaylistService;
 use Partymeister\Slides\Transformers\PlaylistTransformer;
 
+/**
+ * Class PlaylistsController
+ * @package Partymeister\Slides\Http\Controllers\Api
+ */
 class PlaylistsController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
         $paginator = PlaylistService::collection()->getPaginator();
-        $resource = $this->transformPaginator($paginator, PlaylistTransformer::class);
+        $resource  = $this->transformPaginator($paginator, PlaylistTransformer::class);
 
         return $this->respondWithJson('Playlist collection read', $resource);
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param PlaylistRequest $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(PlaylistRequest $request)
     {
-        $result = PlaylistService::create($request)->getResult();
+        $result   = PlaylistService::create($request)->getResult();
         $resource = $this->transformItem($result, PlaylistTransformer::class);
 
         return $this->respondWithJson('Playlist created', $resource);
@@ -43,13 +49,12 @@ class PlaylistsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Playlist $record
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Playlist $record)
     {
-        $result = PlaylistService::show($record)->getResult();
+        $result   = PlaylistService::show($record)->getResult();
         $resource = $this->transformItem($result, PlaylistTransformer::class);
 
         return $this->respondWithJson('Playlist read', $resource);
@@ -59,14 +64,13 @@ class PlaylistsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param PlaylistRequest $request
+     * @param Playlist        $record
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(PlaylistRequest $request, Playlist $record)
     {
-        $result = PlaylistService::update($record, $request)->getResult();
+        $result   = PlaylistService::update($record, $request)->getResult();
         $resource = $this->transformItem($result, PlaylistTransformer::class);
 
         return $this->respondWithJson('Playlist updated', $resource);
@@ -76,17 +80,17 @@ class PlaylistsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Playlist $record
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Playlist $record)
     {
         $result = PlaylistService::delete($record)->getResult();
 
         if ($result) {
-            return $this->respondWithJson('Playlist deleted', ['success' => true]);
+            return $this->respondWithJson('Playlist deleted', [ 'success' => true ]);
         }
-        return $this->respondWithJson('Playlist NOT deleted', ['success' => false]);
+
+        return $this->respondWithJson('Playlist NOT deleted', [ 'success' => false ]);
     }
 }

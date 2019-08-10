@@ -5,6 +5,10 @@ namespace Partymeister\Slides\Transformers;
 use League\Fractal;
 use Partymeister\Slides\Models\Transition;
 
+/**
+ * Class TransitionTransformer
+ * @package Partymeister\Slides\Transformers
+ */
 class TransitionTransformer extends Fractal\TransformerAbstract
 {
 

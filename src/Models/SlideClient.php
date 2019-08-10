@@ -2,53 +2,58 @@
 
 namespace Partymeister\Slides\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Motor\Core\Traits\Searchable;
-use Motor\Core\Traits\Filterable;
 use Culpa\Traits\Blameable;
 use Culpa\Traits\CreatedBy;
 use Culpa\Traits\DeletedBy;
 use Culpa\Traits\UpdatedBy;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Motor\Backend\Models\User;
+use Motor\Core\Filter\Filter;
+use Motor\Core\Traits\Filterable;
+use Motor\Core\Traits\Searchable;
 
 /**
  * Partymeister\Slides\Models\SlideClient
  *
- * @property int $id
- * @property string $name
- * @property string $type
- * @property string $ip_address
- * @property string $port
- * @property int $sort_position
- * @property int|null $playlist_id
- * @property int|null $playlist_item_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property int $created_by
- * @property int $updated_by
- * @property int|null $deleted_by
- * @property-read \Motor\Backend\Models\User $creator
- * @property-read \Motor\Backend\Models\User|null $eraser
- * @property-read \Motor\Backend\Models\User $updater
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient filteredBy(\Motor\Core\Filter\Filter $filter, $column)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient filteredByMultiple(\Motor\Core\Filter\Filter $filter)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient query()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient search($q, $full_text = false)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereDeletedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereIpAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient wherePlaylistId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient wherePlaylistItemId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient wherePort($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereSortPosition($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\SlideClient whereUpdatedBy($value)
- * @mixin \Eloquent
+ * @property int                                  $id
+ * @property string                               $name
+ * @property string                               $type
+ * @property string                               $ip_address
+ * @property string                               $port
+ * @property int                                  $sort_position
+ * @property int|null                             $playlist_id
+ * @property int|null                             $playlist_item_id
+ * @property Carbon|null      $created_at
+ * @property Carbon|null      $updated_at
+ * @property int                                  $created_by
+ * @property int                                  $updated_by
+ * @property int|null                             $deleted_by
+ * @property-read User      $creator
+ * @property-read User|null $eraser
+ * @property-read User      $updater
+ * @method static Builder|SlideClient filteredBy( Filter $filter, $column )
+ * @method static Builder|SlideClient filteredByMultiple( Filter $filter )
+ * @method static Builder|SlideClient newModelQuery()
+ * @method static Builder|SlideClient newQuery()
+ * @method static Builder|SlideClient query()
+ * @method static Builder|SlideClient search( $q, $full_text = false )
+ * @method static Builder|SlideClient whereCreatedAt( $value )
+ * @method static Builder|SlideClient whereCreatedBy( $value )
+ * @method static Builder|SlideClient whereDeletedBy( $value )
+ * @method static Builder|SlideClient whereId( $value )
+ * @method static Builder|SlideClient whereIpAddress( $value )
+ * @method static Builder|SlideClient whereName( $value )
+ * @method static Builder|SlideClient wherePlaylistId( $value )
+ * @method static Builder|SlideClient wherePlaylistItemId( $value )
+ * @method static Builder|SlideClient wherePort( $value )
+ * @method static Builder|SlideClient whereSortPosition( $value )
+ * @method static Builder|SlideClient whereType( $value )
+ * @method static Builder|SlideClient whereUpdatedAt( $value )
+ * @method static Builder|SlideClient whereUpdatedBy( $value )
+ * @mixin Eloquent
  */
 class SlideClient extends Model
 {

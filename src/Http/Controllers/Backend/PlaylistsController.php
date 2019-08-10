@@ -2,21 +2,24 @@
 
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Kris\LaravelFormBuilder\FormBuilderTrait;
 use League\Fractal\Manager;
 use Motor\Backend\Http\Controllers\Controller;
-
 use Motor\Media\Transformers\FileTransformer;
-use Partymeister\Slides\Models\Playlist;
-use Partymeister\Slides\Http\Requests\Backend\PlaylistRequest;
-use Partymeister\Slides\Services\PlaylistService;
-use Partymeister\Slides\Grids\PlaylistGrid;
 use Partymeister\Slides\Forms\Backend\PlaylistForm;
-
-use Kris\LaravelFormBuilder\FormBuilderTrait;
+use Partymeister\Slides\Grids\PlaylistGrid;
+use Partymeister\Slides\Http\Requests\Backend\PlaylistRequest;
+use Partymeister\Slides\Models\Playlist;
+use Partymeister\Slides\Services\PlaylistService;
 use Partymeister\Slides\Transformers\PlaylistItemTransformer;
 use Partymeister\Slides\Transformers\SlideTransformer;
-use Spatie\Fractalistic\Fractal;
 
+/**
+ * Class PlaylistsController
+ * @package Partymeister\Slides\Http\Controllers\Backend
+ */
 class PlaylistsController extends Controller
 {
 
@@ -26,7 +29,8 @@ class PlaylistsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \ReflectionException
      */
     public function index()
     {
@@ -43,7 +47,7 @@ class PlaylistsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -64,9 +68,8 @@ class PlaylistsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param PlaylistRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(PlaylistRequest $request)
     {
@@ -88,9 +91,7 @@ class PlaylistsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param $id
      */
     public function show($id)
     {
@@ -101,9 +102,8 @@ class PlaylistsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Playlist $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Playlist $record)
     {
@@ -146,10 +146,9 @@ class PlaylistsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param PlaylistRequest $request
+     * @param Playlist        $record
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(PlaylistRequest $request, Playlist $record)
     {
@@ -171,9 +170,8 @@ class PlaylistsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Playlist $record
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Playlist $record)
     {

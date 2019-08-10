@@ -2,52 +2,60 @@
 
 namespace Partymeister\Slides\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Motor\Core\Traits\Searchable;
-use Motor\Core\Traits\Filterable;
 use Culpa\Traits\Blameable;
 use Culpa\Traits\CreatedBy;
 use Culpa\Traits\DeletedBy;
 use Culpa\Traits\UpdatedBy;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
+use Motor\Backend\Models\User;
+use Motor\Core\Filter\Filter;
+use Motor\Core\Traits\Filterable;
+use Motor\Core\Traits\Searchable;
 
 /**
  * Partymeister\Slides\Models\Playlist
  *
- * @property int $id
- * @property string $name
- * @property string $type
- * @property int $is_competition
- * @property int $created_by
- * @property int $updated_by
- * @property int|null $deleted_by
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Motor\Backend\Models\User $creator
- * @property-read \Motor\Backend\Models\User|null $eraser
- * @property-read mixed $item_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Partymeister\Slides\Models\PlaylistItem[] $items
- * @property-read \Motor\Backend\Models\User $updater
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist filteredBy(\Motor\Core\Filter\Filter $filter, $column)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist filteredByMultiple(\Motor\Core\Filter\Filter $filter)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist query()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist search($q, $full_text = false)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist whereDeletedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist whereIsCompetition($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist whereType($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Playlist whereUpdatedBy($value)
- * @mixin \Eloquent
+ * @property int                                                                                      $id
+ * @property string                                                                                   $name
+ * @property string                                                                                   $type
+ * @property int                                                                                      $is_competition
+ * @property int                                                                                      $created_by
+ * @property int                                                                                      $updated_by
+ * @property int|null                                                                                 $deleted_by
+ * @property Carbon|null                              $created_at
+ * @property Carbon|null                              $updated_at
+ * @property-read User                                                    $creator
+ * @property-read User|null                                               $eraser
+ * @property-read mixed                                                   $item_count
+ * @property-read Collection|PlaylistItem[] $items
+ * @property-read User                                                    $updater
+ * @method static Builder|Playlist filteredBy( Filter $filter, $column )
+ * @method static Builder|Playlist filteredByMultiple( Filter $filter )
+ * @method static Builder|Playlist newModelQuery()
+ * @method static Builder|Playlist newQuery()
+ * @method static Builder|Playlist query()
+ * @method static Builder|Playlist search( $q, $full_text = false )
+ * @method static Builder|Playlist whereCreatedAt( $value )
+ * @method static Builder|Playlist whereCreatedBy( $value )
+ * @method static Builder|Playlist whereDeletedBy( $value )
+ * @method static Builder|Playlist whereId( $value )
+ * @method static Builder|Playlist whereIsCompetition( $value )
+ * @method static Builder|Playlist whereName( $value )
+ * @method static Builder|Playlist whereType( $value )
+ * @method static Builder|Playlist whereUpdatedAt( $value )
+ * @method static Builder|Playlist whereUpdatedBy( $value )
+ * @mixin Eloquent
  */
 class Playlist extends Model
 {
+
     use Searchable;
-	use Filterable;
+    use Filterable;
     use Blameable, CreatedBy, UpdatedBy, DeletedBy;
 
     /**
@@ -55,7 +63,7 @@ class Playlist extends Model
      *
      * @var array
      */
-    protected $blameable = array('created', 'updated', 'deleted');
+    protected $blameable = [ 'created', 'updated', 'deleted' ];
 
     /**
      * Searchable columns for the searchable trait
@@ -77,11 +85,24 @@ class Playlist extends Model
         'is_competition',
     ];
 
+    /**
+     * @return int
+     */
+    /**
+     * @return int
+     */
     public function getItemCountAttribute()
     {
         return $this->items()->count();
     }
 
+
+    /**
+     * @return HasMany
+     */
+    /**
+     * @return HasMany
+     */
     public function items()
     {
         return $this->hasMany(PlaylistItem::class);

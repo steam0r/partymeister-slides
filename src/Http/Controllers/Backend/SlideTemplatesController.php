@@ -2,16 +2,20 @@
 
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
-use Motor\Backend\Http\Controllers\Controller;
-
-use Partymeister\Slides\Models\SlideTemplate;
-use Partymeister\Slides\Http\Requests\Backend\SlideTemplateRequest;
-use Partymeister\Slides\Services\SlideTemplateService;
-use Partymeister\Slides\Grids\SlideTemplateGrid;
-use Partymeister\Slides\Forms\Backend\SlideTemplateForm;
-
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
+use Motor\Backend\Http\Controllers\Controller;
+use Partymeister\Slides\Forms\Backend\SlideTemplateForm;
+use Partymeister\Slides\Grids\SlideTemplateGrid;
+use Partymeister\Slides\Http\Requests\Backend\SlideTemplateRequest;
+use Partymeister\Slides\Models\SlideTemplate;
+use Partymeister\Slides\Services\SlideTemplateService;
 
+/**
+ * Class SlideTemplatesController
+ * @package Partymeister\Slides\Http\Controllers\Backend
+ */
 class SlideTemplatesController extends Controller
 {
 
@@ -21,46 +25,26 @@ class SlideTemplatesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \ReflectionException
      */
     public function index()
     {
         $grid = new SlideTemplateGrid(SlideTemplate::class);
 
-        $service      = SlideTemplateService::collection($grid);
+        $service = SlideTemplateService::collection($grid);
         $grid->setFilter($service->getFilter());
-        $paginator    = $service->getPaginator();
+        $paginator = $service->getPaginator();
 
         return view('partymeister-slides::backend.slide_templates.index', compact('paginator', 'grid'));
     }
 
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create(SlideTemplate $record)
-    {
-        $form = $this->form(SlideTemplateForm::class, [
-            'method'  => 'POST',
-            'route'   => 'backend.slide_templates.store',
-            'enctype' => 'multipart/form-data',
-            'model'   => $record
-        ]);
-
-        $motorShowRightSidebar = true;
-
-        return view('partymeister-slides::backend.slide_templates.create', compact('form', 'motorShowRightSidebar'));
-    }
-
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideTemplateRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(SlideTemplateRequest $request)
     {
@@ -81,40 +65,61 @@ class SlideTemplatesController extends Controller
 
     /**
      * @param SlideTemplate $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function duplicate(SlideTemplate $record)
     {
-        $newRecord = $record->replicate();
-        $newRecord->name = 'Duplicate of '.$newRecord->name;
+        $newRecord       = $record->replicate();
+        $newRecord->name = 'Duplicate of ' . $newRecord->name;
 
         return $this->create($newRecord);
     }
 
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @param SlideTemplate $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function create(SlideTemplate $record)
+    {
+        $form = $this->form(SlideTemplateForm::class, [
+            'method'  => 'POST',
+            'route'   => 'backend.slide_templates.store',
+            'enctype' => 'multipart/form-data',
+            'model'   => $record
+        ]);
+
+        $motorShowRightSidebar = true;
+
+        return view('partymeister-slides::backend.slide_templates.create', compact('form', 'motorShowRightSidebar'));
+    }
+
+
+    /**
      * Display the specified resource.
      *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideTemplateRequest $request
+     * @param SlideTemplate        $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(SlideTemplateRequest $request, SlideTemplate $record)
     {
         $preview = $request->get('preview', 'false');
 
-        $placeholderData = json_encode([
-        ]);
+        $placeholderData = json_encode([]);
 
-        return view('partymeister-slides::backend.slide_templates.show', compact('record', 'preview', 'placeholderData'));
+        return view('partymeister-slides::backend.slide_templates.show',
+            compact('record', 'preview', 'placeholderData'));
     }
 
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideTemplate $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(SlideTemplate $record)
     {
@@ -134,10 +139,9 @@ class SlideTemplatesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideTemplateRequest $request
+     * @param SlideTemplate        $record
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(SlideTemplateRequest $request, SlideTemplate $record)
     {
@@ -159,9 +163,8 @@ class SlideTemplatesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideTemplate $record
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(SlideTemplate $record)
     {

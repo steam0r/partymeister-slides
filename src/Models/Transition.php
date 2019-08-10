@@ -2,45 +2,50 @@
 
 namespace Partymeister\Slides\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Motor\Core\Traits\Searchable;
-use Motor\Core\Traits\Filterable;
 use Culpa\Traits\Blameable;
 use Culpa\Traits\CreatedBy;
 use Culpa\Traits\DeletedBy;
 use Culpa\Traits\UpdatedBy;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+use Motor\Backend\Models\User;
+use Motor\Core\Filter\Filter;
+use Motor\Core\Traits\Filterable;
+use Motor\Core\Traits\Searchable;
 
 /**
  * Partymeister\Slides\Models\Transition
  *
- * @property int $id
- * @property string $name
- * @property int $identifier
- * @property int $default_duration
- * @property int $created_by
- * @property int $updated_by
- * @property int|null $deleted_by
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Motor\Backend\Models\User $creator
- * @property-read \Motor\Backend\Models\User|null $eraser
- * @property-read \Motor\Backend\Models\User $updater
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition filteredBy(\Motor\Core\Filter\Filter $filter, $column)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition filteredByMultiple(\Motor\Core\Filter\Filter $filter)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition query()
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition search($q, $full_text = false)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition whereCreatedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition whereDefaultDuration($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition whereDeletedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition whereIdentifier($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\Partymeister\Slides\Models\Transition whereUpdatedBy($value)
- * @mixin \Eloquent
+ * @property int                                  $id
+ * @property string                               $name
+ * @property int                                  $identifier
+ * @property int                                  $default_duration
+ * @property int                                  $created_by
+ * @property int                                  $updated_by
+ * @property int|null                             $deleted_by
+ * @property Carbon|null      $created_at
+ * @property Carbon|null      $updated_at
+ * @property-read User      $creator
+ * @property-read User|null $eraser
+ * @property-read User      $updater
+ * @method static Builder|Transition filteredBy( Filter $filter, $column )
+ * @method static Builder|Transition filteredByMultiple( Filter $filter )
+ * @method static Builder|Transition newModelQuery()
+ * @method static Builder|Transition newQuery()
+ * @method static Builder|Transition query()
+ * @method static Builder|Transition search( $q, $full_text = false )
+ * @method static Builder|Transition whereCreatedAt( $value )
+ * @method static Builder|Transition whereCreatedBy( $value )
+ * @method static Builder|Transition whereDefaultDuration( $value )
+ * @method static Builder|Transition whereDeletedBy( $value )
+ * @method static Builder|Transition whereId( $value )
+ * @method static Builder|Transition whereIdentifier( $value )
+ * @method static Builder|Transition whereName( $value )
+ * @method static Builder|Transition whereUpdatedAt( $value )
+ * @method static Builder|Transition whereUpdatedBy( $value )
+ * @mixin Eloquent
  */
 class Transition extends Model
 {

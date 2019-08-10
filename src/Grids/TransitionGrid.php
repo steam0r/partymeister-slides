@@ -4,6 +4,10 @@ namespace Partymeister\Slides\Grids;
 
 use Motor\Backend\Grid\Grid;
 
+/**
+ * Class TransitionGrid
+ * @package Partymeister\Slides\Grids
+ */
 class TransitionGrid extends Grid
 {
 

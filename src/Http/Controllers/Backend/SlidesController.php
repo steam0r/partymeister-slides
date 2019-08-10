@@ -3,17 +3,21 @@
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Kris\LaravelFormBuilder\FormBuilderTrait;
 use Motor\Backend\Http\Controllers\Controller;
-
-use Partymeister\Slides\Models\Slide;
+use Partymeister\Slides\Forms\Backend\SlideForm;
+use Partymeister\Slides\Grids\SlideGrid;
 use Partymeister\Slides\Http\Requests\Backend\SlideRequest;
+use Partymeister\Slides\Models\Slide;
 use Partymeister\Slides\Models\SlideTemplate;
 use Partymeister\Slides\Services\SlideService;
-use Partymeister\Slides\Grids\SlideGrid;
-use Partymeister\Slides\Forms\Backend\SlideForm;
 
-use Kris\LaravelFormBuilder\FormBuilderTrait;
-
+/**
+ * Class SlidesController
+ * @package Partymeister\Slides\Http\Controllers\Backend
+ */
 class SlidesController extends Controller
 {
 
@@ -23,7 +27,8 @@ class SlidesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \ReflectionException
      */
     public function index()
     {
@@ -38,9 +43,46 @@ class SlidesController extends Controller
 
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param SlideRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function store(SlideRequest $request)
+    {
+        $form = $this->form(SlideForm::class);
+
+        // It will automatically use current request, get the rules, and do the validation
+        if ( ! $form->isValid()) {
+            return redirect()->back()->withErrors($form->getErrors())->withInput();
+        }
+
+        SlideService::createWithForm($request, $form);
+
+        flash()->success(trans('partymeister-slides::backend/slides.created'));
+
+        return redirect('backend/slides');
+    }
+
+
+    /**
+     * @param Slide $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function duplicate(Slide $record)
+    {
+        $newRecord       = $record->replicate();
+        $newRecord->name = 'Duplicate of ' . $newRecord->name;
+
+        return $this->create($newRecord);
+    }
+
+
+    /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Model $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function create(Model $record)
     {
@@ -61,47 +103,11 @@ class SlidesController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(SlideRequest $request)
-    {
-        $form = $this->form(SlideForm::class);
-
-        // It will automatically use current request, get the rules, and do the validation
-        if ( ! $form->isValid()) {
-            return redirect()->back()->withErrors($form->getErrors())->withInput();
-        }
-
-        SlideService::createWithForm($request, $form);
-
-        flash()->success(trans('partymeister-slides::backend/slides.created'));
-
-        return redirect('backend/slides');
-    }
-
-
-    /**
-     * @param SlideTemplate $record
-     */
-    public function duplicate(Slide $record)
-    {
-        $newRecord       = $record->replicate();
-        $newRecord->name = 'Duplicate of ' . $newRecord->name;
-
-        return $this->create($newRecord);
-    }
-
-
-    /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideRequest $request
+     * @param Slide        $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function show(SlideRequest $request, Slide $record)
     {
@@ -120,9 +126,8 @@ class SlidesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Slide $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Slide $record)
     {
@@ -142,10 +147,9 @@ class SlidesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideRequest $request
+     * @param Slide        $record
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(SlideRequest $request, Slide $record)
     {
@@ -167,9 +171,8 @@ class SlidesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Slide $record
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Slide $record)
     {

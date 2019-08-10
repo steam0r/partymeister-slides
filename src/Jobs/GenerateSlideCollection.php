@@ -3,33 +3,41 @@
 namespace Partymeister\Slides\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
-use Partymeister\Slides\Helpers\Browsershot;
-use Partymeister\Slides\Models\Slide;
 
+/**
+ * Class GenerateSlideCollection
+ * @package Partymeister\Slides\Jobs
+ */
 class GenerateSlideCollection implements ShouldQueue
 {
 
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    /**
+     * @var Collection
+     */
     public $slideIds;
 
+    /**
+     * @var
+     */
     public $namePrefix;
 
 
     /**
      * Create a new job instance.
      *
-     * @return void
+     * @param Collection $slideIds
+     * @param            $namePrefix
      */
     public function __construct(Collection $slideIds, $namePrefix)
     {
-        $this->slideIds      = $slideIds;
+        $this->slideIds   = $slideIds;
         $this->namePrefix = $namePrefix;
     }
 
@@ -46,7 +54,7 @@ class GenerateSlideCollection implements ShouldQueue
         //    $filenameForFinal   = base_path() . '/storage/app/' . $this->namePrefix . '_final_' . $slideId . '.png';
         //}
 
-        $command = 'node '.__DIR__.'/../../resources/assets/bin/hack.js \''.json_encode(['slides' => $this->slideIds]).'\'';
+        $command = 'node ' . __DIR__ . '/../../resources/assets/bin/hack.js \'' . json_encode([ 'slides' => $this->slideIds ]) . '\'';
 
         exec($command);
 

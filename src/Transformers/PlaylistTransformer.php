@@ -5,6 +5,10 @@ namespace Partymeister\Slides\Transformers;
 use League\Fractal;
 use Partymeister\Slides\Models\Playlist;
 
+/**
+ * Class PlaylistTransformer
+ * @package Partymeister\Slides\Transformers
+ */
 class PlaylistTransformer extends Fractal\TransformerAbstract
 {
 

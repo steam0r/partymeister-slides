@@ -3,40 +3,50 @@
 namespace Partymeister\Slides\Events;
 
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\PrivateChannel;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
-use Partymeister\Slides\Models\Playlist;
-use Partymeister\Slides\Models\Slide;
 
+/**
+ * Class SlideCollectionSaved
+ * @package Partymeister\Slides\Events
+ */
 class SlideCollectionSaved
 {
+
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    /**
+     * @var Collection
+     */
     public $slideIds;
 
+    /**
+     * @var string
+     */
     public $namePrefix = '';
+
 
     /**
      * Create a new event instance.
      *
-     * @return void
+     * SlideCollectionSaved constructor.
+     * @param Collection $slideIds
+     * @param            $namePrefix
      */
     public function __construct(Collection $slideIds, $namePrefix)
     {
-        $this->slideIds = $slideIds;
+        $this->slideIds   = $slideIds;
         $this->namePrefix = $namePrefix;
     }
+
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return \Illuminate\Broadcasting\Channel|array
+     * @return Channel|array
      */
     public function broadcastOn()
     {

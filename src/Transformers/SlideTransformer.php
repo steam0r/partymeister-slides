@@ -6,6 +6,10 @@ use League\Fractal;
 use Motor\Backend\Helpers\MediaHelper;
 use Partymeister\Slides\Models\Slide;
 
+/**
+ * Class SlideTransformer
+ * @package Partymeister\Slides\Transformers
+ */
 class SlideTransformer extends Fractal\TransformerAbstract
 {
 

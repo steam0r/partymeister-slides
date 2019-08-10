@@ -2,22 +2,33 @@
 
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
-use Motor\Backend\Http\Controllers\Controller;
-
-use Partymeister\Slides\Models\SlideClient;
-use Partymeister\Slides\Http\Requests\Backend\SlideClientRequest;
-use Partymeister\Slides\Services\SlideClientService;
-use Partymeister\Slides\Grids\SlideClientGrid;
-use Partymeister\Slides\Forms\Backend\SlideClientForm;
-
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
+use Motor\Backend\Http\Controllers\Controller;
+use Partymeister\Slides\Forms\Backend\SlideClientForm;
+use Partymeister\Slides\Grids\SlideClientGrid;
+use Partymeister\Slides\Http\Requests\Backend\SlideClientRequest;
+use Partymeister\Slides\Models\SlideClient;
+use Partymeister\Slides\Services\SlideClientService;
 
+/**
+ * Class SlideClientsController
+ * @package Partymeister\Slides\Http\Controllers\Backend
+ */
 class SlideClientsController extends Controller
 {
 
     use FormBuilderTrait;
 
 
+    /**
+     * @param SlideClient        $record
+     * @param SlideClientRequest $request
+     * @return RedirectResponse|Redirector
+     */
     public function activate(SlideClient $record, SlideClientRequest $request)
     {
         session([ 'screens.active' => $record->id ]);
@@ -29,7 +40,8 @@ class SlideClientsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \ReflectionException
      */
     public function index()
     {
@@ -46,7 +58,7 @@ class SlideClientsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -63,9 +75,8 @@ class SlideClientsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideClientRequest $request
+     * @return RedirectResponse|Redirector
      */
     public function store(SlideClientRequest $request)
     {
@@ -87,9 +98,7 @@ class SlideClientsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param $id
      */
     public function show($id)
     {
@@ -100,9 +109,8 @@ class SlideClientsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideClient $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(SlideClient $record)
     {
@@ -120,10 +128,9 @@ class SlideClientsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideClientRequest $request
+     * @param SlideClient        $record
+     * @return RedirectResponse|Redirector
      */
     public function update(SlideClientRequest $request, SlideClient $record)
     {
@@ -145,9 +152,8 @@ class SlideClientsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param SlideClient $record
+     * @return RedirectResponse|Redirector
      */
     public function destroy(SlideClient $record)
     {

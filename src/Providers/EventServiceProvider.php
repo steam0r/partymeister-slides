@@ -2,11 +2,15 @@
 
 namespace Partymeister\Slides\Providers;
 
-use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
+/**
+ * Class EventServiceProvider
+ * @package Partymeister\Slides\Providers
+ */
 class EventServiceProvider extends ServiceProvider
 {
+
     /**
      * The event listener mappings for the application.
      *
@@ -16,13 +20,14 @@ class EventServiceProvider extends ServiceProvider
         'Partymeister\Slides\Events\SlideCollectionSaved' => [
             'Partymeister\Slides\Listeners\GenerateSlideCollection',
         ],
-        'Partymeister\Slides\Events\SlideSaved' => [
+        'Partymeister\Slides\Events\SlideSaved'           => [
             'Partymeister\Slides\Listeners\GenerateSlide',
         ],
-        'Partymeister\Slides\Events\EventSaved'   => [
+        'Partymeister\Slides\Events\EventSaved'           => [
             'Partymeister\Slides\Listeners\GenerateScheduleSlides',
         ],
     ];
+
 
     /**
      * Register any events for your application.

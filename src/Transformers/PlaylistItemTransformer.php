@@ -5,6 +5,10 @@ namespace Partymeister\Slides\Transformers;
 use League\Fractal;
 use Partymeister\Slides\Models\PlaylistItem;
 
+/**
+ * Class PlaylistItemTransformer
+ * @package Partymeister\Slides\Transformers
+ */
 class PlaylistItemTransformer extends Fractal\TransformerAbstract
 {
 
@@ -31,7 +35,7 @@ class PlaylistItemTransformer extends Fractal\TransformerAbstract
             'type'                  => $record->type,
             'duration'              => $record->duration,
             'transition_id'         => $record->transition_id,
-            'transition_identifier' => (!is_null($record->transition) ? $record->transition->identifier : ''),
+            'transition_identifier' => ( ! is_null($record->transition) ? $record->transition->identifier : '' ),
             'transition_duration'   => $record->transition_duration,
             'is_advanced_manually'  => (bool) $record->is_advanced_manually,
             'is_muted'              => (bool) $record->is_muted,

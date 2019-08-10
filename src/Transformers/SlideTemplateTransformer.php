@@ -5,8 +5,13 @@ namespace Partymeister\Slides\Transformers;
 use League\Fractal;
 use Partymeister\Slides\Models\SlideTemplate;
 
+/**
+ * Class SlideTemplateTransformer
+ * @package Partymeister\Slides\Transformers
+ */
 class SlideTemplateTransformer extends Fractal\TransformerAbstract
 {
+
     /**
      * List of resources possible to include
      *
@@ -25,7 +30,7 @@ class SlideTemplateTransformer extends Fractal\TransformerAbstract
     public function transform(SlideTemplate $record)
     {
         return [
-            'id'        => (int) $record->id
+            'id' => (int) $record->id
         ];
     }
 }

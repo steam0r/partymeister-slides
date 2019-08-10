@@ -11,6 +11,10 @@ use Partymeister\Competitions\Models\CompetitionType;
 use Partymeister\Competitions\Models\OptionGroup;
 use Partymeister\Competitions\Models\VoteCategory;
 
+/**
+ * Class PartymeisterSlidesGenerateCompetitionCommand
+ * @package Partymeister\Slides\Console\Commands
+ */
 class PartymeisterSlidesGenerateCompetitionCommand extends Command
 {
 
@@ -43,14 +47,14 @@ class PartymeisterSlidesGenerateCompetitionCommand extends Command
 
         $name = $faker->name;
 
-        $competition = new Competition();
-        $competition->name = $name;
-        $competition->sort_position = $faker->numberBetween(0, 99);
+        $competition                            = new Competition();
+        $competition->name                      = $name;
+        $competition->sort_position             = $faker->numberBetween(0, 99);
         $competition->prizegiving_sort_position = $faker->numberBetween(0, 99);
-        $competition->competition_type_id = CompetitionType::inRandomOrder()->first()->id;
-        $competition->has_prizegiving = true;
-        $competition->upload_enabled = true;
-        $competition->voting_enabled = false;
+        $competition->competition_type_id       = CompetitionType::inRandomOrder()->first()->id;
+        $competition->has_prizegiving           = true;
+        $competition->upload_enabled            = true;
+        $competition->voting_enabled            = false;
 
         $competition->save();
         $competition->option_groups()->attach(OptionGroup::inRandomOrder()->first()->id);

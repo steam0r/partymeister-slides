@@ -6,106 +6,33 @@ use FFMpeg\FFMpeg;
 use FFMpeg\FFProbe;
 use Illuminate\Support\Arr;
 use Motor\Backend\Models\Category;
+use Motor\Backend\Services\BaseService;
 use Motor\Core\Filter\Renderers\SelectRenderer;
 use Motor\Media\Models\File;
 use Motor\Media\Models\FileAssociation;
 use Partymeister\Competitions\Helpers\CallbackHelper;
 use Partymeister\Competitions\Models\Entry;
-use Partymeister\Slides\Events\SlideCollectionSaved;
-use Partymeister\Slides\Events\SlideSaved;
 use Partymeister\Slides\Models\Playlist;
-use Motor\Backend\Services\BaseService;
 use Partymeister\Slides\Models\PlaylistItem;
 use Partymeister\Slides\Models\Slide;
 use Partymeister\Slides\Models\Transition;
 
+/**
+ * Class PlaylistService
+ * @package Partymeister\Slides\Services
+ */
 class PlaylistService extends BaseService
 {
 
+    /**
+     * @var string
+     */
     protected $model = Playlist::class;
 
 
-    public function filters()
-    {
-        $this->filter->add(new SelectRenderer('type'))
-                     ->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))
-                     ->setEmptyOption('-- ' . trans('partymeister-slides::backend/playlists.type') . ' --')
-                     ->setOptions(trans('partymeister-slides::backend/playlists.types'));
-    }
-
-
-    public function afterCreate()
-    {
-        $this->savePlaylistItems();
-    }
-
-
-    public function beforeUpdate()
-    {
-        $this->record->updated_at = date('Y-m-d H:i:s');
-    }
-
-
-    public function afterUpdate()
-    {
-        $this->savePlaylistItems();
-    }
-
-
-    protected function savePlaylistItems()
-    {
-        $items = json_decode($this->request->get('playlist_items'));
-
-        // Delete all playlist items for this playlist
-        foreach ($this->record->items()->get() as $item) {
-            $item->file_association()->delete();
-            $item->delete();
-        }
-
-        // Create new playlist items
-        foreach ($items as $key => $item) {
-            $i              = new PlaylistItem();
-            $i->playlist_id = $this->record->id;
-            $i->type        = ( isset($item->type) ? $item->type : $this->getType($item) );
-
-            $transition = Transition::where('identifier', $item->transition_identifier)->first();
-
-            if (isset($item->overwrite_slide_type) && $item->overwrite_slide_type != '') {
-                $i->type = $item->overwrite_slide_type;
-            }
-
-            $i->duration             = $item->duration;
-            $i->transition_id        = ( is_null($transition) ? null : $transition->id );
-            $i->transition_duration  = $item->transition_duration;
-            $i->is_advanced_manually = $item->is_advanced_manually;
-            $i->midi_note            = $item->midi_note;
-            $i->callback_hash        = $item->callback_hash;
-            $i->callback_delay       = $item->callback_delay;
-            $i->metadata             = ( isset($item->metadata) ? $item->metadata : '{}' );
-            $i->sort_position        = $key;
-
-            if (property_exists($item, 'slide_type')) {
-                $i->slide_id   = $item->id;
-                $i->slide_type = $item->slide_type;
-            }
-
-            // Fixme: implement this
-            $i->is_muted = false;
-            $i->save();
-
-            if ( ! property_exists($item, 'slide_type')) {
-                // Create file association
-                $fa             = new FileAssociation();
-                $fa->file_id    = $item->id;
-                $fa->model_type = get_class($i);
-                $fa->model_id   = $i->id;
-                $fa->identifier = 'playlist_item';
-                $fa->save();
-            }
-        }
-    }
-
-
+    /**
+     * @param $data
+     */
     public static function generatePrizegivingPlaylist($data)
     {
         ini_set('max_execution_time', 1200);
@@ -429,6 +356,84 @@ class PlaylistService extends BaseService
     }
 
 
+    public function filters()
+    {
+        $this->filter->add(new SelectRenderer('type'))
+                     ->setOptionPrefix(trans('partymeister-slides::backend/playlists.type'))
+                     ->setEmptyOption('-- ' . trans('partymeister-slides::backend/playlists.type') . ' --')
+                     ->setOptions(trans('partymeister-slides::backend/playlists.types'));
+    }
+
+
+    public function afterCreate()
+    {
+        $this->savePlaylistItems();
+    }
+
+
+    protected function savePlaylistItems()
+    {
+        $items = json_decode($this->request->get('playlist_items'));
+
+        // Delete all playlist items for this playlist
+        foreach ($this->record->items()->get() as $item) {
+            $item->file_association()->delete();
+            $item->delete();
+        }
+
+        // Create new playlist items
+        foreach ($items as $key => $item) {
+            $i              = new PlaylistItem();
+            $i->playlist_id = $this->record->id;
+            $i->type        = ( isset($item->type) ? $item->type : $this->getType($item) );
+
+            $transition = Transition::where('identifier', $item->transition_identifier)->first();
+
+            if (isset($item->overwrite_slide_type) && $item->overwrite_slide_type != '') {
+                $i->type = $item->overwrite_slide_type;
+            }
+
+            $i->duration             = $item->duration;
+            $i->transition_id        = ( is_null($transition) ? null : $transition->id );
+            $i->transition_duration  = $item->transition_duration;
+            $i->is_advanced_manually = $item->is_advanced_manually;
+            $i->midi_note            = $item->midi_note;
+            $i->callback_hash        = $item->callback_hash;
+            $i->callback_delay       = $item->callback_delay;
+            $i->metadata             = ( isset($item->metadata) ? $item->metadata : '{}' );
+            $i->sort_position        = $key;
+
+            if (property_exists($item, 'slide_type')) {
+                $i->slide_id   = $item->id;
+                $i->slide_type = $item->slide_type;
+            }
+
+            // Fixme: implement this
+            $i->is_muted = false;
+            $i->save();
+
+            if ( ! property_exists($item, 'slide_type')) {
+                // Create file association
+                $fa             = new FileAssociation();
+                $fa->file_id    = $item->id;
+                $fa->model_type = get_class($i);
+                $fa->model_id   = $i->id;
+                $fa->identifier = 'playlist_item';
+                $fa->save();
+            }
+        }
+    }
+
+
+    /**
+     * @param $data
+     */
+
+
+    /**
+     * @param $item
+     * @return string
+     */
     protected function getType($item)
     {
         if (in_array($item->file->mime_type, [
@@ -444,5 +449,17 @@ class PlaylistService extends BaseService
         }
 
         return '';
+    }
+
+
+    public function beforeUpdate()
+    {
+        $this->record->updated_at = date('Y-m-d H:i:s');
+    }
+
+
+    public function afterUpdate()
+    {
+        $this->savePlaylistItems();
     }
 }

@@ -2,16 +2,20 @@
 
 namespace Partymeister\Slides\Http\Controllers\Backend;
 
-use Motor\Backend\Http\Controllers\Controller;
-
-use Partymeister\Slides\Models\Transition;
-use Partymeister\Slides\Http\Requests\Backend\TransitionRequest;
-use Partymeister\Slides\Services\TransitionService;
-use Partymeister\Slides\Grids\TransitionGrid;
-use Partymeister\Slides\Forms\Backend\TransitionForm;
-
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
+use Motor\Backend\Http\Controllers\Controller;
+use Partymeister\Slides\Forms\Backend\TransitionForm;
+use Partymeister\Slides\Grids\TransitionGrid;
+use Partymeister\Slides\Http\Requests\Backend\TransitionRequest;
+use Partymeister\Slides\Models\Transition;
+use Partymeister\Slides\Services\TransitionService;
 
+/**
+ * Class TransitionsController
+ * @package Partymeister\Slides\Http\Controllers\Backend
+ */
 class TransitionsController extends Controller
 {
 
@@ -21,7 +25,8 @@ class TransitionsController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \ReflectionException
      */
     public function index()
     {
@@ -38,7 +43,7 @@ class TransitionsController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -55,9 +60,8 @@ class TransitionsController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
+     * @param TransitionRequest $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function store(TransitionRequest $request)
     {
@@ -79,9 +83,7 @@ class TransitionsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param $id
      */
     public function show($id)
     {
@@ -92,9 +94,8 @@ class TransitionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Transition $record
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(Transition $record)
     {
@@ -112,10 +113,9 @@ class TransitionsController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param TransitionRequest $request
+     * @param Transition        $record
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function update(TransitionRequest $request, Transition $record)
     {
@@ -137,9 +137,8 @@ class TransitionsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
-     * @return \Illuminate\Http\Response
+     * @param Transition $record
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function destroy(Transition $record)
     {

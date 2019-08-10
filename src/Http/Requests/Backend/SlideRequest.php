@@ -4,6 +4,10 @@ namespace Partymeister\Slides\Http\Requests\Backend;
 
 use Motor\Backend\Http\Requests\Request;
 
+/**
+ * Class SlideRequest
+ * @package Partymeister\Slides\Http\Requests\Backend
+ */
 class SlideRequest extends Request
 {
 

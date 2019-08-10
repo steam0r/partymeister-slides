@@ -2,17 +2,32 @@
 
 namespace Partymeister\Slides\Http\Controllers\Api\SlideClients;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Motor\Backend\Http\Controllers\Controller;
+use Partymeister\Slides\Events\PlaylistNextRequest;
+use Partymeister\Slides\Events\PlaylistPreviousRequest;
+use Partymeister\Slides\Events\PlaylistRequest;
+use Partymeister\Slides\Events\PlaylistSeekRequest;
+use Partymeister\Slides\Events\PlayNowRequest;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\SlideClient;
 use Partymeister\Slides\Services\XMLService;
+use Psr\SimpleCache\InvalidArgumentException;
 
+/**
+ * Class CommunicationController
+ * @package Partymeister\Slides\Http\Controllers\Api\SlideClients
+ */
 class CommunicationController extends Controller
 {
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function playlist(Request $request)
     {
         $client = SlideClient::find(session('screens.active'));
@@ -34,7 +49,7 @@ class CommunicationController extends Controller
                 if (is_null($playlist)) {
                     return response()->json([ 'message' => 'Playlist not found' ], 400);
                 }
-                event(new \Partymeister\Slides\Events\PlaylistRequest($playlist, $request->get('callbacks')));
+                event(new PlaylistRequest($playlist, $request->get('callbacks')));
 
                 return response()->json([ 'result' => 'Playlist event sent' ]);
                 break;
@@ -42,6 +57,10 @@ class CommunicationController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function playnow(Request $request)
     {
         $client = SlideClient::find(session('screens.active'));
@@ -68,7 +87,7 @@ class CommunicationController extends Controller
                     $item = Arr::get($request->all(), 'slide_id');
                 }
 
-                event(new \Partymeister\Slides\Events\PlayNowRequest($type, $item));
+                event(new PlayNowRequest($type, $item));
 
                 return response()->json([ 'result' => 'PlayNow event sent' ]);
                 break;
@@ -76,6 +95,10 @@ class CommunicationController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function seek(Request $request)
     {
         $client = SlideClient::find(session('screens.active'));
@@ -98,7 +121,7 @@ class CommunicationController extends Controller
                 if (is_null($playlist)) {
                     return response()->json([ 'message' => 'Playlist not found' ], 400);
                 }
-                event(new \Partymeister\Slides\Events\PlaylistSeekRequest($playlist, 0));
+                event(new PlaylistSeekRequest($playlist, 0));
 
                 return response()->json([ 'result' => 'Seek event sent' ]);
                 break;
@@ -106,6 +129,14 @@ class CommunicationController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function skip(Request $request)
     {
         $client = SlideClient::find(session('screens.active'));
@@ -125,10 +156,10 @@ class CommunicationController extends Controller
             case 'slidemeister-web':
                 switch ($request->get('direction')) {
                     case 'previous':
-                        event(new \Partymeister\Slides\Events\PlaylistPreviousRequest($request->get('hard', false)));
+                        event(new PlaylistPreviousRequest($request->get('hard', false)));
                         break;
                     case 'next':
-                        event(new \Partymeister\Slides\Events\PlaylistNextRequest($request->get('hard', false)));
+                        event(new PlaylistNextRequest($request->get('hard', false)));
                         break;
                 }
 
@@ -138,6 +169,14 @@ class CommunicationController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function get_system_info(Request $request)
     {
         $result = XMLService::send('get_system_info');
@@ -149,6 +188,16 @@ class CommunicationController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws InvalidArgumentException
+     */
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws InvalidArgumentException
+     */
     public function get_playlists(Request $request)
     {
         $client = SlideClient::find(session('screens.active'));
@@ -166,7 +215,8 @@ class CommunicationController extends Controller
                     return response()->json([ 'result' => $result ]);
                 }
             case 'slidemeister-web':
-                $result = Cache::store('redis')->get(config('cache.prefix').':slidemeister-web.'.session('screens.active'));
+                $result = Cache::store('redis')
+                               ->get(config('cache.prefix') . ':slidemeister-web.' . session('screens.active'));
                 if ( ! $result) {
                     return response()->json([ 'result' => $result ], 400);
                 } else {

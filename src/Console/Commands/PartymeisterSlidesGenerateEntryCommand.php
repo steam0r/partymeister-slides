@@ -7,11 +7,12 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Auth;
 use Motor\Backend\Models\User;
 use Partymeister\Competitions\Models\Competition;
-use Partymeister\Competitions\Models\CompetitionType;
 use Partymeister\Competitions\Models\Entry;
-use Partymeister\Competitions\Models\OptionGroup;
-use Partymeister\Competitions\Models\VoteCategory;
 
+/**
+ * Class PartymeisterSlidesGenerateEntryCommand
+ * @package Partymeister\Slides\Console\Commands
+ */
 class PartymeisterSlidesGenerateEntryCommand extends Command
 {
 

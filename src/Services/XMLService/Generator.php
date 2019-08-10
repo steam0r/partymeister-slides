@@ -9,9 +9,17 @@ use Partymeister\Slides\Models\Slide;
 use Partymeister\Slides\Services\XMLService;
 use SimpleXMLElement;
 
+/**
+ * Class Generator
+ * @package Partymeister\Slides\Services\XMLService
+ */
 class Generator
 {
 
+    /**
+     * @param $parameters
+     * @return mixed
+     */
     public static function siegmeister($parameters)
     {
         $xml = new SimpleXMLElement('<xml></xml>');
@@ -20,6 +28,26 @@ class Generator
     }
 
 
+    /**
+     * @param $xml
+     * @return mixed
+     */
+    public static function add_encoding($xml)
+    {
+        return str_replace('<?xml version="1.0"?>', '<?xml version="1.0" encoding="utf-8"?>', $xml);
+    }
+
+
+    /**
+     * @param $parameters
+     * @return bool|string
+     */
+
+
+    /**
+     * @param $parameters
+     * @return bool|mixed
+     */
     public static function playlist($parameters)
     {
         // Load Playlist
@@ -104,7 +132,8 @@ class Generator
             //	$item->addChild('path', config('partymeister-slides.screens_url').$attachment->file->getUrl() . $attachment->file->filename);
             //}
             if ($playlist_item->slide_id != null) {
-                $item->addChild('path', config('partymeister-slides.screens_url') . route('backend.slides.show', [$playlist_item->slide->id], false));
+                $item->addChild('path', config('partymeister-slides.screens_url') . route('backend.slides.show',
+                        [ $playlist_item->slide->id ], false));
             } else {
                 $item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
             }
@@ -180,6 +209,16 @@ class Generator
     }
 
 
+    /**
+     * @param $parameters
+     * @return bool|mixed
+     */
+
+
+    /**
+     * @param $parameters
+     * @return bool|string
+     */
     public static function playnow($parameters)
     {
         if (isset($parameters['slide_id'])) {
@@ -233,8 +272,9 @@ class Generator
         }
 
         //$item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
-        if (isset($slide) && !is_null($slide)) {
-            $item->addChild('path', config('partymeister-slides.screens_url') . route('backend.slides.show', [$slide->id], false));
+        if (isset($slide) && ! is_null($slide)) {
+            $item->addChild('path',
+                config('partymeister-slides.screens_url') . route('backend.slides.show', [ $slide->id ], false));
         } else {
             $item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
         }
@@ -265,6 +305,16 @@ class Generator
     }
 
 
+    /**
+     * @param $parameters
+     * @return mixed
+     */
+
+
+    /**
+     * @param $parameters
+     * @return bool|mixed
+     */
     public static function seek($parameters)
     {
         // If no slide id is given - get the first slide from the playlist
@@ -300,6 +350,16 @@ class Generator
     }
 
 
+    /**
+     * @param $parameters
+     * @return mixed
+     */
+
+
+    /**
+     * @param $parameters
+     * @return mixed
+     */
     public static function previous($parameters)
     {
         $xml = new SimpleXMLElement('<xml></xml>');
@@ -315,6 +375,16 @@ class Generator
     }
 
 
+    /**
+     * @param $parameters
+     * @return mixed
+     */
+
+
+    /**
+     * @param $parameters
+     * @return mixed
+     */
     public static function next($parameters)
     {
         $xml = new SimpleXMLElement('<xml></xml>');
@@ -330,6 +400,16 @@ class Generator
     }
 
 
+    /**
+     * @param $parameters
+     * @return mixed
+     */
+
+
+    /**
+     * @param $parameters
+     * @return mixed
+     */
     public static function get_playlists($parameters)
     {
         $xml = new SimpleXMLElement('<xml></xml>');
@@ -341,6 +421,16 @@ class Generator
     }
 
 
+    /**
+     * @param $xml
+     * @return mixed
+     */
+
+
+    /**
+     * @param $parameters
+     * @return mixed
+     */
     public static function get_system_info($parameters)
     {
         $xml = new SimpleXMLElement('<xml></xml>');
@@ -349,11 +439,5 @@ class Generator
         $rpc->addAttribute('name', 'get_system_info');
 
         return self::add_encoding($xml->asXML());
-    }
-
-
-    public static function add_encoding($xml)
-    {
-        return str_replace('<?xml version="1.0"?>', '<?xml version="1.0" encoding="utf-8"?>', $xml);
     }
 }
