@@ -673,7 +673,7 @@
 
             let degrees = 0;
             if (tr != undefined && tr != 'none' && tr.split('(').length > 0) {
-                let values = tr.split('(')[1],
+                var values = tr.split('(')[1],
                     values = values.split(')')[0],
                     values = values.split(',');
 
