@@ -114,8 +114,8 @@ class SlidesController extends Controller
         $preview = $request->get('preview', 'false');
 
         $placeholderData = json_encode([
-            'wurst'    => 'Schinken',
-            'schinken' => 'uahahahahha!'
+            'test1'    => 'test1',
+            'test2' => 'test2!'
         ]);
 
         return view('partymeister-slides::backend.slide_templates.show',

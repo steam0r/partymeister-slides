@@ -73,7 +73,7 @@
 
         slidemeister.data.export = function (version, key) {
             $($target).css('border', 'none');
-            $($target).css('zoom', 0.5);
+            $($target).css('zoom', 1);
 
             $.each($elements, function(index, e) {
                 slidemeister.ui.resizeText(e, true);

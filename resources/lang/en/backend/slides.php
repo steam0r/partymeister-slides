@@ -20,5 +20,9 @@ return [
         'compo'              => 'Competition',
         'comingup'           => 'Coming up / End',
         'end'                => 'End / Participants'
-    ]
+    ],
+
+    'latest'     => 'Latest slides',
+    'generating' => 'Generating slide previews and hiding the ugliness',
+
 ];

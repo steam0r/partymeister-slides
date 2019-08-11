@@ -29,4 +29,7 @@ return [
     'callback'             => 'Callback',
     'callback_delay'       => 'Delay',
     'transition'           => 'Transition',
+
+    'latest' => 'Latest playlists',
+
 ];

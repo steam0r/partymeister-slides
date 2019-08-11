@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Grids;
 
 use Motor\Backend\Grid\Grid;
+use Motor\Backend\Grid\Renderers\BladeRenderer;
 use Motor\Backend\Grid\Renderers\FileRenderer;
 use Motor\Backend\Grid\Renderers\TranslateRenderer;
 
@@ -17,6 +18,8 @@ class SlideTemplateGrid extends Grid
     {
         $this->addColumn('preview', trans('motor-media::backend/files.file'))
              ->renderer(FileRenderer::class, [ 'file' => 'preview' ]);
+        $this->addColumn('link', trans('motor-media::backend/files.file'))
+             ->renderer(BladeRenderer::class, [ 'template' => 'partymeister-slides::grid.slide_templates.slide_template' ]);
         $this->addColumn('name', trans('motor-backend::backend/global.name'), true);
         $this->addColumn('template_for', trans('partymeister-slides::backend/slide_templates.template_for'))
              ->renderer(TranslateRenderer::class,

@@ -32,7 +32,7 @@
     </div>
 </div>
 <div class="loader loader-default"
-     data-text="&hearts; Generating slide previews and hiding the ugliness &hearts;"></div>
+     data-text="&hearts; {{ trans('partymeister-slides::backend/slides.generating') }} &hearts;"></div>
 @section ('right-sidebar')
     <ul class="slidemeister-navbar nav nav-tabs" role="tablist">
         <li class="nav-item">
