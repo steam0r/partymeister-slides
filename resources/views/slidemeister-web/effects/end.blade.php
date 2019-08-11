@@ -4,14 +4,14 @@
 
     function drawEnd(offset) {
         $('canvas').css('z-index', 0);
-        var myCanvas = document.getElementById("end");
+        let myCanvas = document.getElementById("end");
         myCanvas.style.zIndex = 8000;
-        var drawingContext = myCanvas.getContext("2d");
+        let drawingContext = myCanvas.getContext("2d");
 
-        var color1 = "#ef4a82", color2 = "#e56697";
-        var numberOfStripes = 50;
-        for (var i = 0; i < numberOfStripes * 2; i++) {
-            var thickness = 80;
+        let color1 = "#ef4a82", color2 = "#e56697";
+        let numberOfStripes = 50;
+        for (let i = 0; i < numberOfStripes * 2; i++) {
+            let thickness = 80;
             drawingContext.beginPath();
             drawingContext.strokeStyle = i % 2 ? color1 : color2;
             drawingContext.lineWidth = thickness;
@@ -23,9 +23,9 @@
         }
     }
 
-    var scrollOffset = 0;
+    let scrollOffset = 0;
 
-    var endFrame;
+    let endFrame;
 
 
     function animateEnd() {

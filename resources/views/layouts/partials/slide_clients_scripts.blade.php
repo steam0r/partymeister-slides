@@ -16,15 +16,15 @@
         });
 
         // Get playlists
-        var updatePlaylists = function () {
+        let updatePlaylists = function () {
 
             axios.get('{{route('ajax.slide_clients.communication.playlists')}}').then(function (playlistsResponse) {
 
-                var parsedResponse = null;
-                var playlists = [];
-                var currentItem = null;
-                var currentPlaylist = null;
-                var validPlaylist = false;
+                let parsedResponse = null;
+                let playlists = [];
+                let currentItem = null;
+                let currentPlaylist = null;
+                let validPlaylist = false;
 
                 parsedResponse = $.parseXML(playlistsResponse.data.result);
                 if (parsedResponse == null) {
@@ -39,8 +39,8 @@
                         });
                     });
 
-                    var currentItemCombined = $(parsedResponse).find('data item_current').text();
-                    var split = currentItemCombined.split('_');
+                    let currentItemCombined = $(parsedResponse).find('data item_current').text();
+                    let split = currentItemCombined.split('_');
 
                     currentPlaylist = split[0];
                     currentItem = split[1];
@@ -65,8 +65,8 @@
                 for (let p of playlists) {
                     $('.playlist-' + p.id + '-cached').removeClass('d-none');
 
-                    var remotePlaylistTimestamp = p.updated_at;
-                    var playlistTimestamp = parseInt($('.playlist-' + p.id + '-outdated').data('timestamp'));
+                    let remotePlaylistTimestamp = p.updated_at;
+                    let playlistTimestamp = parseInt($('.playlist-' + p.id + '-outdated').data('timestamp'));
 
                     if (remotePlaylistTimestamp !== null && remotePlaylistTimestamp < playlistTimestamp) {
                         $('.playlist-' + p.id + '-outdated').removeClass('d-none');
@@ -91,7 +91,7 @@
             });
         };
 
-        var seek = function (data) {
+        let seek = function (data) {
             return axios.post('{{route('ajax.slide_clients.communication.seek')}}', data).then(function (response) {
                 updatePlaylists();
             }).catch(function (error) {
@@ -107,7 +107,7 @@
                 callbacks: $(this).data('callbacks')
             };
 
-            var action = $(this).data('action');
+            let action = $(this).data('action');
 
             if (data.callbacks == 1) {
                 if (!confirm('{{ trans('partymeister-slides::backend/slide_clients.callback_question') }}')) {
@@ -118,7 +118,7 @@
             axios.post('{{route('ajax.slide_clients.communication.playlist')}}', data).then(function (response) {
 
                 if (action == 'seek') {
-                    var seekData = {
+                    let seekData = {
                         playlist_id: data.playlist_id,
                         hard: false,
                     };

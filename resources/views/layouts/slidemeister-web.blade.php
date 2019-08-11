@@ -141,15 +141,15 @@
 <script>
     $.fn.extend({
         animateCss: function (animationName, callback) {
-            var animationEnd = (function (el) {
-                var animations = {
+            let animationEnd = (function (el) {
+                let animations = {
                     animation: 'animationend',
                     OAnimation: 'oAnimationEnd',
                     MozAnimation: 'mozAnimationEnd',
                     WebkitAnimation: 'webkitAnimationEnd',
                 };
 
-                for (var t in animations) {
+                for (let t in animations) {
                     if (el.style[t] !== undefined) {
                         return animations[t];
                     }
@@ -192,7 +192,7 @@
     }
 
 
-    var slidemeisterVue = new Vue({
+    let slidemeisterVue = new Vue({
         el: '#slidemeisterVue',
         data: {
             cachedPlaylists: [],
@@ -354,12 +354,12 @@
             checkVideo: function () {
                 if (this.items[this.currentItem].type == 'video') {
                     setTimeout(() => {
-                        var currentVideo = document.getElementById("video-current");
+                        let currentVideo = document.getElementById("video-current");
                         if (currentVideo != null) {
                             currentVideo.currentTime = 0;
                             currentVideo.play();
                         }
-                        var previousVideo = document.getElementById("video-previous");
+                        let previousVideo = document.getElementById("video-previous");
                         if (previousVideo != null) {
                             previousVideo.pause();
                         }

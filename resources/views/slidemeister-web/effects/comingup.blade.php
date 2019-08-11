@@ -4,14 +4,14 @@
 
     function drawComingup(offset) {
         $('canvas').css('z-index', 0);
-        var myCanvas = document.getElementById("comingup");
+        let myCanvas = document.getElementById("comingup");
         myCanvas.style.zIndex = 8000;
-        var drawingContext = myCanvas.getContext("2d");
+        let drawingContext = myCanvas.getContext("2d");
 
-        var color1 = "#87c762", color2 = "#97cd78";
-        var numberOfStripes = 50;
-        for (var i = 0; i < numberOfStripes * 2; i++) {
-            var thickness = 80;
+        let color1 = "#87c762", color2 = "#97cd78";
+        let numberOfStripes = 50;
+        for (let i = 0; i < numberOfStripes * 2; i++) {
+            let thickness = 80;
             drawingContext.beginPath();
             drawingContext.strokeStyle = i % 2 ? color1 : color2;
             drawingContext.lineWidth = thickness;
@@ -23,9 +23,9 @@
         }
     }
 
-    var scrollOffset = 0;
+    let scrollOffset = 0;
 
-    var comingUpFrame;
+    let comingUpFrame;
 
 
     function animateComingup() {

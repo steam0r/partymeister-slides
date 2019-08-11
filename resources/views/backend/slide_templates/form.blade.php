@@ -92,7 +92,7 @@
 
                 $('.loader').addClass('is-active');
 
-                var dataToSave = slidemeister.data.save();
+                let dataToSave = slidemeister.data.save();
                 $('input[name="definitions"]').val(JSON.stringify(dataToSave));
                 $('input[name="cached_html_preview"]').val($('#slidemeister').html());
 

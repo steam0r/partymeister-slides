@@ -1,7 +1,7 @@
 (function ($) {
     $.fn.slidemeister = function ($propertySelector, $properties) {
 
-        var ctrlDown = false,
+        let ctrlDown = false,
             ctrlKey = 17,
             cmdKey = 91,
             vKey = 86,
@@ -13,24 +13,24 @@
             if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = false;
         });
 
-        var $target = this;
+        let $target = this;
 
-        var $debug = false;
+        let $debug = false;
 
-        var $editorLibrary = 'medium';
+        let $editorLibrary = 'medium';
 
-        var $editors = {};
+        let $editors = {};
 
-        var $elements = [];
+        let $elements = [];
 
-        var $activeEditors = [];
+        let $activeEditors = [];
 
-        var $elementData = {};
+        let $elementData = {};
 
-        var $placeholderData = {};
+        let $placeholderData = {};
 
-        var $layersSelector = '';
-        var $layersContainer = '';
+        let $layersSelector = '';
+        let $layersContainer = '';
 
         if ($properties == undefined) {
             $properties = {};
@@ -48,15 +48,15 @@
             $layersContainer = '#slidemeister-layers-container';
         }
 
-        var $disableHover = false;
+        let $disableHover = false;
 
-        var $historyLock = false;
+        let $historyLock = false;
 
-        var $tabindex = 0;
+        let $tabindex = 0;
 
-        var $editable = true;
+        let $editable = true;
 
-        var slidemeister = {element: {}, ui: {}, data: {}, tab: {}, history: {}, layer: {}};
+        let slidemeister = {element: {}, ui: {}, data: {}, tab: {}, history: {}, layer: {}};
 
         slidemeister.data.removePreviewElements = function() {
             $($target).css('background-color', 'transparent');
@@ -176,7 +176,7 @@
          * */
         slidemeister.data.save = function (replace=false) {
 
-            var dataToSave = {};
+            let dataToSave = {};
             dataToSave.global = {
                 bgImage: $('#bgImage').val(),
                 zoom: $('#zoom').val()
@@ -234,7 +234,7 @@
          */
         slidemeister.data.getPropertiesFromElement = function (element) {
 
-            var elementData = {};
+            let elementData = {};
             // Get properties and values for each element
             $.each($properties, function (property, data) {
                 if (data.elementProperty !== false) {
@@ -249,7 +249,7 @@
 
         slidemeister.data.populateTimetable = function (data) {
             setTimeout(function () {
-                var baseTimeElement, baseTypeElement, baseNameElement = false;
+                let baseTimeElement, baseTypeElement, baseNameElement = false;
 
                 $.each($elements, function (index, element) {
                     if ($elementData[element].prettyname == 'timetable_time') {
@@ -263,7 +263,7 @@
                     }
                 });
 
-                var height = $($target).find('.'+baseNameElement+ ' div').height();
+                let height = $($target).find('.'+baseNameElement+ ' div').height();
 
                 $.each(data, function (index, row) {
                     if (index == 0) {
@@ -292,7 +292,7 @@
 
         slidemeister.data.populatePrizegiving = function (data, metaElement, showRank) {
             setTimeout(function () {
-                var baseAuthorElement, baseRankElement = false;
+                let baseAuthorElement, baseRankElement = false;
 
                 $.each($elements, function (index, element) {
                     if ($elementData[element].prettyname == 'prizegiving_author') {
@@ -303,10 +303,10 @@
                     }
                 });
 
-                var height = $($target).find('.'+baseAuthorElement+ ' div').height();
+                let height = $($target).find('.'+baseAuthorElement+ ' div').height();
 
 
-                var normalized = [];
+                let normalized = [];
                 $.each(data, function (index, row) {
                     // console.log(index+' - '+height);
                     if (index < 7) {
@@ -324,20 +324,20 @@
                         } else {
                             $($target).find('.'+rankElement+ ' span').html(' ');
 
-                            var width = $($target).find('.'+authorElement).outerWidth();
+                            let width = $($target).find('.'+authorElement).outerWidth();
 
                             // var x1 = $elementData[rankElement].x;
-                            var x1 = parseInt($($target).find('.'+authorElement).css('left').replace('px', ''));
+                            let x1 = parseInt($($target).find('.'+authorElement).css('left').replace('px', ''));
                             // var y1 = $elementData[rankElement].y;
-                            var y1 = parseInt($($target).find('.'+authorElement).css('top').replace('px', ''))+(height/10);
+                            let y1 = parseInt($($target).find('.'+authorElement).css('top').replace('px', ''))+(height/10);
 
                             if (row.max_points == 0) {
-                                var x2 = x1;
+                                let x2 = x1;
                             } else {
-                                var x2 = Math.max(((row.points / row.max_points) * width) + x1, x1);
+                                let x2 = Math.max(((row.points / row.max_points) * width) + x1, x1);
                             }
 
-                            var y2 = y1+height;
+                            let y2 = y1+height;
 
                             normalized.push({
                                 x1: slidemeister.data.normalizeNumber(x1, $($target).width(), 4),
@@ -371,7 +371,7 @@
          */
         slidemeister.element.replacePlaceholders = function () {
             $.each($elements, function (index, element) {
-                var placeholderTemplate = $elementData[element].placeholder;
+                let placeholderTemplate = $elementData[element].placeholder;
                 if (placeholderTemplate != '') {
                     $.each($placeholderData, function (placeholder, value) {
                         placeholderTemplate = placeholderTemplate.replace('{{' + placeholder + '}}', value);
@@ -401,7 +401,7 @@
          * @param url
          */
         slidemeister.element.createImage = function (url) {
-            var data = slidemeister.element.defaultValues();
+            let data = slidemeister.element.defaultValues();
 
             element = data[0];
             values = data[1];
@@ -426,9 +426,9 @@
             });
 
             // get highest z-index
-            var zIndex = 0;
+            let zIndex = 0;
             $('.slidemeister-element').each(function (index, item) {
-                var value = parseInt($(item).css('z-index'));
+                let value = parseInt($(item).css('z-index'));
 
                 zIndex = (value > zIndex) ? value : zIndex;
             });
@@ -452,7 +452,7 @@
         slidemeister.element.create = function (element, values, editable = true) {
 
             if (element == undefined) {
-                var data = slidemeister.element.defaultValues();
+                let data = slidemeister.element.defaultValues();
 
                 element = data[0];
                 values = data[1];
@@ -561,7 +561,7 @@
                 console.log("Create editor for " + element);
             }
 
-            var initializeEditor = function () {
+            let initializeEditor = function () {
 
                 if ($elementData[element].editable == '0') {
                     return;
@@ -622,13 +622,13 @@
 
 
                         // Get text
-                        var text = $(editable).html();
+                        let text = $(editable).html();
 
                         // Set the new text value in the form field
                         $('#text').val(text);
 
                         // Save old field data
-                        var oldText = $elementData[element].text;
+                        let oldText = $elementData[element].text;
 
                         if (oldText != text) {
                             slidemeister.history.save();
@@ -669,11 +669,11 @@
             }
 
             // Get current rotation from css
-            var tr = $($target).find('.' + element).css('transform');
+            let tr = $($target).find('.' + element).css('transform');
 
-            var degrees = 0;
+            let degrees = 0;
             if (tr != undefined && tr != 'none' && tr.split('(').length > 0) {
-                var values = tr.split('(')[1],
+                let values = tr.split('(')[1],
                     values = values.split(')')[0],
                     values = values.split(',');
 
@@ -711,9 +711,9 @@
                             $disableHover = true;
 
                             // Fix issue when the draggable is rotated
-                            var left = parseInt($(this).css('left'), 10);
+                            let left = parseInt($(this).css('left'), 10);
                             left = isNaN(left) ? 0 : left;
-                            var top = parseInt($(this).css('top'), 10);
+                            let top = parseInt($(this).css('top'), 10);
                             top = isNaN(top) ? 0 : top;
                             recoupLeft = left - ui.position.left;
                             recoupTop = top - ui.position.top;
@@ -929,14 +929,14 @@
             if (elementToBeCloned == undefined) {
                 elementToBeCloned = $('#element').val();
             }
-            var newElement = slidemeister.element.getUniqeId();
+            let newElement = slidemeister.element.getUniqeId();
 
             if ($debug == true) {
                 console.log('Clone ' + elementToBeCloned);
             }
 
             // Get element data (cloning them, and not just referencing the object)
-            var values = $.extend({}, $elementData[elementToBeCloned]);
+            let values = $.extend({}, $elementData[elementToBeCloned]);
 
             values.x = parseInt(values.x) + x;
             values.y = parseInt(values.y) + y;
@@ -1003,7 +1003,7 @@
 
             zIndexValue = $elementData[element]['zIndex'];
 
-            var field = '<li class="list-group-item" data-z-index="' + zIndexValue + '" data-name="' + element + '">' + ($elementData[element]['prettyname'] ? $elementData[element]['prettyname'] : element) + '</li>';
+            let field = '<li class="list-group-item" data-z-index="' + zIndexValue + '" data-name="' + element + '">' + ($elementData[element]['prettyname'] ? $elementData[element]['prettyname'] : element) + '</li>';
             fieldSelector = $('#slidemeister-layers-container ul').append(field);
 
             // Add mouseover/mouseout events for layer items
@@ -1027,11 +1027,11 @@
 
         slidemeister.ui.resort = function () {
             // resort list by zIndex
-            var list = $('#slidemeister-layers');
-            var items = list.children('li').get();
+            let list = $('#slidemeister-layers');
+            let items = list.children('li').get();
             items.sort(function (a, b) {
-                var compA = parseInt($(a).data('z-index'));
-                var compB = parseInt($(b).data('z-index'));
+                let compA = parseInt($(a).data('z-index'));
+                let compB = parseInt($(b).data('z-index'));
                 return (compA > compB) ? -1 : (compA < compB) ? 1 : 0;
             });
             $.each(items, function (index, item) {
@@ -1050,11 +1050,11 @@
 
             // Generate property input fields
             $.each($properties, function (property, data) {
-                var addStyle = '';
+                let addStyle = '';
                 if (data.visible === false) {
                     addStyle = 'display: none;';
                 }
-                var field = '<div class="input-group slidemeister-property-list" style="' + addStyle + '"><label class="col-form-label col-form-label-sm" for="' + property + '">' + property + '</label>';
+                let field = '<div class="input-group slidemeister-property-list" style="' + addStyle + '"><label class="col-form-label col-form-label-sm" for="' + property + '">' + property + '</label>';
 
                 switch (data.type) {
                     case 'select':
@@ -1112,9 +1112,9 @@
             // Update data attributes
 
             // Compensate for rotation
-            var left = parseInt($($target).find('.' + element).css('left'), 10);
+            let left = parseInt($($target).find('.' + element).css('left'), 10);
             left = isNaN(left) ? 0 : left;
-            var top = parseInt($($target).find('.' + element).css('top'), 10);
+            let top = parseInt($($target).find('.' + element).css('top'), 10);
             top = isNaN(top) ? 0 : top;
             recoupLeft = left;
             recoupTop = top;
@@ -1238,10 +1238,10 @@
             }
 
 
-            var fontSize = parseInt($($target).find('.' + element).attr('font-size'));
+            let fontSize = parseInt($($target).find('.' + element).attr('font-size'));
 
-            var textHeight = $($target).find('.' + element + ' div span').outerHeight();
-            var textWidth = $($target).find('.' + element + ' div span').outerWidth();
+            let textHeight = $($target).find('.' + element + ' div span').outerHeight();
+            let textWidth = $($target).find('.' + element + ' div span').outerWidth();
 
             // For live-text scaling wile resizing the element when operating on a zoomed target...
             if (elementWidth == undefined && elementHeight == undefined) {
@@ -1289,12 +1289,12 @@
                 console.log('fixResizableWithCssZoom');
             }
 
-            var zoomScale = $($target).css('zoom');
-            var changeWidth = ui.size.width - ui.originalSize.width; // find change in width
-            var newWidth = ui.originalSize.width + changeWidth / zoomScale; // adjust new width by our zoomScale
+            let zoomScale = $($target).css('zoom');
+            let changeWidth = ui.size.width - ui.originalSize.width; // find change in width
+            let newWidth = ui.originalSize.width + changeWidth / zoomScale; // adjust new width by our zoomScale
 
-            var changeHeight = ui.size.height - ui.originalSize.height; // find change in height
-            var newHeight = ui.originalSize.height + changeHeight / zoomScale; // adjust new height by our zoomScale
+            let changeHeight = ui.size.height - ui.originalSize.height; // find change in height
+            let newHeight = ui.originalSize.height + changeHeight / zoomScale; // adjust new height by our zoomScale
 
             // Don't mess it up
             if (newWidth < 20) {
@@ -1325,8 +1325,8 @@
             ui.position.left += recoupLeft;
             ui.position.top += recoupTop;
 
-            var zoom = $($target).css('zoom');
-            var factor = ((1 / zoom) - 1);
+            let zoom = $($target).css('zoom');
+            let factor = ((1 / zoom) - 1);
 
             // console.log(factor);
 
@@ -1343,7 +1343,7 @@
          * @returns {Array}
          */
         slidemeister.tab.getList = function () {
-            var tablistElements = [];
+            let tablistElements = [];
 
             // Make list out of all tabbable elements (actual elements and form fields)
             $.each($elements, function (index, element) {
@@ -1366,7 +1366,7 @@
                 console.log('Tab setIndex');
             }
 
-            var tablistElements = slidemeister.tab.getList();
+            let tablistElements = slidemeister.tab.getList();
 
             element = event.currentTarget.id;
 
@@ -1389,7 +1389,7 @@
                 console.log('Tab cycle');
             }
 
-            var tablistElements = slidemeister.tab.getList();
+            let tablistElements = slidemeister.tab.getList();
 
             // Check direction and increase/decrease tabindex
             switch (direction) {
@@ -1475,7 +1475,7 @@
 
             // Save current state if Historyindex == 0
             if ($historyIndex == 0 && $lastHistoryAction != 'redo') {
-                var elementData = {};
+                let elementData = {};
                 $.each($elements, function (index, element) {
                     elementData[element] = slidemeister.data.getPropertiesFromElement(element);
                 });
@@ -1539,7 +1539,7 @@
             $historyIndex = 0;
 
             // Get data
-            var elementData = {};
+            let elementData = {};
             $.each($elements, function (index, element) {
                 elementData[element] = slidemeister.data.getPropertiesFromElement(element);
             });
@@ -1577,15 +1577,15 @@
 
 // Small jquery extension to select all text in a contenteditable element
 jQuery.fn.selectText = function () {
-    var doc = document;
-    var element = this[0];
+    let doc = document;
+    let element = this[0];
     if (doc.body.createTextRange) {
-        var range = document.body.createTextRange();
+        let range = document.body.createTextRange();
         range.moveToElementText(element);
         range.select();
     } else if (window.getSelection) {
-        var selection = window.getSelection();
-        var range = document.createRange();
+        let selection = window.getSelection();
+        let range = document.createRange();
         range.selectNodeContents(element);
         selection.removeAllRanges();
         selection.addRange(range);

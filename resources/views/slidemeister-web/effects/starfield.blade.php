@@ -5,39 +5,39 @@
     }
 
     function get_screen_size() {
-        var w = document.documentElement.clientWidth;
-        var h = document.documentElement.clientHeight;
+        let w = document.documentElement.clientWidth;
+        let h = document.documentElement.clientHeight;
         return Array(w, h);
     }
 
-    var url = document.location.href;
+    let url = document.location.href;
 
-    var test = true;
-    var n = 512;
-    var w = 0;
-    var h = 0;
-    var x = 0;
-    var y = 0;
-    var z = 0;
-    var star_color_ratio = 0;
-    var star_x_save, star_y_save;
-    var star_ratio = 256;
-    var star_speed = 4;
-    var star = new Array(n);
-    var opacity = 0.1;
+    let test = true;
+    let n = 512;
+    let w = 0;
+    let h = 0;
+    let x = 0;
+    let y = 0;
+    let z = 0;
+    let star_color_ratio = 0;
+    let star_x_save, star_y_save;
+    let star_ratio = 256;
+    let star_speed = 4;
+    let star = new Array(n);
+    let opacity = 0.1;
 
-    var cursor_x = 0;
-    var cursor_y = 0;
-    var mouse_x = 0;
-    var mouse_y = 0;
+    let cursor_x = 0;
+    let cursor_y = 0;
+    let mouse_x = 0;
+    let mouse_y = 0;
 
-    var context;
+    let context;
 
-    var timeout;
-    var fps = 0;
+    let timeout;
+    let fps = 0;
 
     function init() {
-        for (var i = 0; i < n; i++) {
+        for (let i = 0; i < n; i++) {
             star[i] = new Array(5);
             star[i][0] = Math.random() * w * 2 - x * 2;
             star[i][1] = Math.random() * h * 2 - y * 2;
@@ -45,7 +45,7 @@
             star[i][3] = 0;
             star[i][4] = 0;
         }
-        var starfield = $i('starfield');
+        let starfield = $i('starfield');
         starfield.style.position = 'absolute';
         starfield.width = w;
         starfield.height = h;
@@ -58,7 +58,7 @@
         mouse_x = cursor_x - x;
         mouse_y = cursor_y - y;
         context.fillRect(0, 0, w, h);
-        for (var i = 0; i < n; i++) {
+        for (let i = 0; i < n; i++) {
             test = true;
             star_x_save = star[i][3];
             star_y_save = star[i][4];
@@ -105,7 +105,7 @@
 
     function startStarfield() {
         $('canvas').css('z-index', 0);
-        var myCanvas = document.getElementById("starfield");
+        let myCanvas = document.getElementById("starfield");
         myCanvas.style.zIndex = 8000;
 
         resize();
