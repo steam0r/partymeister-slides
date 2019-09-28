@@ -23,7 +23,7 @@
         }
     }
 
-    let scrollOffset = 0;
+    let scrollOffsetEnd = 0;
 
     let endFrame;
 
@@ -31,12 +31,12 @@
     function animateEnd() {
         endFrame = requestAnimFrame(animateEnd);
 
-        scrollOffset -= 1;
-        if (scrollOffset < -80) {
-            scrollOffset = 0;
+        scrollOffsetEnd -= 1;
+        if (scrollOffsetEnd < -80) {
+            scrollOffsetEnd = 0;
         }
 
-        drawEnd(scrollOffset);
+        drawEnd(scrollOffsetEnd);
     }
 
     function startEnd() {

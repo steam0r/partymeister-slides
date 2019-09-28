@@ -44,6 +44,7 @@ class CommunicationController extends Controller
                 } else {
                     return response()->json([ 'result' => $result ]);
                 }
+                break;
             case 'slidemeister-web':
                 $playlist = Playlist::find($request->get('playlist_id'));
                 if (is_null($playlist)) {
@@ -214,6 +215,7 @@ class CommunicationController extends Controller
                 } else {
                     return response()->json([ 'result' => $result ]);
                 }
+                break;
             case 'slidemeister-web':
                 $result = Cache::store('redis')
                                ->get(config('cache.prefix') . ':slidemeister-web.' . session('screens.active'));

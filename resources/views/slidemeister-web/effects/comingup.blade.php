@@ -23,7 +23,7 @@
         }
     }
 
-    let scrollOffset = 0;
+    let scrollOffsetComingUp = 0;
 
     let comingUpFrame;
 
@@ -31,12 +31,12 @@
     function animateComingup() {
         comingUpFrame = requestAnimFrame(animateComingup);
 
-        scrollOffset -= 1;
-        if (scrollOffset < -80) {
-            scrollOffset = 0;
+        scrollOffsetComingUp -= 1;
+        if (scrollOffsetComingUp < -80) {
+            scrollOffsetComingUp = 0;
         }
 
-        drawComingup(scrollOffset);
+        drawComingup(scrollOffsetComingUp);
     }
 
     function startComingup() {

@@ -509,7 +509,7 @@
             updateStatus: function () {
                 console.log('Update status');
                 console.log(this.items);
-                /*
+                console.log(this.currentItem);
                 let data = {
                     playlists: this.cachedPlaylists.map(playlist => {
                         return {id: playlist.id, updated_at: new Date(playlist.updated_at.date).getTime()/1000}
@@ -520,7 +520,6 @@
                 axios.post('{{route('ajax.slidemeister-web.status.update', ['slide_client' => $slideClient->id])}}', data).then(response => {
                     console.log('Updated status');
                 });
-                */
             }
         }
     });
