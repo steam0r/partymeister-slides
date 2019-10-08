@@ -37,7 +37,7 @@
 
 .slidemeister-canvas-bounds-w {
   top: 54px;
-  left: 0px;
+  left: 0;
   width: 96px;
   height: 541px;
 }
@@ -281,7 +281,7 @@ p.draghandle {
   display: flex;
 }
 [contenteditable]:focus {
-  outline: 0px solid transparent;
+  outline: 0 solid transparent;
 }
 
 body#slidemeister-render #slidemeister {

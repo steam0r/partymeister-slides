@@ -32,6 +32,7 @@ class Browsershot extends \Spatie\Browsershot\Browsershot
 
     /**
      * @param string $targetPath
+     * @throws CouldNotTakeBrowsershot
      * @throws ElementNotFound
      */
     public function save(string $targetPath)

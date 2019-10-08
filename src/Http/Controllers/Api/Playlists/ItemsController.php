@@ -31,7 +31,7 @@ class ItemsController extends Controller
             $f = fractal($record->file_association->file, new FileTransformer())->toArray();
         }
 
-        if ($f != null) {
+        if (isset($f) && $f != null) {
             $i['data'] = array_merge($i['data'], $f['data']);
 
             return response()->json([ 'data' => $i['data'] ]);

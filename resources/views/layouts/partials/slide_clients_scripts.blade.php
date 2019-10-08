@@ -80,7 +80,7 @@
                     $('.playlist-' + currentPlaylist + '-preview').removeClass('d-none');
                     $('.playlist-' + currentPlaylist + '-preview').find('img').prop('src', response.data.data.file.preview);
                 }).catch(function (error) {
-                    console.log('UpdatePlaylists: Playlist item not found')
+                    console.log('UpdatePlaylists: Playlist item not found');
                     console.log(error);
                 });
 

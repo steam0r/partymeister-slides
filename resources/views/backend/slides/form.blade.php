@@ -1,4 +1,3 @@
-@section('main')
 @section('view_styles')
     @include('partymeister-slides::layouts.partials.slide_fonts')
     <style type="text/css">

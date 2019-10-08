@@ -331,10 +331,12 @@
                             // var y1 = $elementData[rankElement].y;
                             let y1 = parseInt($($target).find('.'+authorElement).css('top').replace('px', ''))+(height/10);
 
+                            let x2;
+
                             if (row.max_points == 0) {
-                                let x2 = x1;
+                                x2 = x1;
                             } else {
-                                let x2 = Math.max(((row.points / row.max_points) * width) + x1, x1);
+                                x2 = Math.max(((row.points / row.max_points) * width) + x1, x1);
                             }
 
                             let y2 = y1+height;

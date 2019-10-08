@@ -2,7 +2,6 @@
 
 namespace Partymeister\Slides\Listeners;
 
-use Partymeister\Core\Events\EventSaved;
 
 /**
  * Class GenerateScheduleSlides
@@ -25,10 +24,9 @@ class GenerateScheduleSlides
     /**
      * Handle the event.
      *
-     * @param EventSaved $event
      * @return void
      */
-    public function handle(EventSaved $event)
+    public function handle()
     {
         //
     }

@@ -12,9 +12,8 @@
     }
   ],
   "require": {
-    "partymeister/core": "0.4.*",
-    "spatie/browsershot": "^3.29",
-    "matthewbdaly/laravel-etag-middleware": "^1.2"
+    "partymeister/core": "0.5.*",
+    "spatie/browsershot": "^3.29"
   },
   "autoload": {
     "psr-4": {

@@ -5,7 +5,6 @@ namespace Partymeister\Slides\Services;
 use Illuminate\Support\Arr;
 use Motor\Backend\Services\BaseService;
 use Motor\Core\Filter\Renderers\SelectRenderer;
-use Partymeister\Slides\Events\SlideTemplateSaved;
 use Partymeister\Slides\Models\SlideTemplate;
 
 /**

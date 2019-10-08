@@ -46,7 +46,7 @@ class GenerateSlide implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
+     * @throws \Spatie\Browsershot\Exceptions\CouldNotTakeBrowsershot
      */
     public function handle()
     {

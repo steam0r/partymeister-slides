@@ -2,8 +2,6 @@
 
 namespace Partymeister\Slides\Services;
 
-use FFMpeg\FFMpeg;
-use FFMpeg\FFProbe;
 use Illuminate\Support\Arr;
 use Motor\Backend\Models\Category;
 use Motor\Backend\Services\BaseService;
@@ -32,6 +30,9 @@ class PlaylistService extends BaseService
 
     /**
      * @param $data
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
      */
     public static function generatePrizegivingPlaylist($data)
     {
@@ -161,6 +162,9 @@ class PlaylistService extends BaseService
     /**
      * @param $competition
      * @param $data
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\DiskDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileDoesNotExist
+     * @throws \Spatie\MediaLibrary\Exceptions\FileCannotBeAdded\FileIsTooBig
      */
     public static function generateCompetitionPlaylist($competition, $data)
     {
