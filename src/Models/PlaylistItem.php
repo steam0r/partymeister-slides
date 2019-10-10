@@ -77,7 +77,6 @@ use Motor\Media\Models\FileAssociation;
  */
 class PlaylistItem extends Model
 {
-
     use Searchable;
     use Filterable;
     use Blameable, CreatedBy, UpdatedBy, DeletedBy;
@@ -124,7 +123,7 @@ class PlaylistItem extends Model
     /**
      * @return BelongsTo
      */
-    function transition()
+    public function transition()
     {
         return $this->belongsTo(Transition::class);
     }
@@ -136,7 +135,7 @@ class PlaylistItem extends Model
     /**
      * @return MorphOne
      */
-    function file_association()
+    public function file_association()
     {
         return $this->morphOne(FileAssociation::class, 'model');
     }
@@ -148,7 +147,7 @@ class PlaylistItem extends Model
     /**
      * @return BelongsTo
      */
-    function slide()
+    public function slide()
     {
         return $this->belongsTo(Slide::class);
     }

@@ -12,7 +12,6 @@ use Motor\Backend\Grid\Renderers\TranslateRenderer;
  */
 class PlaylistGrid extends Grid
 {
-
     protected function setup()
     {
         $this->addColumn('name', trans('motor-backend::backend/global.name'), true);
@@ -20,8 +19,10 @@ class PlaylistGrid extends Grid
              ->renderer(TranslateRenderer::class, [ 'file' => 'partymeister-slides::backend/playlists.types' ]);
         $this->addColumn('item_count', trans('partymeister-slides::backend/playlists.items'));
         $this->addColumn('controls', trans('partymeister-slides::backend/slide_clients.controls'))
-             ->renderer(BladeRenderer::class,
-                 [ 'template' => 'partymeister-slides::grid.slide_clients.playlist_controls' ]);
+             ->renderer(
+                 BladeRenderer::class,
+                 [ 'template' => 'partymeister-slides::grid.slide_clients.playlist_controls' ]
+             );
         $this->setDefaultSorting('name', 'ASC');
 
         $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.playlists.edit');

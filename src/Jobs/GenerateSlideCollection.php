@@ -15,7 +15,6 @@ use Illuminate\Support\Collection;
  */
 class GenerateSlideCollection implements ShouldQueue
 {
-
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**

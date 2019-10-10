@@ -7,7 +7,6 @@ use Partymeister\Slides\Models\Slide;
 
 class PartymeisterSlidesBackendSlideTest extends TestCase
 {
-
     use DatabaseTransactions;
 
     protected $user;
@@ -76,7 +75,7 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
     {
         $record = create_test_slide();
         $this->visit('/backend/slides')
-            ->within('table', function(){
+            ->within('table', function () {
                 $this->click(trans('motor-backend::backend/global.edit'));
             })
             ->seePageIs('/backend/slides/'.$record->id.'/edit')
@@ -92,7 +91,7 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
         $this->visit('/backend/slides/'.$record->id.'/edit')
             ->see($record->name)
             ->type('Updated Slide', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/slides.save'));
             })
             ->see(trans('partymeister-slides::backend/slides.updated'))
@@ -117,7 +116,7 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
         $this->visit('/backend/slides/create')
             ->see(trans('partymeister-slides::backend/slides.new'))
             ->type('Create Slide Name', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/slides.save'));
             })
             ->see(trans('partymeister-slides::backend/slides.created'))
@@ -130,7 +129,7 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
     {
         $this->visit('/backend/slides/create')
             ->see(trans('partymeister-slides::backend/slides.new'))
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/slides.save'));
             })
             ->see('Data missing!')
@@ -144,7 +143,7 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
         $this->visit('/backend/slides/'.$record->id.'/edit')
             ->see(trans('partymeister-slides::backend/slides.edit'))
             ->type('Modified Slide Name', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/slides.save'));
             })
             ->see(trans('partymeister-slides::backend/slides.updated'))
@@ -160,7 +159,7 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
         $this->assertCount(1, Slide::all());
 
         $this->visit('/backend/slides')
-            ->within('table', function(){
+            ->within('table', function () {
                 $this->press(trans('motor-backend::backend/global.delete'));
             })
             ->seePageIs('/backend/slides')
@@ -174,7 +173,7 @@ class PartymeisterSlidesBackendSlideTest extends TestCase
     {
         $records = create_test_slide(100);
         $this->visit('/backend/slides')
-            ->within('.pagination', function(){
+            ->within('.pagination', function () {
                 $this->click('3');
             })
             ->seePageIs('/backend/slides?page=3');

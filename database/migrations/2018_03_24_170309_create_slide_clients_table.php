@@ -30,7 +30,6 @@ class CreateSlideClientsTable extends Migration
 
             $table->foreign('playlist_id')->references('id')->on('playlists')->onDelete('set null');
             $table->foreign('playlist_item_id')->references('id')->on('playlist_items')->onDelete('set null');
-
         });
     }
 

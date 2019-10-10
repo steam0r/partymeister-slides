@@ -31,11 +31,14 @@ class SlideForm extends Form
         }
 
         $this->add('name', 'text', [ 'label' => trans('motor-backend::backend/global.name'), 'rules' => 'required' ])
-             ->add('category_id', 'select',
-                 [ 'label' => trans('motor-backend::backend/categories.category'), 'choices' => $categoryChoices ])
+             ->add(
+                 'category_id',
+                 'select',
+                 [ 'label' => trans('motor-backend::backend/categories.category'), 'choices' => $categoryChoices ]
+             )
              ->add('slide_type', 'select', [
                  'label'   => trans('partymeister-slides::backend/slides.slide_type'),
-                 'choices' => ( trans('partymeister-slides::backend/slides.slide_types') )
+                 'choices' => (trans('partymeister-slides::backend/slides.slide_types'))
              ])
              ->add('slide_template_id', 'hidden')
              ->add('definitions', 'hidden', [ 'attr' => [ 'v-pre' => true ] ])

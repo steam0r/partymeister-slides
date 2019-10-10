@@ -37,7 +37,7 @@ class Browsershot extends \Spatie\Browsershot\Browsershot
      */
     public function save(string $targetPath)
     {
-        if ( ! $this->debug) {
+        if (! $this->debug) {
             parent::save($targetPath);
         }
 
@@ -57,11 +57,11 @@ class Browsershot extends \Spatie\Browsershot\Browsershot
 
         $this->cleanupTemporaryHtmlFile();
 
-        if ( ! file_exists($targetPath)) {
+        if (! file_exists($targetPath)) {
             throw CouldNotTakeBrowsershot::chromeOutputEmpty($targetPath);
         }
 
-        if ( ! $this->imageManipulations->isEmpty()) {
+        if (! $this->imageManipulations->isEmpty()) {
             $this->applyManipulations($targetPath);
         }
 

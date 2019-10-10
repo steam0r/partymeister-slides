@@ -22,7 +22,6 @@ use Partymeister\Slides\Transformers\SlideTransformer;
  */
 class PlaylistsController extends Controller
 {
-
     use FormBuilderTrait;
 
 
@@ -60,8 +59,10 @@ class PlaylistsController extends Controller
         $motorShowRightSidebar = true;
         $playlistItems         = [];
 
-        return view('partymeister-slides::backend.playlists.create',
-            compact('form', 'motorShowRightSidebar', 'playlistItems'));
+        return view(
+            'partymeister-slides::backend.playlists.create',
+            compact('form', 'motorShowRightSidebar', 'playlistItems')
+        );
     }
 
 
@@ -76,7 +77,7 @@ class PlaylistsController extends Controller
         $form = $this->form(PlaylistForm::class);
 
         // It will automatically use current request, get the rules, and do the validation
-        if ( ! $form->isValid()) {
+        if (! $form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
@@ -138,8 +139,10 @@ class PlaylistsController extends Controller
 
         $playlistItems = json_encode($playlistItems, JSON_UNESCAPED_SLASHES);
 
-        return view('partymeister-slides::backend.playlists.edit',
-            compact('form', 'motorShowRightSidebar', 'playlistItems'));
+        return view(
+            'partymeister-slides::backend.playlists.edit',
+            compact('form', 'motorShowRightSidebar', 'playlistItems')
+        );
     }
 
 
@@ -155,7 +158,7 @@ class PlaylistsController extends Controller
         $form = $this->form(PlaylistForm::class);
 
         // It will automatically use current request, get the rules, and do the validation
-        if ( ! $form->isValid()) {
+        if (! $form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 

@@ -39,7 +39,7 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('playlist', $request->all());
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json([ 'result' => $result ], 400);
                 } else {
                     return response()->json([ 'result' => $result ]);
@@ -73,7 +73,7 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('playnow', $request->all());
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json([ 'result' => $result ], 400);
                 } else {
                     return response()->json([ 'result' => $result ]);
@@ -111,7 +111,7 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('seek', $request->all());
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json([ 'result' => $result ], 400);
                 } else {
                     return response()->json([ 'result' => $result ]);
@@ -149,11 +149,12 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send($request->get('direction'), [ 'hard' => $request->get('hard') ]);
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json([ 'result' => $result ], 400);
                 } else {
                     return response()->json([ 'result' => $result ]);
                 }
+                // no break
             case 'slidemeister-web':
                 switch ($request->get('direction')) {
                     case 'previous':
@@ -181,7 +182,7 @@ class CommunicationController extends Controller
     public function get_system_info(Request $request)
     {
         $result = XMLService::send('get_system_info');
-        if ( ! $result) {
+        if (! $result) {
             return response()->json([ 'result' => $result ], 400);
         } else {
             return response()->json([ 'result' => $result ]);
@@ -210,7 +211,7 @@ class CommunicationController extends Controller
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('get_playlists');
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json([ 'result' => $result ], 400);
                 } else {
                     return response()->json([ 'result' => $result ]);
@@ -219,7 +220,7 @@ class CommunicationController extends Controller
             case 'slidemeister-web':
                 $result = Cache::store('redis')
                                ->get(config('cache.prefix') . ':slidemeister-web.' . session('screens.active'));
-                if ( ! $result) {
+                if (! $result) {
                     return response()->json([ 'result' => $result ], 400);
                 } else {
                     return response()->json([ 'result' => $result ]);
@@ -227,5 +228,4 @@ class CommunicationController extends Controller
                 break;
         }
     }
-
 }

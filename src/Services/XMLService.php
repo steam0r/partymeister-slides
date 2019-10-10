@@ -50,12 +50,12 @@ class XMLService
 
         try {
             $fp = fsockopen($screen->ip_address, $screen->port, $errno, $errstr, 2);
-            if ( ! $fp) {
+            if (! $fp) {
                 return "$errstr - $errno";
             } else {
                 $retval = '';
                 fwrite($fp, $xml . "\r\n\r\n");
-                while ( ! feof($fp)) {
+                while (! feof($fp)) {
                     $retval .= fgets($fp, 128);
                 }
                 fclose($fp);
@@ -66,5 +66,4 @@ class XMLService
             return false;
         }
     }
-
 }

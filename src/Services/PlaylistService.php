@@ -75,7 +75,6 @@ class PlaylistService extends BaseService
         $count    = 0;
         $slideIds = [];
         foreach (Arr::get($data, 'slide', []) as $slideName => $definitions) {
-
             $count++;
             $type                 = Arr::get($data, 'type.' . $slideName);
             $name                 = Arr::get($data, 'name.' . $slideName);
@@ -120,12 +119,12 @@ class PlaylistService extends BaseService
             $i->is_advanced_manually = $isAdvancedManually;
             $i->midi_note            = $midiNote;
             $i->metadata             = $meta;
-            if ( ! is_null($transition)) {
+            if (! is_null($transition)) {
                 $i->transition_id = $transition->id;
             }
             $i->transition_duration = $transitionDuration;
             $i->duration            = $duration;
-            if ( ! is_null($callback)) {
+            if (! is_null($callback)) {
                 $i->callback_hash  = $callback->hash;
                 $i->callback_delay = 20;
             }
@@ -233,9 +232,9 @@ class PlaylistService extends BaseService
                     $callback = CallbackHelper::competitionStarts($competition);
                     break;
                 case 'entry':
-                    if ( ! is_null($id)) {
+                    if (! is_null($id)) {
                         $entry = Entry::find($id);
-                        if ( ! is_null($entry)) {
+                        if (! is_null($entry)) {
                             $callback = CallbackHelper::livevoting($entry);
                         }
                     }
@@ -273,12 +272,12 @@ class PlaylistService extends BaseService
                     $i->slide_id             = $s->id;
                     $i->is_advanced_manually = $isAdvancedManually;
                     $i->midi_note            = $midiNote;
-                    if ( ! is_null($transition)) {
+                    if (! is_null($transition)) {
                         $i->transition_id = $transition->id;
                     }
                     $i->transition_duration = $transitionDuration;
                     $i->duration            = $duration;
-                    if ( ! is_null($callback)) {
+                    if (! is_null($callback)) {
                         $i->callback_hash  = $callback->hash;
                         $i->callback_delay = 20;
                     }
@@ -339,7 +338,7 @@ class PlaylistService extends BaseService
                     $i->type                 = $type;
                     $i->is_advanced_manually = $isAdvancedManually;
                     $i->midi_note            = $midiNote;
-                    if ( ! is_null($transition)) {
+                    if (! is_null($transition)) {
                         $i->transition_id = $transition->id;
                     }
                     $i->transition_duration = $transitionDuration;
@@ -389,7 +388,7 @@ class PlaylistService extends BaseService
         foreach ($items as $key => $item) {
             $i              = new PlaylistItem();
             $i->playlist_id = $this->record->id;
-            $i->type        = ( isset($item->type) ? $item->type : $this->getType($item) );
+            $i->type        = (isset($item->type) ? $item->type : $this->getType($item));
 
             $transition = Transition::where('identifier', $item->transition_identifier)->first();
 
@@ -398,13 +397,13 @@ class PlaylistService extends BaseService
             }
 
             $i->duration             = $item->duration;
-            $i->transition_id        = ( is_null($transition) ? null : $transition->id );
+            $i->transition_id        = (is_null($transition) ? null : $transition->id);
             $i->transition_duration  = $item->transition_duration;
             $i->is_advanced_manually = $item->is_advanced_manually;
             $i->midi_note            = $item->midi_note;
             $i->callback_hash        = $item->callback_hash;
             $i->callback_delay       = $item->callback_delay;
-            $i->metadata             = ( isset($item->metadata) ? $item->metadata : '{}' );
+            $i->metadata             = (isset($item->metadata) ? $item->metadata : '{}');
             $i->sort_position        = $key;
 
             if (property_exists($item, 'slide_type')) {
@@ -416,7 +415,7 @@ class PlaylistService extends BaseService
             $i->is_muted = false;
             $i->save();
 
-            if ( ! property_exists($item, 'slide_type')) {
+            if (! property_exists($item, 'slide_type')) {
                 // Create file association
                 $fa             = new FileAssociation();
                 $fa->file_id    = $item->id;

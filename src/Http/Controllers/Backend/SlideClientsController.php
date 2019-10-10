@@ -20,7 +20,6 @@ use Partymeister\Slides\Services\SlideClientService;
  */
 class SlideClientsController extends Controller
 {
-
     use FormBuilderTrait;
 
 
@@ -83,7 +82,7 @@ class SlideClientsController extends Controller
         $form = $this->form(SlideClientForm::class);
 
         // It will automatically use current request, get the rules, and do the validation
-        if ( ! $form->isValid()) {
+        if (! $form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
@@ -137,7 +136,7 @@ class SlideClientsController extends Controller
         $form = $this->form(SlideClientForm::class);
 
         // It will automatically use current request, get the rules, and do the validation
-        if ( ! $form->isValid()) {
+        if (! $form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 

@@ -14,7 +14,6 @@ use Partymeister\Slides\Grids\FileGrid;
  */
 class FilesController extends \Motor\Media\Http\Controllers\Backend\FilesController
 {
-
     use FormBuilderTrait;
 
 

@@ -18,7 +18,6 @@ use Partymeister\Slides\Services\TransitionService;
  */
 class TransitionsController extends Controller
 {
-
     use FormBuilderTrait;
 
 
@@ -68,7 +67,7 @@ class TransitionsController extends Controller
         $form = $this->form(TransitionForm::class);
 
         // It will automatically use current request, get the rules, and do the validation
-        if ( ! $form->isValid()) {
+        if (! $form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
@@ -122,7 +121,7 @@ class TransitionsController extends Controller
         $form = $this->form(TransitionForm::class);
 
         // It will automatically use current request, get the rules, and do the validation
-        if ( ! $form->isValid()) {
+        if (! $form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 

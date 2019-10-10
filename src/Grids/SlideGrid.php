@@ -13,7 +13,6 @@ use Motor\Backend\Grid\Renderers\TranslateRenderer;
  */
 class SlideGrid extends Grid
 {
-
     protected function setup()
     {
         $this->addColumn('preview', trans('motor-media::backend/files.file'))
@@ -25,8 +24,10 @@ class SlideGrid extends Grid
              ->renderer(TranslateRenderer::class, [ 'file' => 'partymeister-slides::backend/slides.slide_types' ]);
         $this->addColumn('category.name', trans('motor-backend::backend/categories.category'));
         $this->addColumn('controls', trans('partymeister-slides::backend/slide_clients.controls'))
-             ->renderer(BladeRenderer::class,
-                 [ 'template' => 'partymeister-slides::grid.slide_clients.playnow_slide_controls' ]);
+             ->renderer(
+                 BladeRenderer::class,
+                 [ 'template' => 'partymeister-slides::grid.slide_clients.playnow_slide_controls' ]
+             );
         $this->setDefaultSorting('id', 'DESC');
 
         $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.slides.edit');

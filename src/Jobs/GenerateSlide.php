@@ -16,7 +16,6 @@ use Partymeister\Slides\Helpers\Browsershot;
  */
 class GenerateSlide implements ShouldQueue
 {
-
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**

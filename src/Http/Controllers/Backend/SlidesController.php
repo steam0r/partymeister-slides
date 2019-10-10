@@ -20,7 +20,6 @@ use Partymeister\Slides\Services\SlideService;
  */
 class SlidesController extends Controller
 {
-
     use FormBuilderTrait;
 
 
@@ -53,7 +52,7 @@ class SlidesController extends Controller
         $form = $this->form(SlideForm::class);
 
         // It will automatically use current request, get the rules, and do the validation
-        if ( ! $form->isValid()) {
+        if (! $form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 
@@ -118,8 +117,10 @@ class SlidesController extends Controller
             'test2' => 'test2!'
         ]);
 
-        return view('partymeister-slides::backend.slide_templates.show',
-            compact('record', 'preview', 'placeholderData'));
+        return view(
+            'partymeister-slides::backend.slide_templates.show',
+            compact('record', 'preview', 'placeholderData')
+        );
     }
 
 
@@ -156,7 +157,7 @@ class SlidesController extends Controller
         $form = $this->form(SlideForm::class);
 
         // It will automatically use current request, get the rules, and do the validation
-        if ( ! $form->isValid()) {
+        if (! $form->isValid()) {
             return redirect()->back()->withErrors($form->getErrors())->withInput();
         }
 

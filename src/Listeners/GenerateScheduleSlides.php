@@ -2,7 +2,6 @@
 
 namespace Partymeister\Slides\Listeners;
 
-
 /**
  * Class GenerateScheduleSlides
  * @package Partymeister\Slides\Listeners

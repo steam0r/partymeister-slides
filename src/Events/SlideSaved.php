@@ -15,7 +15,6 @@ use Illuminate\Queue\SerializesModels;
  */
 class SlideSaved
 {
-
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**

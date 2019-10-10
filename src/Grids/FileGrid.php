@@ -13,7 +13,6 @@ use Motor\Backend\Grid\Renderers\FileRenderer;
  */
 class FileGrid extends Grid
 {
-
     protected function setup()
     {
         $this->addColumn('preview', trans('motor-media::backend/files.file'))
@@ -25,8 +24,10 @@ class FileGrid extends Grid
         $this->addColumn('categories', trans('motor-backend::backend/categories.categories'))
              ->renderer(CollectionRenderer::class, [ 'column' => 'name' ]);
         $this->addColumn('controls', trans('partymeister-slides::backend/slide_clients.controls'))
-             ->renderer(BladeRenderer::class,
-                 [ 'template' => 'partymeister-slides::grid.slide_clients.playnow_file_controls' ]);
+             ->renderer(
+                 BladeRenderer::class,
+                 [ 'template' => 'partymeister-slides::grid.slide_clients.playnow_file_controls' ]
+             );
         $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.files.edit');
         $this->addDeleteAction(trans('motor-backend::backend/global.delete'), 'backend.files.destroy');
     }

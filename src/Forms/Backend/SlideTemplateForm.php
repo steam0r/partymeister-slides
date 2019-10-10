@@ -19,7 +19,7 @@ class SlideTemplateForm extends Form
         $this->add('name', 'text', [ 'label' => trans('motor-backend::backend/global.name'), 'rules' => 'required' ])
              ->add('template_for', 'select', [
                  'label'   => trans('partymeister-slides::backend/slide_templates.template_for'),
-                 'choices' => ( trans('partymeister-slides::backend/slide_templates.template_for_types') )
+                 'choices' => (trans('partymeister-slides::backend/slide_templates.template_for_types'))
              ])
              ->add('definitions', 'hidden')
              ->add('cached_html_preview', 'hidden')

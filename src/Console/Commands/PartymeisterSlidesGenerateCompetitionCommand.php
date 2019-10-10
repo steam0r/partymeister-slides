@@ -40,7 +40,6 @@ class PartymeisterSlidesGenerateCompetitionCommand extends Command
      */
     public function handle()
     {
-
         Auth::login(User::find(1));
 
         $faker = Factory::create($this->argument('locale'));

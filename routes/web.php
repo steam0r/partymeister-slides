@@ -5,7 +5,7 @@ use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\SlideClient;
 
 // FIXME: put this in a controller so we can use the Route caching
-Route::get('slidemeister-web/{slide_client}', function(SlideClient $slideClient) {
+Route::get('slidemeister-web/{slide_client}', function (SlideClient $slideClient) {
     return view('partymeister-slides::slidemeister-web/index', ['slideClient' => $slideClient, 'channelPrefix' => config('cache.prefix')]);
 })->middleware(['bindings'])->name('backend.slidemeister-web.show');
 
@@ -19,16 +19,19 @@ Route::group([
         'navigation'
     ]
 ], function () {
-
     Route::group([ 'middleware' => [ 'permission' ] ], function () {
         Route::resource('slides', 'SlidesController')->except(['create', 'show']);
-        Route::get('slides/{slide}/duplicate',
-            'SlidesController@duplicate')->name('slides.duplicate');
+        Route::get(
+            'slides/{slide}/duplicate',
+            'SlidesController@duplicate'
+        )->name('slides.duplicate');
         Route::get('slides/create/{slide_template}', 'SlidesController@create')->name('slides.create');
 
         Route::resource('slide_templates', 'SlideTemplatesController')->except('show');
-        Route::get('slide_templates/{slide_template}/duplicate',
-            'SlideTemplatesController@duplicate')->name('slide_templates.duplicate');
+        Route::get(
+            'slide_templates/{slide_template}/duplicate',
+            'SlideTemplatesController@duplicate'
+        )->name('slide_templates.duplicate');
 
         Route::resource('playlists', 'PlaylistsController');
         Route::resource('transitions', 'TransitionsController');

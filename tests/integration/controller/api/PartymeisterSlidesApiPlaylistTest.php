@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class PartymeisterSlidesApiPlaylistTest extends TestCase
 {
-
     use DatabaseTransactions;
 
     protected $user;
@@ -105,8 +104,10 @@ class PartymeisterSlidesApiPlaylistTest extends TestCase
     {
         $this->user->givePermissionTo($this->readPermission);
         $record = create_test_playlist();
-        $this->json('GET',
-            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token)->seeStatusCode(200)->seeJson([
+        $this->json(
+            'GET',
+            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token
+        )->seeStatusCode(200)->seeJson([
             'name' => $record->name
         ]);
     }
@@ -115,8 +116,10 @@ class PartymeisterSlidesApiPlaylistTest extends TestCase
     public function fails_to_show_a_single_playlist_without_permission()
     {
         $record = create_test_playlist();
-        $this->json('GET',
-            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token)->seeStatusCode(403)->seeJson([
+        $this->json(
+            'GET',
+            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token
+        )->seeStatusCode(403)->seeJson([
             'error' => 'Access denied.'
         ]);
     }
@@ -147,8 +150,10 @@ class PartymeisterSlidesApiPlaylistTest extends TestCase
     {
         $this->user->givePermissionTo($this->readPermission);
         $records = create_test_playlist(10);
-        $this->json('GET',
-            '/api/playlists?api_token=' . $this->user->api_token . '&search=' . $records[2]->name)->seeStatusCode(200)->seeJson([
+        $this->json(
+            'GET',
+            '/api/playlists?api_token=' . $this->user->api_token . '&search=' . $records[2]->name
+        )->seeStatusCode(200)->seeJson([
             'name' => $records[2]->name
         ]);
     }
@@ -159,8 +164,10 @@ class PartymeisterSlidesApiPlaylistTest extends TestCase
     {
         $this->user->givePermissionTo($this->readPermission);
         create_test_playlist(50);
-        $this->json('GET',
-            '/api/playlists?api_token=' . $this->user->api_token . '&page=2')->seeStatusCode(200)->seeJson([
+        $this->json(
+            'GET',
+            '/api/playlists?api_token=' . $this->user->api_token . '&page=2'
+        )->seeStatusCode(200)->seeJson([
             'current_page' => 2
         ]);
     }
@@ -181,8 +188,10 @@ class PartymeisterSlidesApiPlaylistTest extends TestCase
     {
         $this->user->givePermissionTo($this->writePermission);
         $record = create_test_playlist();
-        $this->json('PATCH',
-            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token)->seeStatusCode(422)->seeJson([
+        $this->json(
+            'PATCH',
+            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token
+        )->seeStatusCode(422)->seeJson([
             'name' => [ 'The name field is required.' ]
         ]);
     }
@@ -192,8 +201,10 @@ class PartymeisterSlidesApiPlaylistTest extends TestCase
     public function fails_if_trying_to_modify_a_playlist_without_permission()
     {
         $record = create_test_playlist();
-        $this->json('PATCH',
-            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token)->seeStatusCode(403)->seeJson([
+        $this->json(
+            'PATCH',
+            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token
+        )->seeStatusCode(403)->seeJson([
             'error' => 'Access denied.'
         ]);
     }
@@ -225,8 +236,10 @@ class PartymeisterSlidesApiPlaylistTest extends TestCase
     public function fails_to_delete_a_playlist_without_permission()
     {
         $record = create_test_playlist();
-        $this->json('DELETE',
-            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token)->seeStatusCode(403)->seeJson([
+        $this->json(
+            'DELETE',
+            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token
+        )->seeStatusCode(403)->seeJson([
             'error' => 'Access denied.'
         ]);
     }
@@ -236,8 +249,10 @@ class PartymeisterSlidesApiPlaylistTest extends TestCase
     {
         $this->user->givePermissionTo($this->deletePermission);
         $record = create_test_playlist();
-        $this->json('DELETE',
-            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token)->seeStatusCode(200)->seeJson([
+        $this->json(
+            'DELETE',
+            '/api/playlists/' . $record->id . '?api_token=' . $this->user->api_token
+        )->seeStatusCode(200)->seeJson([
             'success' => true
         ]);
     }

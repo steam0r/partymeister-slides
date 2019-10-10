@@ -17,7 +17,7 @@ Route::group([
 });
 
 // FIXME: put this in a controller so we can use route caching
-Route::post('ajax/slidemeister-web/{slide_client}/status', function(Request $request, $slide_client) {
+Route::post('ajax/slidemeister-web/{slide_client}/status', function (Request $request, $slide_client) {
     Cache::store('redis')->put(config('cache.prefix').':slidemeister-web.'.$slide_client, $request->all(), 3600);
 })->name('ajax.slidemeister-web.status.update');
 

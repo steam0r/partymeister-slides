@@ -18,7 +18,6 @@ use Partymeister\Slides\Transformers\SlideTransformer;
  */
 class PlayNowRequest implements ShouldBroadcastNow
 {
-
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**

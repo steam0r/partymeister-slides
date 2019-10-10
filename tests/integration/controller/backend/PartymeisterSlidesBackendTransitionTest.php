@@ -7,7 +7,6 @@ use Partymeister\Slides\Models\Transition;
 
 class PartymeisterSlidesBackendTransitionTest extends TestCase
 {
-
     use DatabaseTransactions;
 
     protected $user;
@@ -76,7 +75,7 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
     {
         $record = create_test_transition();
         $this->visit('/backend/transitions')
-            ->within('table', function(){
+            ->within('table', function () {
                 $this->click(trans('motor-backend::backend/global.edit'));
             })
             ->seePageIs('/backend/transitions/'.$record->id.'/edit')
@@ -92,7 +91,7 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
         $this->visit('/backend/transitions/'.$record->id.'/edit')
             ->see($record->name)
             ->type('Updated Transition', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/transitions.save'));
             })
             ->see(trans('partymeister-slides::backend/transitions.updated'))
@@ -117,7 +116,7 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
         $this->visit('/backend/transitions/create')
             ->see(trans('partymeister-slides::backend/transitions.new'))
             ->type('Create Transition Name', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/transitions.save'));
             })
             ->see(trans('partymeister-slides::backend/transitions.created'))
@@ -130,7 +129,7 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
     {
         $this->visit('/backend/transitions/create')
             ->see(trans('partymeister-slides::backend/transitions.new'))
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/transitions.save'));
             })
             ->see('Data missing!')
@@ -144,7 +143,7 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
         $this->visit('/backend/transitions/'.$record->id.'/edit')
             ->see(trans('partymeister-slides::backend/transitions.edit'))
             ->type('Modified Transition Name', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/transitions.save'));
             })
             ->see(trans('partymeister-slides::backend/transitions.updated'))
@@ -160,7 +159,7 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
         $this->assertCount(1, Transition::all());
 
         $this->visit('/backend/transitions')
-            ->within('table', function(){
+            ->within('table', function () {
                 $this->press(trans('motor-backend::backend/global.delete'));
             })
             ->seePageIs('/backend/transitions')
@@ -174,7 +173,7 @@ class PartymeisterSlidesBackendTransitionTest extends TestCase
     {
         $records = create_test_transition(100);
         $this->visit('/backend/transitions')
-            ->within('.pagination', function(){
+            ->within('.pagination', function () {
                 $this->click('3');
             })
             ->seePageIs('/backend/transitions?page=3');

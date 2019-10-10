@@ -15,7 +15,6 @@ use Partymeister\Slides\Models\Playlist;
  */
 class PlaylistSeekRequest implements ShouldBroadcastNow
 {
-
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**

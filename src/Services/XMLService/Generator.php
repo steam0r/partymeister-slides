@@ -116,8 +116,10 @@ class Generator
 
             // Add callback if available
             if ((string) $playlist_item->callback_hash != '') {
-                $callback = $item->addChild('callback',
-                    config('partymeister-slides.screens_url') . '/api/callback/' . $playlist_item->callback_hash);
+                $callback = $item->addChild(
+                    'callback',
+                    config('partymeister-slides.screens_url') . '/api/callback/' . $playlist_item->callback_hash
+                );
                 $callback->addAttribute('delay', $playlist_item->callback_delay . '.0');
             }
 
@@ -132,8 +134,11 @@ class Generator
             //	$item->addChild('path', config('partymeister-slides.screens_url').$attachment->file->getUrl() . $attachment->file->filename);
             //}
             if ($playlist_item->slide_id != null) {
-                $item->addChild('path', config('partymeister-slides.screens_url') . route('backend.slides.show',
-                        [ $playlist_item->slide->id ], false));
+                $item->addChild('path', config('partymeister-slides.screens_url') . route(
+                    'backend.slides.show',
+                    [ $playlist_item->slide->id ],
+                    false
+                ));
             } else {
                 $item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
             }
@@ -165,13 +170,16 @@ class Generator
             $item->addChild('mute', $playlist_item->is_muted);
 
             if ($playlist_item->slide_type == 'siegmeister_bars' || $playlist_item->slide_type == 'siegmeister_winners') {
-
                 $siegmeister = $item->addChild('siegmeister');
                 $siegmeister->addChild('bar_color', config('partymeister-slides-prizegiving.bar_color'));
-                $siegmeister->addChild('bar_blink_color_1',
-                    config('partymeister-slides-prizegiving.bar_blink_color_1'));
-                $siegmeister->addChild('bar_blink_color_2',
-                    config('partymeister-slides-prizegiving.bar_blink_color_2'));
+                $siegmeister->addChild(
+                    'bar_blink_color_1',
+                    config('partymeister-slides-prizegiving.bar_blink_color_1')
+                );
+                $siegmeister->addChild(
+                    'bar_blink_color_2',
+                    config('partymeister-slides-prizegiving.bar_blink_color_2')
+                );
                 $siegmeister->addChild('bar_alpha', config('partymeister-slides-prizegiving.bar_alpha'));
 
                 $metadata = json_decode($playlist_item->metadata);
@@ -195,7 +203,6 @@ class Generator
                             $bar->addAttribute('y2', $entry->y2);
                         }
                     }
-
                 }
             }
             $previousItem = $playlist_item;
@@ -273,8 +280,10 @@ class Generator
 
         //$item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
         if (isset($slide) && ! is_null($slide)) {
-            $item->addChild('path',
-                config('partymeister-slides.screens_url') . route('backend.slides.show', [ $slide->id ], false));
+            $item->addChild(
+                'path',
+                config('partymeister-slides.screens_url') . route('backend.slides.show', [ $slide->id ], false)
+            );
         } else {
             $item->addChild('path', config('partymeister-slides.screens_url') . $attachment->getUrl());
         }
@@ -318,7 +327,7 @@ class Generator
     public static function seek($parameters)
     {
         // If no slide id is given - get the first slide from the playlist
-        if ( ! isset($parameters['slide_id'])) {
+        if (! isset($parameters['slide_id'])) {
             $playlist = Playlist::find($parameters['playlist_id']);
             if ($playlist == null) {
                 return false;
@@ -327,7 +336,7 @@ class Generator
             $parameters['slide_id'] = $playlist_item->id;
         }
 
-        if ( ! isset($parameters['hard'])) {
+        if (! isset($parameters['hard'])) {
             $parameters['hard'] = 0;
         }
 

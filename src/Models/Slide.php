@@ -68,7 +68,6 @@ use Spatie\MediaLibrary\Models\Media;
  */
 class Slide extends Model implements HasMedia
 {
-
     use Searchable;
     use Filterable;
     use Blameable, CreatedBy, UpdatedBy, DeletedBy;

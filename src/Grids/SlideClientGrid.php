@@ -11,7 +11,6 @@ use Motor\Backend\Grid\Renderers\TranslateRenderer;
  */
 class SlideClientGrid extends Grid
 {
-
     protected function setup()
     {
         $this->addColumn('name', trans('partymeister-slides::backend/slide_clients.name'), true);
@@ -22,8 +21,11 @@ class SlideClientGrid extends Grid
         $this->addColumn('sort_position', trans('partymeister-slides::backend/slide_clients.sort_position'), true);
         $this->setDefaultSorting('sort_position', 'ASC');
 
-        $this->addAction(trans('partymeister-slides::backend/slide_clients.open_client'),
-            'backend.slidemeister-web.show', [ 'class' => 'btn-primary' ])
+        $this->addAction(
+            trans('partymeister-slides::backend/slide_clients.open_client'),
+            'backend.slidemeister-web.show',
+            [ 'class' => 'btn-primary' ]
+        )
              ->onCondition('type', 'slidemeister-web', '=');
 
         $this->addEditAction(trans('motor-backend::backend/global.edit'), 'backend.navigations.edit')

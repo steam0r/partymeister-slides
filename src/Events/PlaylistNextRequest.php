@@ -14,7 +14,6 @@ use Illuminate\Queue\SerializesModels;
  */
 class PlaylistNextRequest implements ShouldBroadcastNow
 {
-
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**

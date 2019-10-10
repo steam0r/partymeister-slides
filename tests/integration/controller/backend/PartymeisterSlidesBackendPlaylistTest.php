@@ -7,7 +7,6 @@ use Partymeister\Slides\Models\Playlist;
 
 class PartymeisterSlidesBackendPlaylistTest extends TestCase
 {
-
     use DatabaseTransactions;
 
     protected $user;
@@ -76,7 +75,7 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
     {
         $record = create_test_playlist();
         $this->visit('/backend/playlists')
-            ->within('table', function(){
+            ->within('table', function () {
                 $this->click(trans('motor-backend::backend/global.edit'));
             })
             ->seePageIs('/backend/playlists/'.$record->id.'/edit')
@@ -92,7 +91,7 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
         $this->visit('/backend/playlists/'.$record->id.'/edit')
             ->see($record->name)
             ->type('Updated Playlist', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/playlists.save'));
             })
             ->see(trans('partymeister-slides::backend/playlists.updated'))
@@ -117,7 +116,7 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
         $this->visit('/backend/playlists/create')
             ->see(trans('partymeister-slides::backend/playlists.new'))
             ->type('Create Playlist Name', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/playlists.save'));
             })
             ->see(trans('partymeister-slides::backend/playlists.created'))
@@ -130,7 +129,7 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
     {
         $this->visit('/backend/playlists/create')
             ->see(trans('partymeister-slides::backend/playlists.new'))
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/playlists.save'));
             })
             ->see('Data missing!')
@@ -144,7 +143,7 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
         $this->visit('/backend/playlists/'.$record->id.'/edit')
             ->see(trans('partymeister-slides::backend/playlists.edit'))
             ->type('Modified Playlist Name', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/playlists.save'));
             })
             ->see(trans('partymeister-slides::backend/playlists.updated'))
@@ -160,7 +159,7 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
         $this->assertCount(1, Playlist::all());
 
         $this->visit('/backend/playlists')
-            ->within('table', function(){
+            ->within('table', function () {
                 $this->press(trans('motor-backend::backend/global.delete'));
             })
             ->seePageIs('/backend/playlists')
@@ -174,7 +173,7 @@ class PartymeisterSlidesBackendPlaylistTest extends TestCase
     {
         $records = create_test_playlist(100);
         $this->visit('/backend/playlists')
-            ->within('.pagination', function(){
+            ->within('.pagination', function () {
                 $this->click('3');
             })
             ->seePageIs('/backend/playlists?page=3');

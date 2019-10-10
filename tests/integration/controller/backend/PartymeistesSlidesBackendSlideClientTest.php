@@ -7,7 +7,6 @@ use Partymeister\Slides\Models\SlideClient;
 
 class PartymeisterSlidesBackendSlideClientTest extends TestCase
 {
-
     use DatabaseTransactions;
 
     protected $user;
@@ -76,7 +75,7 @@ class PartymeisterSlidesBackendSlideClientTest extends TestCase
     {
         $record = create_test_slide_client();
         $this->visit('/backend/slide_clients')
-            ->within('table', function(){
+            ->within('table', function () {
                 $this->click(trans('motor-backend::backend/global.edit'));
             })
             ->seePageIs('/backend/slide_clients/'.$record->id.'/edit')
@@ -92,7 +91,7 @@ class PartymeisterSlidesBackendSlideClientTest extends TestCase
         $this->visit('/backend/slide_clients/'.$record->id.'/edit')
             ->see($record->name)
             ->type('Updated Slide client', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/slide_clients.save'));
             })
             ->see(trans('partymeister-slides::backend/slide_clients.updated'))
@@ -117,7 +116,7 @@ class PartymeisterSlidesBackendSlideClientTest extends TestCase
         $this->visit('/backend/slide_clients/create')
             ->see(trans('partymeister-slides::backend/slide_clients.new'))
             ->type('Create Slide client Name', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/slide_clients.save'));
             })
             ->see(trans('partymeister-slides::backend/slide_clients.created'))
@@ -130,7 +129,7 @@ class PartymeisterSlidesBackendSlideClientTest extends TestCase
     {
         $this->visit('/backend/slide_clients/create')
             ->see(trans('partymeister-slides::backend/slide_clients.new'))
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/slide_clients.save'));
             })
             ->see('Data missing!')
@@ -144,7 +143,7 @@ class PartymeisterSlidesBackendSlideClientTest extends TestCase
         $this->visit('/backend/slide_clients/'.$record->id.'/edit')
             ->see(trans('partymeister-slides::backend/slide_clients.edit'))
             ->type('Modified Slide client Name', 'name')
-            ->within('.box-footer', function(){
+            ->within('.box-footer', function () {
                 $this->press(trans('partymeister-slides::backend/slide_clients.save'));
             })
             ->see(trans('partymeister-slides::backend/slide_clients.updated'))
@@ -160,7 +159,7 @@ class PartymeisterSlidesBackendSlideClientTest extends TestCase
         $this->assertCount(1, SlideClient::all());
 
         $this->visit('/backend/slide_clients')
-            ->within('table', function(){
+            ->within('table', function () {
                 $this->press(trans('motor-backend::backend/global.delete'));
             })
             ->seePageIs('/backend/slide_clients')
@@ -174,7 +173,7 @@ class PartymeisterSlidesBackendSlideClientTest extends TestCase
     {
         $records = create_test_slide_client(100);
         $this->visit('/backend/slide_clients')
-            ->within('.pagination', function(){
+            ->within('.pagination', function () {
                 $this->click('3');
             })
             ->seePageIs('/backend/slide_clients?page=3');

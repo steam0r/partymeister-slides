@@ -19,7 +19,6 @@ use Partymeister\Slides\Transformers\SlideTransformer;
  */
 class PlaylistRequest implements ShouldBroadcastNow
 {
-
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**

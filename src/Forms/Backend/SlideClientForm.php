@@ -16,16 +16,22 @@ class SlideClientForm extends Form
      */
     public function buildForm()
     {
-        $this->add('name', 'text',
-                [ 'label' => trans('partymeister-slides::backend/slide_clients.name'), 'rules' => 'required' ])
+        $this->add(
+            'name',
+            'text',
+            [ 'label' => trans('partymeister-slides::backend/slide_clients.name'), 'rules' => 'required' ]
+        )
              ->add('type', 'select', [
                  'label'   => trans('partymeister-slides::backend/slide_clients.type'),
-                 'choices' => ( trans('partymeister-slides::backend/slide_clients.types') )
+                 'choices' => (trans('partymeister-slides::backend/slide_clients.types'))
              ])
              ->add('ip_address', 'text', [ 'label' => trans('partymeister-slides::backend/slide_clients.ip_address') ])
              ->add('port', 'text', [ 'label' => trans('partymeister-slides::backend/slide_clients.port') ])
-             ->add('sort_position', 'text',
-                 [ 'label' => trans('partymeister-slides::backend/slide_clients.sort_position') ])
+             ->add(
+                 'sort_position',
+                 'text',
+                 [ 'label' => trans('partymeister-slides::backend/slide_clients.sort_position') ]
+             )
              ->add('submit', 'submit', [
                  'attr'  => [ 'class' => 'btn btn-primary' ],
                  'label' => trans('partymeister-slides::backend/slide_clients.save')

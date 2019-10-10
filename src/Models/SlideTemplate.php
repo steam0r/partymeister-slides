@@ -61,7 +61,6 @@ use Spatie\MediaLibrary\Models\Media;
  */
 class SlideTemplate extends Model implements HasMedia
 {
-
     use Searchable;
     use Filterable;
     use Blameable, CreatedBy, UpdatedBy, DeletedBy;
@@ -132,5 +131,4 @@ class SlideTemplate extends Model implements HasMedia
     {
         return $this->hasMany(Slide::class);
     }
-
 }
