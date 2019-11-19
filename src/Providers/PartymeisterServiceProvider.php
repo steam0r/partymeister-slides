@@ -4,8 +4,7 @@ namespace Partymeister\Slides\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Partymeister\Slides\Console\Commands\PartymeisterSlidesGenerateCompetitionCommand;
-use Partymeister\Slides\Console\Commands\PartymeisterSlidesGenerateEntryCommand;
+use Partymeister\Slides\Console\Commands\PartymeisterChromiumProcess;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\PlaylistItem;
 use Partymeister\Slides\Models\Slide;
@@ -34,24 +33,32 @@ class PartymeisterServiceProvider extends ServiceProvider
         $this->views();
         $this->navigationItems();
         $this->permissions();
-        $this->registerCommands();
         $this->migrations();
         $this->publishResourceAssets();
+        $this->registerCommands();
     }
 
+    public function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                PartymeisterChromiumProcess::class,
+            ]);
+        }
+    }
 
     public function config()
     {
-        $this->mergeConfigFrom(__DIR__ . '/../../config/partymeister-slides.php', 'partymeister-slides');
-        $this->mergeConfigFrom(__DIR__ . '/../../config/partymeister-slides-fonts.php', 'partymeister-slides-fonts');
+        $this->mergeConfigFrom(__DIR__.'/../../config/partymeister-slides.php', 'partymeister-slides');
+        $this->mergeConfigFrom(__DIR__.'/../../config/partymeister-slides-fonts.php', 'partymeister-slides-fonts');
     }
 
 
     public function routes()
     {
         if (! $this->app->routesAreCached()) {
-            require __DIR__ . '/../../routes/web.php';
-            require __DIR__ . '/../../routes/api.php';
+            require __DIR__.'/../../routes/web.php';
+            require __DIR__.'/../../routes/api.php';
         }
     }
 
@@ -81,68 +88,57 @@ class PartymeisterServiceProvider extends ServiceProvider
 
     public function translations()
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../../resources/lang', 'partymeister-slides');
+        $this->loadTranslationsFrom(__DIR__.'/../../resources/lang', 'partymeister-slides');
 
         $this->publishes([
-            __DIR__ . '/../../resources/lang' => resource_path('lang/vendor/partymeister-slides'),
+            __DIR__.'/../../resources/lang' => resource_path('lang/vendor/partymeister-slides'),
         ], 'motor-backend-translations');
     }
 
 
     public function views()
     {
-        $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'partymeister-slides');
+        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'partymeister-slides');
 
         $this->publishes([
-            __DIR__ . '/../../resources/views' => resource_path('views/vendor/partymeister-slides'),
+            __DIR__.'/../../resources/views' => resource_path('views/vendor/partymeister-slides'),
         ], 'motor-backend-views');
     }
 
 
     public function navigationItems()
     {
-        $config = $this->app['config']->get('motor-backend-navigation', []);
-        $this->app['config']->set(
+        $config = $this->app[ 'config' ]->get('motor-backend-navigation', []);
+        $this->app[ 'config' ]->set(
             'motor-backend-navigation',
-            array_replace_recursive(require __DIR__ . '/../../config/motor-backend-navigation.php', $config)
+            array_replace_recursive(require __DIR__.'/../../config/motor-backend-navigation.php', $config)
         );
     }
 
 
     public function permissions()
     {
-        $config = $this->app['config']->get('motor-backend-permissions', []);
-        $this->app['config']->set(
+        $config = $this->app[ 'config' ]->get('motor-backend-permissions', []);
+        $this->app[ 'config' ]->set(
             'motor-backend-permissions',
-            array_replace_recursive(require __DIR__ . '/../../config/motor-backend-permissions.php', $config)
+            array_replace_recursive(require __DIR__.'/../../config/motor-backend-permissions.php', $config)
         );
-    }
-
-
-    public function registerCommands()
-    {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                PartymeisterSlidesGenerateCompetitionCommand::class,
-                PartymeisterSlidesGenerateEntryCommand::class,
-            ]);
-        }
     }
 
 
     public function migrations()
     {
-        $this->loadMigrationsFrom(__DIR__ . '/../../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations');
     }
 
 
     public function publishResourceAssets()
     {
         $assets = [
-            __DIR__ . '/../../resources/assets/images' => resource_path('assets/images'),
-            __DIR__ . '/../../resources/assets/sass'   => resource_path('assets/sass'),
-            __DIR__ . '/../../resources/assets/npm'    => resource_path('assets/npm'),
-            __DIR__ . '/../../resources/assets/js'     => resource_path('assets/js'),
+            __DIR__.'/../../resources/assets/images' => resource_path('assets/images'),
+            __DIR__.'/../../resources/assets/sass'   => resource_path('assets/sass'),
+            __DIR__.'/../../resources/assets/npm'    => resource_path('assets/npm'),
+            __DIR__.'/../../resources/assets/js'     => resource_path('assets/js'),
         ];
 
         $this->publishes($assets, 'partymeister-slides-install-resources');

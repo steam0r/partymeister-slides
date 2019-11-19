@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Motor\Backend\Models\Category;
 use Motor\Backend\Services\BaseService;
 use Motor\Core\Filter\Renderers\SelectRenderer;
+use Partymeister\Slides\Helpers\ScreenshotHelper;
 use Partymeister\Slides\Models\Slide;
 
 /**
@@ -63,25 +64,15 @@ class SlideService extends BaseService
 
     protected function generatePreview()
     {
-        // Convert PNG to actual file
-        $pngData = Arr::get($this->data, 'png_preview');
-        $pngData = substr($pngData, 22);
-        file_put_contents(storage_path() . '/preview_' . $this->record->id . '.png', base64_decode($pngData));
-
-        //$pngData = array_get($this->data, 'png_final');
-        //$pngData = substr($pngData, 22);
-        //file_put_contents(storage_path() . '/final_' . $this->record->id . '.png', base64_decode($pngData));
+        $browser = new ScreenshotHelper();
+        $browser->screenshot(route('backend.slides.show', [ $this->record->id ]).'?preview=true',
+            storage_path().'/preview_'.$this->record->id.'.png');
 
         $this->record->clearMediaCollection('preview');
         $this->record->clearMediaCollection('final');
 
         $this->record->addMedia(storage_path() . '/preview_' . $this->record->id . '.png')
                      ->toMediaCollection('preview', 'media');
-        //$this->record->addMedia(storage_path() . '/final_' . $this->record->id . '.png')->toMediaCollection('final', 'media');
-
-        //GenerateSlide::dispatch($this->record, 'slides')
-        //    ->onConnection('sync');
-//        event(new SlideSaved($this->record, 'slides'));
     }
 
 

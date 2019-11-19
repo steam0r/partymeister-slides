@@ -42,8 +42,8 @@ Route::group([
     });
 });
 
-Route::get('backend/slide_templates/{slide_template}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlideTemplatesController@show')->middleware(['bindings', 'navigation'])->name('backend.slide_templates.show');
-Route::get('backend/slides/{slide}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')->middleware(['bindings', 'navigation', 'cache.headers'])->name('backend.slides.show');
+Route::get('backend/slide_templates/{slide_template}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlideTemplatesController@show')->middleware(['bindings'])->name('backend.slide_templates.show');
+Route::get('backend/slides/{slide}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')->middleware(['bindings', 'cache.headers:etag'])->name('backend.slides.show');
 
 // FIXME: put these in controllers so we can use the Route caching
 //Route::get('test-prizegiving', function() {

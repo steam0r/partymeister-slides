@@ -89,6 +89,9 @@
                 });
             }
 
+            console.log($($target).css('width'));
+            console.log($($target).css('height'));
+
             return domtoimage.toPng(document.getElementById($($target).prop('id')), {
                 width: $($target).css('width').replace('px', ''),
                 height: $($target).css('height').replace('px', ''),

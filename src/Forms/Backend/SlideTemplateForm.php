@@ -24,8 +24,6 @@ class SlideTemplateForm extends Form
              ->add('definitions', 'hidden')
              ->add('cached_html_preview', 'hidden')
              ->add('cached_html_final', 'hidden')
-             ->add('png_preview', 'hidden')
-             ->add('png_final', 'hidden')
              ->add('image_data', 'hidden')
              ->add('submit', 'submit', [
                  'attr'  => [ 'class' => 'btn btn-primary btn-block slidemeister-save' ],

@@ -23,7 +23,7 @@
         TOOLBAR
     </div>
 </div>
-<div id="slidemeister-wrapper">
+<div v-pre id="slidemeister-wrapper">
     <div id="slidemeister-canvas">
         <div id="slidemeister-canvas-border">
         </div>
@@ -34,7 +34,6 @@
 </div>
 <div class="loader loader-default"
      data-text="&hearts; {{ trans('partymeister-slides::backend/slides.generating') }} &hearts;"></div>
-{{--<img id="preview">--}}
 @endsection
 @section ('right-sidebar')
     <ul class="slidemeister-navbar nav nav-tabs" role="tablist">
@@ -47,7 +46,7 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="slidemeister-form" role="tabpanel">
-            <div class="container">
+            <div v-pre class="container">
                 <br>
                 {!! form_start($form, ['id' => 'slide-form']) !!}
                 {!! form_row($form->name) !!}
@@ -56,8 +55,6 @@
                 {!! form_row($form->definitions) !!}
                 {!! form_row($form->cached_html_preview) !!}
                 {!! form_row($form->cached_html_final) !!}
-                {!! form_row($form->png_preview) !!}
-                {!! form_row($form->png_final) !!}
                 {!! form_row($form->image_data) !!}
                 {!! form_row($form->submit) !!}
                 {!! form_end($form, false) !!}
@@ -82,7 +79,6 @@
         </div>
         <div class="tab-pane" id="slidemeister-blocks" role="tabpanel">
             <motor-media-mediapool></motor-media-mediapool>
-            {{--@include('motor-media::layouts.partials.mediapool', ['header' => false])--}}
         </div>
     </div>
 @endsection
@@ -99,22 +95,10 @@
                 let dataToSave = slidemeister.data.save();
                 $('input[name="definitions"]').val(JSON.stringify(dataToSave));
                 $('input[name="cached_html_preview"]').val($('#slidemeister').html());
+                slidemeister.data.removePreviewElements();
+                $('input[name="cached_html_final"]').val($('#slidemeister').html());
 
-                slidemeister.data.export('preview', 1).then(result => {
-                    $('input[name="png_preview"]').val(result[2]);
-
-                    slidemeister.data.removePreviewElements();
-                    $('input[name="cached_html_final"]').val($('#slidemeister').html());
-
-                    $('#slide-form').submit();
-                    // slidemeister.data.export('final', 1).then(result => {
-                    //     $('input[name="png_final"]').val(result[2]);
-                    //     // $('#preview').prop('src', result[2]);
-                    //
-                    //
-                    // });
-
-                });
+                $('#slide-form').submit();
             });
 
             slidemeisterProperties.opacity.visible = false;

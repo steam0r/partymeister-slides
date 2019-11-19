@@ -44,8 +44,6 @@ class SlideForm extends Form
              ->add('definitions', 'hidden', [ 'attr' => [ 'v-pre' => true ] ])
              ->add('cached_html_preview', 'hidden', [ 'attr' => [ 'v-pre' => true ] ])
              ->add('cached_html_final', 'hidden', [ 'attr' => [ 'v-pre' => true ] ])
-             ->add('png_preview', 'hidden')
-             ->add('png_final', 'hidden')
              ->add('image_data', 'hidden')
              ->add('submit', 'submit', [
                  'attr'  => [ 'class' => 'btn btn-primary btn-block slidemeister-save' ],
