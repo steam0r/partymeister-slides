@@ -18,22 +18,23 @@
     </style>
 @append
 @section('main-content')
-<div class="@boxWrapper box-primary" style="margin-bottom: 0;">
-    <div class="@boxHeader">
-        TOOLBAR
-    </div>
-</div>
-<div v-pre id="slidemeister-wrapper">
-    <div id="slidemeister-canvas">
-        <div id="slidemeister-canvas-border">
+    <div class="@boxWrapper box-primary" style="margin-bottom: 0;">
+        <div class="@boxHeader">
+            TOOLBAR
         </div>
-        <div id="slidemeister">
-        </div>
-        <partymeister-slides-dropzone></partymeister-slides-dropzone>
     </div>
-</div>
-<div class="loader loader-default"
-     data-text="&hearts; {{ trans('partymeister-slides::backend/slides.generating') }} &hearts;"></div>
+    <div id="slidemeister-wrapper">
+        <div id="slidemeister-canvas">
+            <div id="slidemeister-canvas-border">
+            </div>
+            <div id="slidemeister">
+                <partymeister-slides-elements :name="'slide-editor'"></partymeister-slides-elements>
+            </div>
+            <partymeister-slides-dropzone></partymeister-slides-dropzone>
+        </div>
+    </div>
+    <div class="loader loader-default"
+         data-text="&hearts; {{ trans('partymeister-slides::backend/slides.generating') }} &hearts;"></div>
 @endsection
 @section ('right-sidebar')
     <ul class="slidemeister-navbar nav nav-tabs" role="tablist">
@@ -46,7 +47,7 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="slidemeister-form" role="tabpanel">
-            <div v-pre class="container">
+            <div class="container">
                 <br>
                 {!! form_start($form, ['id' => 'slide-form']) !!}
                 {!! form_row($form->name) !!}
@@ -59,22 +60,7 @@
                 {!! form_row($form->submit) !!}
                 {!! form_end($form, false) !!}
                 <br>
-
-                <h6>Blocks</h6>
-                <div>
-                    <button id="delete" class="btn btn-block btn-danger btn-sm">Delete</button>
-                </div>
-                <hr>
-
-                <h6>Block properties</h6>
-                <div id="slidemeister-properties">
-                </div>
-                <hr>
-
-                <h6>Layers</h6>
-                <div id="slidemeister-layers-container">
-
-                </div>
+                <partymeister-slides-controls :simple="true"></partymeister-slides-controls>
             </div>
         </div>
         <div class="tab-pane" id="slidemeister-blocks" role="tabpanel">
@@ -84,54 +70,33 @@
 @endsection
 
 @section('view_scripts')
-    @include('partymeister-slides::layouts.partials.slide_scripts')
     <script>
         $(document).ready(function () {
             $('.slidemeister-save').on('click', function (e) {
-                e.preventDefault();
 
                 $('.loader').addClass('is-active');
 
-                let dataToSave = slidemeister.data.save();
-                $('input[name="definitions"]').val(JSON.stringify(dataToSave));
-                $('input[name="cached_html_preview"]').val($('#slidemeister').html());
-                slidemeister.data.removePreviewElements();
-                $('input[name="cached_html_final"]').val($('#slidemeister').html());
+                Vue.prototype.$eventHub.$on('partymeister-slides:receive-definitions', (data) => {
+                    if (data.name === 'slide-editor') {
+                        $('input[name="definitions"]').val(data.definitions);
+                        $('input[name="cached_html_preview"]').val($('#slidemeister').html());
+                        $('input[name="cached_html_final"]').val($('#slidemeister').html());
+                        $('#slide-form').submit();
+                    }
+                });
 
-                $('#slide-form').submit();
+                Vue.prototype.$eventHub.$emit('partymeister-slides:request-definitions', 'slide-editor');
+                e.preventDefault();
             });
 
-            slidemeisterProperties.opacity.visible = false;
-            slidemeisterProperties.editable.visible = false;
-            slidemeisterProperties.visibility.visible = false;
-            slidemeisterProperties.locked.visible = false;
-            slidemeisterProperties.backgroundColor.visible = false;
-            slidemeisterProperties.snapping.visible = false;
-            slidemeisterProperties.prettyname.visible = false;
-            slidemeisterProperties.placeholder.visible = false;
-
-            slidemeister = $('#slidemeister').slidemeister('#slidemeister-properties', slidemeisterProperties);
             if ($('input[name="definitions"]').val() != '') {
-                slidemeister.data.load(JSON.parse($('input[name="definitions"]').val()));
+                Vue.prototype.$eventHub.$emit('partymeister-slides:load-definitions', {
+                    name: 'slide-editor',
+                    elements: JSON.parse($('input[name="definitions"]').val()),
+                    replacements: {},
+                    type: false,
+                });
             }
-
-            // Delete element
-            $('button#delete').on('click', function () {
-                slidemeister.element.delete();
-            });
-
-            Vue.prototype.$eventHub.$on('partymeister-slides:image-dropped', (image) => {
-                slidemeister.element.createImage(image);
-            });
-
-            // Undo
-            $('button#undo').on('click', function () {
-                slidemeister.history.back();
-            });
-            // Redo
-            $('button#redo').on('click', function () {
-                slidemeister.history.forward();
-            });
         });
 
     </script>

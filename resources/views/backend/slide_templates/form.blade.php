@@ -7,10 +7,6 @@
             top: 50px;
             left: 50px;
             width: 200px;
-            /*top: 30%;*/
-            /*left: 40%;*/
-            /*max-width: 20%;*/
-        }
 
         .sortable-ghost .file-description {
             display: none;
@@ -22,11 +18,12 @@
         TOOLBAR
     </div>
 </div>
-<div v-pre id="slidemeister-wrapper">
+<div id="slidemeister-wrapper">
     <div id="slidemeister-canvas">
         <div id="slidemeister-canvas-border">
         </div>
         <div id="slidemeister">
+            <partymeister-slides-elements id="template-editor" :name="'template-editor'"></partymeister-slides-elements>
         </div>
         <partymeister-slides-dropzone></partymeister-slides-dropzone>
     </div>
@@ -44,7 +41,7 @@
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="slidemeister-form" role="tabpanel">
-            <div v-pre class="container">
+            <div class="container">
                 <br>
                 {!! form_start($form, ['id' => 'slide-template-form']) !!}
                 {!! form_row($form->name) !!}
@@ -56,23 +53,8 @@
                 {!! form_row($form->submit) !!}
                 {!! form_end($form) !!}
                 <br>
+                <partymeister-slides-controls></partymeister-slides-controls>
 
-                <h6>Blocks</h6>
-                <div>
-                    <button id="create" class="btn btn-block btn-success btn-sm">Add</button>
-                    <button id="clone" class="btn btn-block btn-warning btn-sm">Clone</button>
-                    <button id="delete" class="btn btn-block btn-danger btn-sm">Delete</button>
-                </div>
-                <hr>
-
-                <h6>Block properties</h6>
-                <div id="slidemeister-properties">
-                </div>
-                <hr>
-                <h6>Layers</h6>
-                <div id="slidemeister-layers-container">
-
-                </div>
             </div>
         </div>
         <div class="tab-pane" id="slidemeister-blocks" role="tabpanel">
@@ -89,49 +71,26 @@
 
                 $('.loader').addClass('is-active');
 
-                let dataToSave = slidemeister.data.save();
-                $('input[name="definitions"]').val(JSON.stringify(dataToSave));
-                $('input[name="cached_html_preview"]').val($('#slidemeister').html());
-                slidemeister.data.removePreviewElements();
-                $('input[name="cached_html_final"]').val($('#slidemeister').html());
-                $('#slide-template-form').submit();
+                Vue.prototype.$eventHub.$on('partymeister-slides:receive-definitions', (data) => {
+                    if (data.name === 'template-editor') {
+                        $('input[name="definitions"]').val(data.definitions);
+                        $('input[name="cached_html_preview"]').val($('#slidemeister').html());
+                        $('input[name="cached_html_final"]').val($('#slidemeister').html());
+                        $('#slide-template-form').submit();
+                    }
+                });
 
+                Vue.prototype.$eventHub.$emit('partymeister-slides:request-definitions', 'template-editor');
                 e.preventDefault();
             });
 
-            slidemeister = $('#slidemeister').slidemeister('#slidemeister-properties', slidemeisterProperties);
             if ($('input[name="definitions"]').val() != '') {
-                slidemeister.data.load(JSON.parse($('input[name="definitions"]').val()));
+                Vue.prototype.$eventHub.$emit('partymeister-slides:load-definitions', {
+                    name: 'template-editor',
+                    elements: JSON.parse($('input[name="definitions"]').val()),
+                    replacements: {}
+                });
             }
-
-            // Create new element
-            $('button#create').on('click', function () {
-                slidemeister.element.create();
-            });
-
-            // clone new element
-            $('button#clone').on('click', function () {
-                slidemeister.element.clone();
-            });
-
-            // Delete element
-            $('button#delete').on('click', function () {
-                slidemeister.element.delete();
-            });
-
-            // Undo
-            $('button#undo').on('click', function () {
-                slidemeister.history.back();
-            });
-            // Redo
-            $('button#redo').on('click', function () {
-                slidemeister.history.forward();
-            });
-
-            Vue.prototype.$eventHub.$on('partymeister-slides:image-dropped', (image) => {
-                slidemeister.element.createImage(image);
-            });
-
         });
 
     </script>
