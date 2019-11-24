@@ -160,8 +160,17 @@
                 if (name !== this.name) {
                     return;
                 }
+                let meta = [];
+                Object.entries(this.elements).forEach(([key, element]) => {
+                    if (element.properties.prizegivingbarCoordinates) {
+                        meta.push(element.properties.prizegivingbarCoordinates);
+                    }
+                });
+                console.log(meta);
+
                 this.$eventHub.$emit('partymeister-slides:receive-definitions', {
                     definitions: JSON.stringify(this.elements),
+                    meta: JSON.stringify(meta),
                     name: this.name
                 });
             });

@@ -54,6 +54,12 @@ export default {
                         transform: 'matrix(1, 0, 0, 1, 0, 0) translate(0px 0px)',
                         width: 300,
                         height: 200,
+                    },
+                    prizegivingbarCoordinates: {
+                        x1: 0,
+                        x2: 0,
+                        y1: 0,
+                        y2: 0,
                     }
                 }
             };
