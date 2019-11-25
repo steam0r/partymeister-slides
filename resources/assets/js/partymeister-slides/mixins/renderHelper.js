@@ -5,9 +5,11 @@ export default {
             clonedElement.name = clonedElement.name + '_' + nameModifier;
             Vue.set(this.elements, clonedElement.name, clonedElement);
             this.updateElementProperties(this.elements[clonedElement.name]);
-            setTimeout(() => {
+            this.$forceNextTick(() => {
                 document.querySelector('#' + this.name + ' .' + clonedElement.name).style.top = yOffset + 'px';
-            }, 0);
+            });
+            // setTimeout(() => {
+            // }, 0);
 
             return this.elements[clonedElement.name];
         },
@@ -29,9 +31,11 @@ export default {
             if (content !== element.properties.placeholder) {
                 element.properties.content = content;
                 if (update) {
-                    setTimeout(() => {
+                    this.$forceNextTick(() => {
                         this.updateElementProperties(element);
-                    }, 100);
+                    });
+                    // setTimeout(() => {
+                    // }, 100);
                 }
             }
         },

@@ -436,17 +436,34 @@
                 this.animatePrizegivingBars(metadata, 0);
             },
             animatePrizegivingBars: function (bars, frame) {
-                if (frame == 240) {
+                if (frame === 240) {
                     window.clearTimeout(barTimeout);
 
                     bars.sort(function (a, b) {
                         return (a.x2 < b.x2) ? 1 : ((b.x2 < a.x2) ? -1 : 0);
                     });
 
-                    for (i = 0; i < 3; i++) {
-                        if (bars[i] != undefined) {
-                            $('#' + bars[i].id).css('background-color', 'red');
-                            $('#' + bars[i].id).addClass('blink');
+                    let blinkingBars = [];
+                    let barValues = [];
+                    for (let [index, bar] of bars.entries()) {
+                        if (index === 0) {
+                            blinkingBars.push(index);
+                            barValues.push(bar.x2);
+                        } else {
+                            if (barValues.includes(bar.x2)) {
+                                blinkingBars.push(index);
+                                barValues.push(bar.x2);
+                            } else if (barValues.length < 3) {
+                                blinkingBars.push(index);
+                                barValues.push(bar.x2);
+                            }
+                        }
+                    }
+
+                    for (const index of blinkingBars) {
+                        if (bars[index] != undefined) {
+                            $('#' + bars[index].id).css('background-color', 'red');
+                            $('#' + bars[index].id).addClass('blink');
                         }
                     }
 
@@ -509,8 +526,8 @@
             },
             updateStatus: function () {
                 console.log('Update status');
-                console.log(this.items);
-                console.log(this.currentItem);
+                // console.log(this.items);
+                // console.log(this.currentItem);
                 let data = {
                     playlists: this.cachedPlaylists.map(playlist => {
                         return {id: playlist.id, updated_at: new Date(playlist.updated_at.date).getTime()/1000}

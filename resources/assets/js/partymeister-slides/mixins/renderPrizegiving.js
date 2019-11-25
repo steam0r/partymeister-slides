@@ -48,7 +48,7 @@ export default {
             });
         },
         calculatePrizegivingBarCoordinates(row, entryElement) {
-            setTimeout(() => {
+            this.$forceNextTick(() => {
                 if (entryElement.properties.prettyname !== 'entry') {
                     return;
                 }
@@ -93,7 +93,9 @@ export default {
                 };
 
                 Vue.set(entryElement.properties, 'prizegivingbarCoordinates', prizegivingbarCoordinates);
-            }, 100);
+            });
+            // setTimeout(() => {
+            // }, 100);
         },
         normalizeNumber(n1, n2, decimals) {
             if (n2 === 0) {

@@ -10,9 +10,9 @@ export default {
             Object.entries(this.elements).forEach(([key, element]) => {
                 this.replaceContent(element, 'participants', replacements);
                 element.properties.content = element.properties.content.replace(/\<\<.+\>\>/, '')
-                setTimeout(() => {
+                this.$forceNextTick(() => {
                     this.updateElementProperties(element);
-                }, 0);
+                });
             });
         },
         renderCompetitionEntry(replacements) {
@@ -21,9 +21,9 @@ export default {
                     this.replaceContent(element, property, value);
                 });
                 element.properties.content = element.properties.content.replace(/\<\<.+\>\>/, '')
-                setTimeout(() => {
+                this.$forceNextTick(() => {
                     this.updateElementProperties(element);
-                }, 0);
+                });
             });
         },
     }

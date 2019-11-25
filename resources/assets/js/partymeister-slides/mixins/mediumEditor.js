@@ -43,12 +43,6 @@ export default {
             let element = this.elements[target.classList[1]];
             element.properties.content = operation.api.origElements.innerHTML;
             this.resizeText(operation.api.origElements.parentElement, parseInt(operation.api.origElements.parentElement.style.width.replace('px', '')), parseInt(operation.api.origElements.parentElement.style.height.replace('px', '')));
-
-            // setTimeout(() => {
-            //     this.updateUndoRedoStack();
-            // }, 5000);
-
-
             this.emitAllElements();
         },
     }

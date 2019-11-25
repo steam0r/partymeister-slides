@@ -118,12 +118,12 @@
                         activeElement = key;
                         this.updateElementOrder(element);
                     });
-                    setTimeout(() => {
+                    this.$forceNextTick(() => {
                         this.setActiveElement({}, activeElement);
                         this.updateAllElementProperties();
                         this.updateSnappableGuidelines();
                         this.emitAllElements();
-                    }, 100);
+                    });
                 } else {
                     this.updateAllElementProperties();
                     if (data.type) {
@@ -220,6 +220,7 @@
             this.$eventHub.$on('partymeister-slides:update-element-properties', (data) => {
                 if (data.name) {
                     this.elements[data.name].properties = data.properties;
+                    this.elements[data.name].moveable.snappable = data.properties.snapping;
                     this.updateElementProperties(this.elements[data.name]);
                     this.setLockedProperty(this.elements[data.name]);
                 }
