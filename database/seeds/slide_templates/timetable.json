@@ -38,7 +38,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 1998,
       "content": "<p><br></p>",
       "opacity": 1,
@@ -104,7 +104,7 @@
     "properties": {
       "size": "individual",
       "color": "#FFFFFF",
-      "locked": false,
+      "locked": true,
       "zIndex": 2000,
       "content": "<p>Timetable</p>",
       "opacity": 1,
@@ -124,7 +124,7 @@
         "height": 55,
         "transform": "matrix(1, 0, 0, 1, 19, -1) translate(10px, 15px)"
       },
-      "placeholder": "Timetable <<day>>",
+      "placeholder": "Timetable <<headline>>",
       "verticalAlign": "center",
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
@@ -137,11 +137,11 @@
       "origin": false,
       "scalable": false,
       "warpable": false,
-      "draggable": true,
+      "draggable": false,
       "keepRatio": false,
       "pinchable": false,
-      "resizable": true,
-      "rotatable": true,
+      "resizable": false,
+      "rotatable": false,
       "snappable": true,
       "throttleDrag": 0,
       "snapThreshold": 10,
@@ -170,7 +170,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 1999,
       "content": "<p><br></p>",
       "opacity": 1,
@@ -236,7 +236,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 2006,
       "content": "<p>Amiga Demo Competition</p>",
       "opacity": 1,
@@ -249,7 +249,7 @@
       "textAlign": "left",
       "fontFamily": "'Exo 2'",
       "fontWeight": "normal",
-      "prettyname": "title",
+      "prettyname": "timetable_event_name",
       "visibility": "render",
       "coordinates": {
         "width": 606,
@@ -257,7 +257,7 @@
         "transform": "matrix(1, 0, 0, 1, 132, 109) translate(189px, 0px)"
       },
       "placeholder": "<<name>>",
-      "verticalAlign": "flex-start",
+      "verticalAlign": "center",
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
       "calculatedFontSize": "25px"
@@ -302,7 +302,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 2005,
       "content": "<p>Competition</p>",
       "opacity": 1,
@@ -315,7 +315,7 @@
       "textAlign": "left",
       "fontFamily": "'Exo 2'",
       "fontWeight": "normal",
-      "prettyname": "type",
+      "prettyname": "timetable_event_type",
       "visibility": "render",
       "coordinates": {
         "width": 176,
@@ -323,7 +323,7 @@
         "transform": "matrix(1, 0, 0, 1, 29, 109) translate(103px, 0px)"
       },
       "placeholder": "<<type>>",
-      "verticalAlign": "flex-start",
+      "verticalAlign": "center",
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
       "calculatedFontSize": "25px"
@@ -368,7 +368,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 2003,
       "content": "<p>11:00</p>",
       "opacity": 1,
@@ -381,7 +381,7 @@
       "textAlign": "left",
       "fontFamily": "'Exo 2'",
       "fontWeight": "normal",
-      "prettyname": "time",
+      "prettyname": "timetable_time",
       "visibility": "render",
       "coordinates": {
         "width": 89,
@@ -389,7 +389,7 @@
         "transform": "matrix(1, 0, 0, 1, 0, 0) translate(29px, 109px)"
       },
       "placeholder": "<<time>>",
-      "verticalAlign": "flex-start",
+      "verticalAlign": "center",
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
       "calculatedFontSize": "25px"

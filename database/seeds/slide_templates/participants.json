@@ -94,7 +94,7 @@
       "color": "#FFFFFF",
       "locked": true,
       "zIndex": 2000,
-      "content": "<p>THIS IS A HEADLINE</p>",
+      "content": "<p>Participants</p>",
       "opacity": 1,
       "editable": true,
       "fontSize": 30,
@@ -112,7 +112,7 @@
         "height": 55,
         "transform": "matrix(1, 0, 0, 1, 19, -1) translate(10px, 15px)"
       },
-      "placeholder": "Timetable <<day>>",
+      "placeholder": "Participants",
       "verticalAlign": "center",
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
@@ -168,7 +168,7 @@
       "prettyname": "panel",
       "visibility": "render",
       "coordinates": {
-        "width": 962,
+        "width": 963,
         "height": 87,
         "transform": "matrix(1, 0, 0, 1, 0, 0) translate(-3px, -1px)"
       },
@@ -214,29 +214,29 @@
       "color": "#000000",
       "locked": true,
       "zIndex": 2006,
-      "content": "<p>Jeremy Corbyn would take a “neutral stance” in a future Brexit referendum, he has announced, after facing mounting pressure in recent days to pick a side.</p><p><br></p><p>Appearing in a special BBC Question Time programme, in which Boris Johnson was attacked over racism and Jo Swinson found herself on the back foot over Brexit, Corbyn confirmed for the first time he would not campaign either for leave or remain.</p>",
+      "content": "<p>random scener (not random)</p>",
       "opacity": 1,
       "editable": true,
-      "fontSize": "24",
+      "fontSize": "48",
       "snapping": true,
       "warpable": false,
       "fontStyle": "normal",
       "resizable": true,
-      "textAlign": "left",
+      "textAlign": "center",
       "fontFamily": "'Exo 2'",
       "fontWeight": "normal",
-      "prettyname": "body",
+      "prettyname": "participants",
       "visibility": "render",
       "coordinates": {
-        "width": 591,
-        "height": 404,
-        "transform": "matrix(1, 0, 0, 1, 321, 109) translate(-292px, -1px)"
+        "width": 877,
+        "height": 398,
+        "transform": "matrix(1, 0, 0, 1, 43, 109) translate(3px, 0px)"
       },
-      "placeholder": "",
-      "verticalAlign": "flex-start",
+      "placeholder": "<<participants>>",
+      "verticalAlign": "center",
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
-      "calculatedFontSize": "24px"
+      "calculatedFontSize": "49px"
     }
   }
 }

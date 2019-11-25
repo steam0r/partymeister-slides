@@ -42,12 +42,12 @@ class SlideTemplatesTableSeeder extends Seeder
             [
                 'name'         => 'Competition Entry',
                 'template_for' => 'competition',
-                'definitions'  => file_get_contents(__DIR__.'/slide_templates/competition_entry.json')
+                'definitions'  => file_get_contents(__DIR__.'/slide_templates/competition_entry-2-n.json')
             ],
             [
                 'name'         => 'Competition Entry (first entry without previous info)',
                 'template_for' => 'competition_entry_1',
-                'definitions'  => file_get_contents(__DIR__.'/slide_templates/competition_entry_1.json')
+                'definitions'  => file_get_contents(__DIR__.'/slide_templates/competition_entry-1.json')
             ],
             [
                 'name'         => 'Timetable',
@@ -63,6 +63,11 @@ class SlideTemplatesTableSeeder extends Seeder
                 'name'         => 'Prizegiving',
                 'template_for' => 'prizegiving',
                 'definitions'  => file_get_contents(__DIR__.'/slide_templates/prizegiving.json')
+            ],
+            [
+                'name'         => 'Participants',
+                'template_for' => 'participants',
+                'definitions'  => file_get_contents(__DIR__.'/slide_templates/participants.json')
             ],
         ];
 

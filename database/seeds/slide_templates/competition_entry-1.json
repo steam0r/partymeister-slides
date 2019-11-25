@@ -22,22 +22,13 @@
           "_prevClass": "snappable-shadow shadow-element_13135619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_24933353"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_33373619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_75401639"
@@ -56,9 +47,9 @@
     "properties": {
       "size": "individual",
       "color": "#FFFFFF",
-      "locked": false,
+      "locked": true,
       "zIndex": 1999,
-      "content": "<p>05</p>",
+      "content": "<p><b>05</b></p>",
       "opacity": 1,
       "editable": true,
       "fontSize": "110",
@@ -74,7 +65,7 @@
       "coordinates": {
         "width": 141,
         "height": 210,
-        "transform": "matrix(1, 0, 0, 1, 32, 84) translate(0px, -36px)"
+        "transform": "matrix(1, 0, 0, 1, 32, 48) translate(1px, 0px)"
       },
       "placeholder": "<<sort_position_prefixed>>",
       "verticalAlign": "flex-start",
@@ -106,22 +97,13 @@
           "_prevClass": "snappable-shadow shadow-element_2145694"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_24933353"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_33373619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_75401639"
@@ -140,7 +122,7 @@
     "properties": {
       "size": "individual",
       "color": "#FFFFFF",
-      "locked": false,
+      "locked": true,
       "zIndex": 2006,
       "content": "<p>by extreme long group name</p>",
       "opacity": 1,
@@ -165,90 +147,6 @@
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
       "calculatedFontSize": "25px"
-    }
-  },
-  "element_13872445": {
-    "name": "element_13872445",
-    "moveable": {
-      "origin": false,
-      "scalable": false,
-      "warpable": false,
-      "draggable": true,
-      "keepRatio": false,
-      "pinchable": false,
-      "resizable": true,
-      "rotatable": true,
-      "snappable": true,
-      "throttleDrag": 0,
-      "snapThreshold": 10,
-      "throttleScale": 0,
-      "throttleResize": 1,
-      "throttleRotate": 0,
-      "elementGuidelines": [
-        {},
-        {
-          "_prevClass": "snappable-shadow shadow-element_2145694"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_13135619"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_24933353"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_33373619"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_75401639"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_89195201"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_94769562"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_96424802"
-        }
-      ]
-    },
-    "properties": {
-      "size": "individual",
-      "color": "#FFFFFF",
-      "locked": false,
-      "zIndex": 2010,
-      "content": "<p>04</p>",
-      "opacity": 1,
-      "editable": true,
-      "fontSize": "80",
-      "snapping": true,
-      "warpable": false,
-      "fontStyle": "normal",
-      "resizable": true,
-      "textAlign": "right",
-      "fontFamily": "'Exo 2'",
-      "fontWeight": "normal",
-      "prettyname": "previous position",
-      "visibility": "render",
-      "coordinates": {
-        "width": 140,
-        "height": 120,
-        "transform": "matrix(1, 0, 0, 1, 32, 300) translate(0px, 46px)"
-      },
-      "placeholder": "<<previous_sort_position_prefixed>>",
-      "verticalAlign": "flex-start",
-      "backgroundColor": "transparent",
-      "horizontalAlign": "flex-start",
-      "calculatedFontSize": "80px"
     }
   },
   "element_24933353": {
@@ -277,19 +175,10 @@
           "_prevClass": "snappable-shadow shadow-element_13135619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_33373619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_75401639"
@@ -308,7 +197,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 1995,
       "content": "<p><br></p>",
       "opacity": 1,
@@ -361,19 +250,10 @@
           "_prevClass": "snappable-shadow shadow-element_13135619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_24933353"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_75401639"
@@ -392,7 +272,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 1998,
       "content": "<p>CURRENT COMPO: 4K EXECUTABLE GRAPHICS</p>",
       "opacity": 1,
@@ -417,90 +297,6 @@
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
       "calculatedFontSize": "31px"
-    }
-  },
-  "element_45620564": {
-    "name": "element_45620564",
-    "moveable": {
-      "origin": false,
-      "scalable": false,
-      "warpable": false,
-      "draggable": false,
-      "keepRatio": false,
-      "pinchable": false,
-      "resizable": false,
-      "rotatable": false,
-      "snappable": true,
-      "throttleDrag": 0,
-      "snapThreshold": 10,
-      "throttleScale": 0,
-      "throttleResize": 1,
-      "throttleRotate": 0,
-      "elementGuidelines": [
-        {},
-        {
-          "_prevClass": "snappable-shadow shadow-element_2145694"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_13135619"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_24933353"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_33373619"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_75401639"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_89195201"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_94769562"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_96424802"
-        }
-      ]
-    },
-    "properties": {
-      "size": "individual",
-      "color": "#FFFFFF",
-      "locked": false,
-      "zIndex": 2009,
-      "content": "<p>by extreme long group name</p>",
-      "opacity": 1,
-      "editable": true,
-      "fontSize": "20",
-      "snapping": true,
-      "warpable": false,
-      "fontStyle": "normal",
-      "resizable": true,
-      "textAlign": "left",
-      "fontFamily": "'Exo 2'",
-      "fontWeight": "normal",
-      "prettyname": "previous author",
-      "visibility": "render",
-      "coordinates": {
-        "width": 597,
-        "height": 41,
-        "transform": "matrix(1, 0, 0, 1, 334, 140) translate(0px, 285px)"
-      },
-      "placeholder": "<<previous_author>>",
-      "verticalAlign": "center",
-      "backgroundColor": "transparent",
-      "horizontalAlign": "flex-start",
-      "calculatedFontSize": "21px"
     }
   },
   "element_63970736": {
@@ -529,19 +325,10 @@
           "_prevClass": "snappable-shadow shadow-element_13135619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_24933353"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_33373619"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_75401639"
@@ -560,7 +347,7 @@
     "properties": {
       "size": "individual",
       "color": "#FFFFFF",
-      "locked": false,
+      "locked": true,
       "zIndex": 2007,
       "content": "<p>This is a very useful and informative comment by the authors of the demo. They want you to read it.</p><p><br></p><p>Read it!</p>",
       "opacity": 1,
@@ -585,90 +372,6 @@
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
       "calculatedFontSize": "17px"
-    }
-  },
-  "element_66332860": {
-    "name": "element_66332860",
-    "moveable": {
-      "origin": false,
-      "scalable": false,
-      "warpable": false,
-      "draggable": false,
-      "keepRatio": false,
-      "pinchable": false,
-      "resizable": false,
-      "rotatable": false,
-      "snappable": true,
-      "throttleDrag": 0,
-      "snapThreshold": 10,
-      "throttleScale": 0,
-      "throttleResize": 1,
-      "throttleRotate": 0,
-      "elementGuidelines": [
-        {},
-        {
-          "_prevClass": "snappable-shadow shadow-element_2145694"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_13135619"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_24933353"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_33373619"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_75401639"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_89195201"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_94769562"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_96424802"
-        }
-      ]
-    },
-    "properties": {
-      "size": "individual",
-      "color": "#FFFFFF",
-      "locked": false,
-      "zIndex": 2008,
-      "content": "<p>one long entry name, biatch</p>",
-      "opacity": 1,
-      "editable": true,
-      "fontSize": "30",
-      "snapping": true,
-      "warpable": false,
-      "fontStyle": "normal",
-      "resizable": true,
-      "textAlign": "left",
-      "fontFamily": "'Exo 2'",
-      "fontWeight": "bold",
-      "prettyname": "previous title",
-      "visibility": "render",
-      "coordinates": {
-        "width": 597,
-        "height": 56,
-        "transform": "matrix(1, 0, 0, 1, 334, 84) translate(0px, 285px)"
-      },
-      "placeholder": "<<previous_title>>",
-      "verticalAlign": "center",
-      "backgroundColor": "transparent",
-      "horizontalAlign": "flex-start",
-      "calculatedFontSize": "31px"
     }
   },
   "element_75401639": {
@@ -697,22 +400,13 @@
           "_prevClass": "snappable-shadow shadow-element_13135619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_24933353"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_33373619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_89195201"
@@ -728,7 +422,7 @@
     "properties": {
       "size": "individual",
       "color": "#FFFFFF",
-      "locked": false,
+      "locked": true,
       "zIndex": 2000,
       "content": "<p>one long entry name, biatch</p>",
       "opacity": 1,
@@ -781,22 +475,13 @@
           "_prevClass": "snappable-shadow shadow-element_13135619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_24933353"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_33373619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_75401639"
@@ -812,7 +497,7 @@
     "properties": {
       "size": "individual",
       "color": "#FFFFFF",
-      "locked": false,
+      "locked": true,
       "zIndex": 2011,
       "content": "<p>4KB C64</p>",
       "opacity": 1,
@@ -865,22 +550,13 @@
           "_prevClass": "snappable-shadow shadow-element_13135619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_24933353"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_33373619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_75401639"
@@ -896,7 +572,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 1996,
       "content": "<p><br></p>",
       "opacity": 1,
@@ -949,22 +625,13 @@
           "_prevClass": "snappable-shadow shadow-element_13135619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_13872445"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_24933353"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_33373619"
         },
         {
-          "_prevClass": "snappable-shadow shadow-element_45620564"
-        },
-        {
           "_prevClass": "snappable-shadow shadow-element_63970736"
-        },
-        {
-          "_prevClass": "snappable-shadow shadow-element_66332860"
         },
         {
           "_prevClass": "snappable-shadow shadow-element_75401639"
@@ -980,7 +647,7 @@
     "properties": {
       "size": "individual",
       "color": "#FFFFFF",
-      "locked": false,
+      "locked": true,
       "zIndex": 2012,
       "content": "<p>Option 1, Option 2, Option 3, Option 4</p>",
       "opacity": 1,

@@ -92,9 +92,9 @@
     "properties": {
       "size": "individual",
       "color": "#FFFFFF",
-      "locked": false,
+      "locked": true,
       "zIndex": 2000,
-      "content": "<p>THIS IS A HEADLINE</p>",
+      "content": "<p>THIS IS A HEADLINE!!!</p>",
       "opacity": 1,
       "editable": true,
       "fontSize": 30,
@@ -212,7 +212,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 2006,
       "content": "<p>Jeremy Corbyn would take a “neutral stance” in a future Brexit referendum, he has announced, after facing mounting pressure in recent days to pick a side.</p><p><br></p><p>Appearing in a special BBC Question Time programme, in which Boris Johnson was attacked over racism and Jo Swinson found herself on the back foot over Brexit, Corbyn confirmed for the first time he would not campaign either for leave or remain.</p>",
       "opacity": 1,

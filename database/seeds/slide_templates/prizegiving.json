@@ -35,7 +35,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 1998,
       "content": "<p><br></p>",
       "opacity": 1,
@@ -98,7 +98,7 @@
     "properties": {
       "size": "individual",
       "color": "#FFFFFF",
-      "locked": false,
+      "locked": true,
       "zIndex": 2000,
       "content": "<p>Prizegiving</p>",
       "opacity": 1,
@@ -118,7 +118,7 @@
         "height": 55,
         "transform": "matrix(1, 0, 0, 1, 19, -1) translate(10px, 15px)"
       },
-      "placeholder": "<<competition>>",
+      "placeholder": "<<headline>>",
       "verticalAlign": "center",
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
@@ -131,11 +131,11 @@
       "origin": false,
       "scalable": false,
       "warpable": false,
-      "draggable": true,
+      "draggable": false,
       "keepRatio": false,
       "pinchable": false,
-      "resizable": true,
-      "rotatable": true,
+      "resizable": false,
+      "rotatable": false,
       "snappable": true,
       "throttleDrag": 0,
       "snapThreshold": 10,
@@ -161,7 +161,7 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 1999,
       "content": "<p><br></p>",
       "opacity": 1,
@@ -224,9 +224,9 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 2006,
-      "content": "<p>Amiga Demo Competition</p>",
+      "content": "<p>Super entry by super author</p>",
       "opacity": 1,
       "editable": true,
       "fontSize": "24",
@@ -245,7 +245,7 @@
         "transform": "matrix(1, 0, 0, 1, 43, 109) translate(3px, 0px)"
       },
       "placeholder": "<<title>> by <<author>>",
-      "verticalAlign": "flex-start",
+      "verticalAlign": "center",
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
       "calculatedFontSize": "25px"
@@ -287,9 +287,9 @@
     "properties": {
       "size": "individual",
       "color": "#000000",
-      "locked": false,
+      "locked": true,
       "zIndex": 2003,
-      "content": "<p>11:00</p>",
+      "content": "<p>#1</p>",
       "opacity": 1,
       "editable": true,
       "fontSize": "24",
@@ -308,7 +308,7 @@
         "transform": "matrix(1, 0, 0, 1, 29, 109) translate(809px, 0px)"
       },
       "placeholder": "<<rank>>",
-      "verticalAlign": "flex-start",
+      "verticalAlign": "center",
       "backgroundColor": "transparent",
       "horizontalAlign": "flex-start",
       "calculatedFontSize": "25px"
