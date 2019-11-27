@@ -100,6 +100,20 @@
                 opacity: 0.1;
             }
         }
+
+        .current {
+            z-index: 1000;
+        }
+
+        .previous {
+            visibility: hidden;
+            z-index: 998;
+        }
+
+        .next {
+            /*visibility: hidden;*/
+            z-index: 999;
+        }
     </style>
     @include('partymeister-slides::layouts.partials.slide_fonts')
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -113,6 +127,7 @@
         Items: @{{ items.length }}<br>
         CurrentItem: @{{ currentItem }}<br>
         <button class="delete-storage">Empty cache</button>
+        <vue-audio style="display: none;" id="jingle-player" :file="jingle"/>
     </div>
 
     <template v-if="currentItem != null && items[currentItem] != undefined">
@@ -131,6 +146,15 @@
              :src="items[previousItem].file.file_original" class="img-fluid slide previous">
         <video v-if="items[previousItem].type == 'video'" id="video-previous" class="slide previous">
             <source :src="items[previousItem].file.file_original" type="video/mp4">
+        </video>
+    </template>
+    <template class="next-item" v-if="nextItem != null && items[nextItem] != undefined">
+        <div v-if="items[nextItem].type == 'image' && items[nextItem].cached_html_final != ''"
+             v-html="items[nextItem].cached_html_final" class="slidemeister-instance slide next"></div>
+        <img v-if="items[nextItem].type == 'image' && items[nextItem].cached_html_final == ''"
+             :src="items[nextItem].file.file_original" class="img-fluid slide next">
+        <video v-if="items[nextItem].type == 'video'" id="video-next" class="slide next">
+            <source :src="items[nextItem].file.file_original" type="video/mp4">
         </video>
     </template>
 </main>
@@ -192,10 +216,13 @@
         return 0;
     }
 
-
     let slidemeisterVue = new Vue({
         el: '#slidemeisterVue',
         data: {
+            jingle: null,
+            jingles: {!! json_encode($jingles) !!},
+            prizegivingBarColor: '{{ ($prizegivingBarColor !== '') ? $prizegivingBarColor : '#000000'}}',
+            prizegivingBarBlinkColor: '{{ ($prizegivingBarBlinkColor !== '') ? $prizegivingBarBlinkColor : '#FF0000'}}',
             cachedPlaylists: [],
             playnow: false,
             currentItemSaved: null,
@@ -204,27 +231,65 @@
             items: [],
             currentItem: null,
             previousItem: null,
+            nextItem: null,
             callbackTimeout: null,
             slideTimeout: null,
-            currentBackground: null
+            currentBackground: null,
+            transitionGroups: [
+                ['fadeIn', 'fadeOut'],
+                ['rotateInUpLeft', 'rotateOutDownRight'],
+                ['lightSpeedIn', 'lightSpeedOut'],
+                ['bounceIn', 'fadeOut'],
+                ['flipInX', 'fadeOut'],
+                ['bounce', 'fadeOut'],
+                ['pulse', 'fadeOut'],
+                ['tada', 'fadeOut'],
+                ['jello', 'fadeOut'],
+                ['zoomIn', 'zoomOut'],
+                ['zoomInDown', 'zoomOutUp'],
+                ['rollIn', 'rollOut'],
+            ],
         },
-        mounted: function () {
+        mounted() {
             // Check if we have playlists in local storage
-            if (localStorage.getItem('cachedPlaylists') != undefined) {
-                this.cachedPlaylists = JSON.parse(localStorage.getItem('cachedPlaylists'));
+            let cachedPlaylists = localStorage.getItem('cachedPlaylists');
+            if (cachedPlaylists !== undefined && cachedPlaylists != null) {
+                this.cachedPlaylists = JSON.parse(cachedPlaylists);
             }
-            if (localStorage.getItem('playlist') != undefined) {
-                this.playlist = JSON.parse(localStorage.getItem('playlist'));
+            let playlist = localStorage.getItem('playlist');
+            if (playlist !== undefined && playlist != null) {
+                this.playlist = JSON.parse(playlist);
                 this.items = this.playlist.items;
             }
-            if (localStorage.getItem('currentItem') != undefined) {
-                this.seekToIndex(parseInt(localStorage.getItem('currentItem')));
+            let currentItem = localStorage.getItem('currentItem');
+            if (currentItem !== undefined && currentItem != null) {
+                this.seekToIndex(parseInt(currentItem));
             }
 
-            window.addEventListener('keydown', function (e) {
+            window.addEventListener('keydown', (e) => {
                 e.preventDefault();
 
-                if (e.key == 'd') {
+                switch (e.key) {
+                    case 'F1':
+                        console.log("F1 pressed");
+                        this.playJingle('jingle_1');
+                        break;
+                    case 'F2':
+                        console.log("F2 pressed");
+                        this.playJingle('jingle_2');
+                        break;
+                    case 'F3':
+                        console.log("F3 pressed");
+                        this.playJingle('jingle_3');
+                        break;
+                    case 'F4':
+                        console.log("F4 pressed");
+                        this.playJingle('jingle_4');
+                        break;
+                }
+
+                if (e.key === 'd') {
+                    console.log("HIER");
                     if ($('.alert.alert-danger').hasClass('d-none')) {
                         $('.alert.alert-danger').removeClass('d-none');
                     } else {
@@ -232,59 +297,68 @@
                     }
                 }
 
-                if (slidemeisterVue.playlist.id != undefined) {
-                    if (e.code == 'Space' && slidemeisterVue.items[slidemeisterVue.currentItem].slide_type == 'siegmeister_bars') {
+                if (this.playlist.id !== undefined) {
+                    if (e.code === 'Space' && this.items[this.currentItem].slide_type === 'siegmeister_bars') {
                         console.log('space pressed - rendering bars!');
-                        slidemeisterVue.renderPrizegivingBars();
+                        this.renderPrizegivingBars();
                     }
-                    if (e.key == 'ArrowRight' || e.key == 'ArrowLeft') {
-                        if (slidemeisterVue.playnow && slidemeisterVue.playlistSaved.id != undefined) {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+                        if (this.playnow && this.playlistSaved.id !== undefined) {
                             console.log("Playnow is active - reverting to previous playlist");
-                            slidemeisterVue.playnow = false;
-                            slidemeisterVue.playlist = slidemeisterVue.playlistSaved;
-                            slidemeisterVue.items = slidemeisterVue.playlist.items;
-                            slidemeisterVue.currentItem = slidemeisterVue.currentItemSaved;
-                            slidemeisterVue.playlistSaved = {};
-                            slidemeisterVue.currentItemSaved = null;
-                        } else if (slidemeisterVue.playnow) {
+                            this.playnow = false;
+                            this.playlist = this.playlistSaved;
+                            this.items = this.playlist.items;
+                            this.currentItem = this.currentItemSaved;
+                            this.playlistSaved = {};
+                            this.currentItemSaved = null;
+                        } else if (this.playnow) {
                             // Do nothing if there is ONLY a playnow slide and nothing else
                             return;
                         }
                     }
-                    if (e.key == 'ArrowRight') {
+                    if (e.key === 'ArrowRight') {
                         if (e.shiftKey) {
                             // Hard transition
-                            slidemeisterVue.seekToNextItem(true)
+                            this.seekToNextItem(true)
                         } else {
                             // Soft transition
-                            slidemeisterVue.seekToNextItem(false)
+                            this.seekToNextItem(false)
                         }
                     }
-                    if (e.key == 'ArrowLeft') {
+                    if (e.key === 'ArrowLeft') {
                         if (e.shiftKey) {
                             // Hard transition
-                            slidemeisterVue.seekToPreviousItem(true)
+                            this.seekToPreviousItem(true)
                         } else {
                             // Soft transition
-                            slidemeisterVue.seekToPreviousItem(false)
+                            this.seekToPreviousItem(false)
                         }
                     }
                 }
             });
         },
         methods: {
-            seekToIndex: function (index, hard) {
+            playJingle(index) {
+                if (this.jingles[index] !== undefined) {
+                    this.jingle = this.jingles[index];
+                    let player = document.querySelector('#jingle-player > audio');
+                    setTimeout(() => {
+                        player.play();
+                    }, 10);
+                }
+            },
+            seekToIndex(index, hard) {
                 console.log('Seek to index ' + index);
                 this.clearTimeouts();
 
-                if (this.items[index] != undefined) {
+                if (this.items[index] !== undefined) {
                     this.currentItem = index;
                 } else {
                     this.currentItem = 0;
                 }
                 if (!hard) {
                     setTimeout(() => {
-                        this.playTransition(this.items[this.currentItem].transition_identifier, this.items[this.currentItem].transition_duration);
+                        this.playTransition(this.items[this.currentItem].transition_slidemeister_identifier, this.items[this.currentItem].transition_duration);
                     }, 10);
                 } else {
                     this.previousItem = null;
@@ -297,27 +371,29 @@
                 this.setCallbackDelay();
                 this.setSlideTimeout();
             },
-            seekToNextItem: function (hard) {
+            seekToNextItem(hard) {
                 console.log('Seek to next item');
                 this.clearTimeouts();
 
-                if (this.items[this.currentItem + 1] != undefined) {
-                    this.previousItem = this.currentItem;
-                    this.currentItem = this.currentItem + 1;
+                if (this.items[this.currentItem + 1] !== undefined) {
+                    this.nextItem = this.currentItem + 1;
+                } else {
+                    this.nextItem = 0;
+                }
+                if (this.items[this.currentItem - 1] !== undefined) {
+                    this.previousItem = this.currentItem - 1;
                 } else {
                     this.previousItem = this.items.length - 1;
-                    this.currentItem = 0;
                 }
                 if (!hard) {
                     setTimeout(() => {
-                        this.playTransition(this.items[this.currentItem].transition_identifier, this.items[this.currentItem].transition_duration);
-                    }, 10);
+                        this.playTransition(this.items[this.currentItem].transition_slidemeister_identifier, this.items[this.currentItem].transition_duration);
+                    }, 0);
                 } else {
-                    this.previousItem = null;
+                    this.currentItem = this.nextItem;
                 }
-                console.log(this.items[this.currentItem]);
 
-                localStorage.setItem('currentItem', this.currentItem);
+                localStorage.setItem('currentItem', this.currentItem + 1);
 
                 this.checkVideo();
                 this.animateBackground();
@@ -325,23 +401,26 @@
                 this.setSlideTimeout();
                 this.updateStatus();
             },
-            seekToPreviousItem: function (hard) {
+            seekToPreviousItem(hard) {
                 console.log('Seek to previous item');
                 this.clearTimeouts();
 
-                if (this.items[this.currentItem - 1] != undefined) {
-                    this.previousItem = this.currentItem;
-                    this.currentItem = this.currentItem - 1;
+                if (this.items[this.currentItem - 1] !== undefined) {
+                    this.nextItem = this.currentItem - 1;
+                } else {
+                    this.nextItem = this.items.length - 1;
+                }
+                if (this.items[this.currentItem + 1] !== undefined) {
+                    this.previousItem = this.currentItem + 1;
                 } else {
                     this.previousItem = 0;
-                    this.currentItem = this.items.length - 1;
                 }
                 if (!hard) {
                     setTimeout(() => {
-                        this.playTransition(this.items[this.currentItem].transition_identifier, this.items[this.currentItem].transition_duration);
+                        this.playTransition(this.items[this.currentItem].transition_slidemeister_identifier, this.items[this.currentItem].transition_duration);
                     }, 10);
                 } else {
-                    this.previousItem = null;
+                    this.currentItem = this.nextItem;
                 }
 
                 localStorage.setItem('currentItem', this.currentItem);
@@ -352,8 +431,8 @@
                 this.setSlideTimeout();
                 this.updateStatus();
             },
-            checkVideo: function () {
-                if (this.items[this.currentItem].type == 'video') {
+            checkVideo() {
+                if (this.items[this.currentItem].type === 'video') {
                     setTimeout(() => {
                         let currentVideo = document.getElementById("video-current");
                         if (currentVideo != null) {
@@ -367,28 +446,40 @@
                     }, 10);
                 }
             },
-            playTransition: function (transition, duration) {
+            playTransition(transition, duration) {
                 console.log('Play transition');
-                $('.current').animateCss('tada', function () {
-                    slidemeisterVue.previousItem = null;
+
+                let transitionGroup = this.transitionGroups[Math.floor(Math.random() * this.transitionGroups.length)];
+                if (transition !== 255 && transition !== '') {
+                    transitionGroup = this.transitionGroups[parseInt(transition)];
+                }
+
+                $('.next').animateCss(transitionGroup[0], () => {
+                    $('.next').css('z-index', 1001);
+                    this.currentItem = this.nextItem;
+                    setTimeout(() => {
+                        $('.next').css('z-index', 999);
+                        // this.nextItem = null;
+                        // this.previousItem = null;
+                    }, 100);
                 });
-                $('.previous').animateCss('fadeOut', function () {
-                    slidemeisterVue.previousItem = null;
+                $('.current').animateCss(transitionGroup[1], () => {
+                    // slidemeisterVue.previousItem = null;
                 });
             },
-            setSlideTimeout: function () {
+            setSlideTimeout() {
                 if (!this.items[this.currentItem].is_advanced_manually) {
                     console.log('Setting timeout to ' + this.items[this.currentItem].duration);
-                    this.slideTimeout = setTimeout(function () {
+                    this.slideTimeout = setTimeout(() => {
                         slidemeisterVue.seekToNextItem();
                     }, this.items[this.currentItem].duration * 1000)
                 }
             },
-            setCallbackDelay: function () {
-                if (this.playlist.callbacks != undefined && this.playlist.callbacks) {
+            setCallbackDelay() {
+                if (this.playlist.callbacks !== undefined && this.playlist.callbacks) {
                     console.log('Setting callback timeout to ' + this.items[this.currentItem].callback_delay);
-                    if (this.items[this.currentItem].callback_hash != '') {
-                        this.callbackTimeout = setTimeout(function () {
+                    if (this.items[this.currentItem].callback_hash !== '') {
+                        this.callbackTimeout = setTimeout(() => {
                             console.log('Excuting callback ' + slidemeisterVue.items[slidemeisterVue.currentItem].callback_hash);
                             axios.get(slidemeisterVue.playlist.callback_url + slidemeisterVue.items[slidemeisterVue.currentItem].callback_hash).then(result => {
                                 console.log('Callback successfully executed');
@@ -399,12 +490,12 @@
                     }
                 }
             },
-            clearTimeouts: function () {
+            clearTimeouts() {
                 console.log('Clearing timeouts');
                 window.clearTimeout(this.callbackTimeout);
                 window.clearTimeout(this.slideTimeout);
             },
-            renderPrizegivingBars: function () {
+            renderPrizegivingBars() {
                 // remove potentially existing bar elements and remove them from the dom
                 $('#slidemeister-bar-wrapper').remove();
 
@@ -415,7 +506,7 @@
 
                 metadata = JSON.parse(this.items[this.currentItem].metadata);
 
-                for (const [index, e]  of metadata.entries()) {
+                for (const [index, e] of metadata.entries()) {
                     let bar = document.createElement("div");
                     let left = Number((e.x1 * 1920).toFixed(2));
                     let width = Number((e.x2 * 1920 - left).toFixed(2));
@@ -427,6 +518,7 @@
                     bar.style.width = 0;
                     bar.style.height = height + 'px';
                     bar.className = 'slidemeister-bars active';
+                    bar.style.backgroundColor = this.prizegivingBarColor;
                     bars.appendChild(bar);
                     metadata[index].id = 'bar-' + index;
                 }
@@ -435,7 +527,7 @@
                 // Animate
                 this.animatePrizegivingBars(metadata, 0);
             },
-            animatePrizegivingBars: function (bars, frame) {
+            animatePrizegivingBars(bars, frame) {
                 if (frame === 240) {
                     window.clearTimeout(barTimeout);
 
@@ -461,9 +553,8 @@
                     }
 
                     for (const index of blinkingBars) {
-                        if (bars[index] != undefined) {
-                            $('#' + bars[index].id).css('background-color', 'red');
-                            $('#' + bars[index].id).addClass('blink');
+                        if (bars[index] !== undefined) {
+                            $('#' + bars[index].id).css('background-color', this.prizegivingBarBlinkColor).addClass('blink');
                         }
                     }
 
@@ -490,12 +581,12 @@
                     $('#bar-' + index).css('width', width + 'px');
                 }
             },
-            animateBackground: function () {
-                if (this.currentBackground == this.items[this.currentItem].slide_type) {
+            animateBackground() {
+                if (this.currentBackground === this.items[this.currentItem].slide_type) {
                     console.log('Correct background is already playing, skipping');
                     return;
                 }
-                if (this.currentBackground != this.items[this.currentItem].slide_type) {
+                if (this.currentBackground !== this.items[this.currentItem].slide_type) {
                     console.log('New background needed, stopping all playing backgrounds');
                     stopEnd();
                     stopComingup();
@@ -503,7 +594,7 @@
                 }
                 this.currentBackground = this.items[this.currentItem].slide_type;
 
-                if (this.currentBackground != 'siegmeister_winners') {
+                if (this.currentBackground !== 'siegmeister_winners') {
                     $('#slidemeister-bar-wrapper').remove();
                 }
                 switch (this.currentBackground) {
@@ -524,18 +615,18 @@
                         break;
                 }
             },
-            updateStatus: function () {
+            updateStatus() {
                 console.log('Update status');
                 // console.log(this.items);
                 // console.log(this.currentItem);
                 let data = {
                     playlists: this.cachedPlaylists.map(playlist => {
-                        return {id: playlist.id, updated_at: new Date(playlist.updated_at.date).getTime()/1000}
+                        return {id: playlist.id, updated_at: new Date(playlist.updated_at.date).getTime() / 1000}
                     }),
                     currentPlaylist: this.playlist.id,
                     currentItem: this.items[this.currentItem].id,
                 };
-                axios.post('{{route('ajax.slidemeister-web.status.update', ['slide_client' => $slideClient->id])}}', data).then(response => {
+                axios.post('{{route('ajax.slidemeister-web.status.update', ['slide_client' => $slideClientId])}}', data).then(response => {
                     console.log('Updated status');
                 });
             }

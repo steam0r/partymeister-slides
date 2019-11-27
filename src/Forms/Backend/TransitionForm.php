@@ -17,6 +17,10 @@ class TransitionForm extends Form
     public function buildForm()
     {
         $this->add('name', 'text', [ 'label' => trans('motor-backend::backend/global.name'), 'rules' => 'required' ])
+            ->add('client_type', 'select', [
+                'label'   => trans('partymeister-slides::backend/slide_clients.type'),
+                'choices' => (trans('partymeister-slides::backend/slide_clients.types'))
+            ])
              ->add(
                  'identifier',
                  'text',

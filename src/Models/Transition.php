@@ -76,6 +76,7 @@ class Transition extends Model
      */
     protected $fillable = [
         'name',
+        'client_type',
         'identifier',
         'default_duration'
     ];

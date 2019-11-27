@@ -36,6 +36,7 @@ class PartymeisterServiceProvider extends ServiceProvider
         $this->migrations();
         $this->publishResourceAssets();
         $this->registerCommands();
+        merge_local_config_with_db_configuration_variables('partymeister-slides');
     }
 
     public function registerCommands()

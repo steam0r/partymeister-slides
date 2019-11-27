@@ -22,6 +22,7 @@ class SlideClientsTableSeeder extends Seeder
             'name'          => 'Main Screen',
             'type'          => 'slidemeister-web',
             'sort_position' => 1,
+            'configuration' => json_encode([ 'prizegiving_bar_color' => '#000000', 'prizegiving_bar_blink_color' => '#FF0000' ]),
             'created_by'    => User::get()->first()->id,
             'updated_by'    => User::get()->first()->id,
         ]);

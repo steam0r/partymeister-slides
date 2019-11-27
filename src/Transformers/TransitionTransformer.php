@@ -31,6 +31,7 @@ class TransitionTransformer extends Fractal\TransformerAbstract
     {
         return [
             'id'               => (int) $record->id,
+            'client_type'      => $record->client_type,
             'name'             => $record->name,
             'identifier'       => $record->identifier,
             'default_duration' => $record->default_duration

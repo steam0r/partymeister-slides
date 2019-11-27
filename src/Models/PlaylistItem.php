@@ -107,6 +107,7 @@ class PlaylistItem extends Model
         'slide_id',
         'duration',
         'transition_id',
+        'transition_slidemeister_id',
         'transition_duration',
         'is_advanced_manually',
         'is_muted',
@@ -128,6 +129,17 @@ class PlaylistItem extends Model
         return $this->belongsTo(Transition::class);
     }
 
+
+    /**
+     * @return BelongsTo
+     */
+    /**
+     * @return BelongsTo
+     */
+    public function transition_slidemeister()
+    {
+        return $this->belongsTo(Transition::class, 'transition_slidemeister_id');
+    }
 
     /**
      * @return MorphOne

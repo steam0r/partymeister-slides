@@ -3,9 +3,16 @@ window._ = require('lodash');
 window.$ = window.jQuery = require('jquery');
 
 window.Vue = require('vue');
+
+
+import VueAudio from 'vue-audio';
+window.Vue.component('vue-audio', VueAudio);
+
 require('vue-resource');
 
 window.axios = require('axios');
+require('mediaelement');
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

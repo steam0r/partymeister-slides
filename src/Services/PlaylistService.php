@@ -385,6 +385,7 @@ class PlaylistService extends BaseService
             $i->type = (isset($item->type) ? $item->type : $this->getType($item));
 
             $transition = Transition::where('identifier', $item->transition_identifier)->first();
+            $transitionSlidemeister = Transition::where('identifier', $item->transition_slidemeister_identifier)->first();
 
             if (isset($item->overwrite_slide_type) && $item->overwrite_slide_type != '') {
                 $i->type = $item->overwrite_slide_type;
@@ -392,6 +393,7 @@ class PlaylistService extends BaseService
 
             $i->duration = $item->duration;
             $i->transition_id = (is_null($transition) ? null : $transition->id);
+            $i->transition_slidemeister_id = (is_null($transitionSlidemeister) ? null : $transitionSlidemeister->id);
             $i->transition_duration = $item->transition_duration;
             $i->is_advanced_manually = $item->is_advanced_manually;
             $i->midi_note = $item->midi_note;

@@ -9,6 +9,24 @@
         {!! form_row($form->ip_address) !!}
         {!! form_row($form->port) !!}
         {!! form_row($form->sort_position) !!}
+
+        <div class="slidemeister-web d-none">
+            <div class="row">
+                <div class="col-md-3">
+                    {!! form_row($form->jingle_1) !!}
+                </div>
+                <div class="col-md-3">
+                    {!! form_row($form->jingle_2) !!}
+                </div>
+                <div class="col-md-3">
+                    {!! form_row($form->jingle_3) !!}
+                </div>
+                <div class="col-md-3">
+                    {!! form_row($form->jingle_4) !!}
+                </div>
+            </div>
+            {!! form_row($form->configuration) !!}
+        </div>
     </div>
     <!-- /.box-body -->
 
@@ -17,3 +35,23 @@
     </div>
 </div>
 {!! form_end($form) !!}
+@section ('right-sidebar')
+    <motor-media-mediapool></motor-media-mediapool>
+@endsection
+@section('view_scripts')
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('#type').change(function(){
+                let value = $(this).find(":selected").val();
+                if (value === 'slidemeister-web') {
+                    $('.slidemeister-web').removeClass('d-none');
+                } else {
+                    $('.slidemeister-web').addClass('d-none');
+                }
+            });
+
+            $('#type').change();
+        });
+    </script>
+@append

@@ -26,6 +26,11 @@
                                 {{ transition.name }}
                             </option>
                         </select>
+                        <select name="transition_slidemeister_id" v-model="file.transition_slidemeister_identifier">
+                            <option v-for="(transition, index) in slidemeisterTransitions" :value="transition.identifier">
+                                {{ transition.name }}
+                            </option>
+                        </select>
                         <input type="text" name="transition_duration" size="4" v-model="file.transition_duration"> {{ $t('partymeister-slides.backend.playlists.milliseconds') }}
                     </div>
                     <div>
@@ -86,6 +91,7 @@
             return {
                 droppedFiles: [],
                 transitions: [],
+                slidemeisterTransitions: [],
                 callbacks: [],
                 slideTypes: [{name: 'Web', value: 'web'}]
             };
@@ -100,6 +106,7 @@
                 Vue.set(this.droppedFiles[event.newIndex], 'duration', 20);
                 Vue.set(this.droppedFiles[event.newIndex], 'midi_note', 0);
                 Vue.set(this.droppedFiles[event.newIndex], 'transition_identifier', 255);
+                Vue.set(this.droppedFiles[event.newIndex], 'transition_slidemeister_identifier', 255);
                 Vue.set(this.droppedFiles[event.newIndex], 'transition_duration', 2000);
                 Vue.set(this.droppedFiles[event.newIndex], 'callback_hash', '');
                 Vue.set(this.droppedFiles[event.newIndex], 'overwrite_slide_type', '');
@@ -134,7 +141,13 @@
             }
 
             axios.get(route('ajax.transitions.index')).then((response) => {
-                this.transitions = response.data.data;
+                for (const [index, transition] of response.data.data.entries()) {
+                    if (transition.client_type === 'screens') {
+                        this.transitions.push(transition);
+                    } else {
+                        this.slidemeisterTransitions.push(transition);
+                    }
+                }
             });
 
             axios.get(route('ajax.callbacks.index')+'?per_page=500').then((response) => {

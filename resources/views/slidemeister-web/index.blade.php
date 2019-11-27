@@ -8,7 +8,7 @@
             console.log('No web storage support :/');
         }
 
-        Echo.channel('{{$channelPrefix}}:slidemeister-web.{{$slideClient->id}}')
+        Echo.channel('{{$channelPrefix}}:slidemeister-web.{{$slideClientId}}')
             .listen('.Partymeister\\Slides\\Events\\PlayNowRequest', (e) => {
                 console.log('PlayNowRequest incoming');
                 if (slidemeisterVue.playlist.id != undefined) {

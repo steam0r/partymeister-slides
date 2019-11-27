@@ -67,7 +67,9 @@ class SlideClientsController extends Controller
             'enctype' => 'multipart/form-data'
         ]);
 
-        return view('partymeister-slides::backend.slide_clients.create', compact('form'));
+        $motorShowRightSidebar = true;
+
+        return view('partymeister-slides::backend.slide_clients.create', compact('form', 'motorShowRightSidebar'));
     }
 
 
@@ -120,7 +122,9 @@ class SlideClientsController extends Controller
             'model'   => $record
         ]);
 
-        return view('partymeister-slides::backend.slide_clients.edit', compact('form'));
+        $motorShowRightSidebar = true;
+
+        return view('partymeister-slides::backend.slide_clients.edit', compact('form', 'motorShowRightSidebar'));
     }
 
 
