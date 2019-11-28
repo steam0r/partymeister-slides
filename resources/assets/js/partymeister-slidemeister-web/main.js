@@ -1,17 +1,37 @@
-window._ = require('lodash');
-
-window.$ = window.jQuery = require('jquery');
-
-window.Vue = require('vue');
-
+import Vue from 'vue';
 
 import VueAudio from 'vue-audio';
-window.Vue.component('vue-audio', VueAudio);
-
-require('vue-resource');
+Vue.component('vue-audio', VueAudio);
 
 window.axios = require('axios');
-require('mediaelement');
+
+import VueForceNextTick from 'vue-force-next-tick';
+Vue.use(VueForceNextTick);
+
+Vue.component(
+    'partymeister-slidemeister-web',
+    require('./components/SlidemeisterWeb.vue').default
+);
+
+// Initialize global event hub
+Vue.prototype.$eventHub = new Vue();
+
+// Initialize base vue app
+window.VueApp = new Vue({
+    el: '#app',
+});
+
+
+// window._ = require('lodash');
+
+// window.$ = window.jQuery = require('jquery');
+//
+// window.Vue = require('vue');
+//
+//
+// require('vue-resource');
+//
+// window.axios = require('axios');
 
 
 /**
@@ -28,3 +48,5 @@ window.Echo = new Echo({
     broadcaster: 'socket.io',
     host: window.location.hostname + ':6001'
 });
+
+window.Vue = Vue;

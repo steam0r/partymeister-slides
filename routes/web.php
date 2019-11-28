@@ -4,11 +4,8 @@ use Illuminate\Http\Request;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\SlideClient;
 
-// FIXME: put this in a controller so we can use the Route caching
-Route::get('slidemeister-web/{slide_client}', '\Partymeister\Slides\Http\Controllers\SlidemeisterWebController@index')->middleware(['bindings'])->name('backend.slidemeister-web.show');
-//function (SlideClient $slideClient) {
-//    return view('partymeister-slides::slidemeister-web/index', ['slideClient' => $slideClient, 'channelPrefix' => config('cache.prefix')]);
-//})->middleware(['bindings'])->name('backend.slidemeister-web.show');
+Route::get('slidemeister-web/{slide_client}',
+    '\Partymeister\Slides\Http\Controllers\SlidemeisterWebController@index')->middleware([ 'bindings' ])->name('backend.slidemeister-web.show');
 
 Route::group([
     'as'         => 'backend.',
@@ -21,7 +18,7 @@ Route::group([
     ]
 ], function () {
     Route::group([ 'middleware' => [ 'permission' ] ], function () {
-        Route::resource('slides', 'SlidesController')->except(['create', 'show']);
+        Route::resource('slides', 'SlidesController')->except([ 'create', 'show' ]);
         Route::get(
             'slides/{slide}/duplicate',
             'SlidesController@duplicate'
@@ -37,14 +34,19 @@ Route::group([
         Route::resource('playlists', 'PlaylistsController');
         Route::resource('transitions', 'TransitionsController');
         Route::resource('slide_clients', 'SlideClientsController');
-        Route::get('slide_clients/{slide_client}/activate', 'SlideClientsController@activate')->name('slide_clients.activate');
+        Route::get('slide_clients/{slide_client}/activate',
+            'SlideClientsController@activate')->name('slide_clients.activate');
 
         Route::resource('files', 'FilesController');
     });
 });
 
-Route::get('backend/slide_templates/{slide_template}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlideTemplatesController@show')->middleware(['bindings'])->name('backend.slide_templates.show');
-Route::get('backend/slides/{slide}.html', 'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')->middleware(['bindings', 'cache.headers:etag'])->name('backend.slides.show');
+Route::get('backend/slide_templates/{slide_template}.html',
+    'Partymeister\Slides\Http\Controllers\Backend\SlideTemplatesController@show')->middleware([ 'bindings' ])->name('backend.slide_templates.show');
+Route::get('backend/slides/{slide}.html',
+    'Partymeister\Slides\Http\Controllers\Backend\SlidesController@show')->middleware([
+    'bindings', 'cache.headers:etag'
+])->name('backend.slides.show');
 
 // FIXME: put these in controllers so we can use the Route caching
 //Route::get('test-prizegiving', function() {

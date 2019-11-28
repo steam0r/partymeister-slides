@@ -28,7 +28,7 @@
             <div id="slidemeister-canvas-border">
             </div>
             <div id="slidemeister">
-                <partymeister-slides-elements :name="'slide-editor'"></partymeister-slides-elements>
+                <partymeister-slides-elements id="slide-editor" :name="'slide-editor'"></partymeister-slides-elements>
             </div>
             <partymeister-slides-dropzone></partymeister-slides-dropzone>
         </div>
