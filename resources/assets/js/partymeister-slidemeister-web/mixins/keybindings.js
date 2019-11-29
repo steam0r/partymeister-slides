@@ -43,10 +43,10 @@ export default {
                 }
                 if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
                     e.preventDefault();
-                    if (this.playnow && this.items.length > 0) {
+                    if (this.playNow && this.items.length > 0) {
                         console.log("Playnow is active - reverting to previous playlist");
-                        this.playnow = false;
-                    } else if (this.playnow) {
+                        this.clearPlayNowAfter = true;
+                    } else if (this.playNow) {
                         // Do nothing if there is ONLY a playnow slide and nothing else
                         return;
                     }

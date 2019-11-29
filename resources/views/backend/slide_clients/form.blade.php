@@ -39,9 +39,10 @@
     <motor-media-mediapool></motor-media-mediapool>
 @endsection
 @section('view_scripts')
+    <link type="text/css" rel="stylesheet" href="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.css">
+    <script type="application/javascript" src="https://rawgit.com/patriciogonzalezvivo/glslEditor/gh-pages/build/glslEditor.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-
             $('#type').change(function(){
                 let value = $(this).find(":selected").val();
                 if (value === 'slidemeister-web') {

@@ -15,6 +15,7 @@ return [
     'template_for_types' => [
         'basic'               => 'Basic template',
         'coming_up'           => 'Coming up',
+        'now'                 => 'Now',
         'end'                 => 'End of compo',
         'competition_entry_1' => 'Competition (Entry 1)',
         'competition'         => 'Competition',

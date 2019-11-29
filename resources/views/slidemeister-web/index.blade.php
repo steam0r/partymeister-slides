@@ -25,16 +25,22 @@
                     e.item.callback_hash = '';
                     e.item.callback_delay = 20;
 
-                    sm.playnowItem = e.item;
-                    sm.playnow = true;
-                    sm.insertPlayNow();
+                    if (sm.playNow === true) {
+                        sm.playNowItems.push(e.item);
+                    } else {
+                        sm.playNowItems = [e.item];
+                    }
+                    // sm.playNow = true;
+                    sm.nextPlayNowItem = sm.playNowItems.length - 1;
+
+                    sm.seekToPlayNow();
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistNextRequest', (e) => {
                     console.log('PlaylistNextRequest incoming');
                     if (sm.playlist.id == undefined) {
                         console.log('No playlist is running, aborting');
                     } else {
-                        sm.playnow = false;
+                        sm.playNow = false;
                         sm.seekToNextItem(e.hard);
                     }
                     sm.updateStatus();
@@ -44,7 +50,7 @@
                     if (sm.playlist.id == undefined) {
                         console.log('No playlist is running, aborting');
                     } else {
-                        sm.playnow = false;
+                        sm.playNow = false;
                         sm.seekToPreviousItem(e.hard);
                     }
                     sm.updateStatus();
@@ -100,7 +106,7 @@
                                 console.log('Playlist is not running yet. Setting it and seeking to item ' + e.index);
                                 sm.playlist = p;
                                 sm.items = p.items;
-                                sm.playnow = false;
+                                sm.playNow = false;
                                 localStorage.setItem('playlist', JSON.stringify(sm.playlist));
                                 setTimeout(() => {
                                     sm.seekToIndex(parseInt(e.index));

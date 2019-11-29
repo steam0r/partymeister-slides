@@ -34,4 +34,5 @@ return [
     'jingle'                      => 'Jingle',
     'prizegiving_bar_color'       => 'Prizegiving bar color',
     'prizegiving_bar_blink_color' => 'Prizegiving bar blink color',
+    'fragment'                    => 'Fragment shader for :type',
 ];

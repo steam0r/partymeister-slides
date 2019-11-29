@@ -1,5 +1,14 @@
 <template>
     <main>
+        <script id="vertexShader" type="x-shader/x-vertex">
+            varying vec2 vUv;
+            void main()	{
+                vUv = uv;
+                gl_Position = vec4( position, 1.0 );
+            }
+
+        </script>
+        <div id="shader-container"></div>
         <div class="debug alert alert-danger d-none">
             CachedPlaylists: {{ cachedPlaylists.length }}<br>
             Playlist: {{ playlist.name }}<br>
@@ -9,17 +18,17 @@
             <vue-audio style="display: none;" id="jingle-player" :file="jingle"/>
         </div>
 
-        <template v-if="currentItem != null && current != undefined">
+        <template v-if="(currentItem != null || this.playNow) && current != undefined">
             <img v-if="current.type == 'image' && current.cached_html_final == undefined"
-                 :src="current.file.file_original" class="img-fluid slide current">
+                 :src="current.file.file_original" class="img-fluid slide current" :style="{'opacity': currentOpacity}">
             <div v-if="current.type == 'image' && current.cached_html_final != ''"
                  v-html="current.cached_html_final" class="slidemeister-instance slide current"
-                 :style="{'zoom': zoom}"></div>
-            <video v-if="current.type == 'video'" id="video-current" class="slide current">
+                 :style="{'opacity': currentOpacity, 'zoom': zoom}"></div>
+            <video v-if="current.type == 'video'" id="video-current" class="slide current" :style="{'opacity': currentOpacity}">
                 <source :src="current.file.file_original" type="video/mp4">
             </video>
         </template>
-        <template v-if="previousItem != null && previous != undefined">
+        <template v-if="(previousItem != null || this.playNow) && previous != undefined">
             <img v-if="previous.type == 'image' && previous.cached_html_final === undefined"
                  :src="previous.file.file_original" class="img-fluid slide previous">
             <div v-if="previous.type == 'image' && previous.cached_html_final != ''"
@@ -29,12 +38,12 @@
                 <source :src="previous.file.file_original" type="video/mp4">
             </video>
         </template>
-        <template class="next-item" v-if="nextItem != null && next != undefined">
+        <template class="next-item" v-if="(nextItem != null || this.playNow) && next != undefined">
             <img v-if="next.type == 'image' && next.cached_html_final === undefined"
-                 :src="next.file.file_original" class="img-fluid slide next">
+                 :src="next.file.file_original" class="img-fluid slide next" :style="{'opacity': nextOpacity}">
             <div v-if="next.type == 'image' && next.cached_html_final != ''"
-                 v-html="next.cached_html_final" class="slidemeister-instance slide next" :style="{'zoom': zoom}"></div>
-            <video v-if="next.type == 'video'" id="video-next" class="slide next">
+                 v-html="next.cached_html_final" class="slidemeister-instance slide next" :style="{'opacity': nextOpacity, 'zoom': zoom}"></div>
+            <video v-if="next.type == 'video'" id="video-next" class="slide next" :style="{'opacity': nextOpacity}">
                 <source :src="next.file.file_original" type="video/mp4">
             </video>
         </template>
@@ -46,6 +55,8 @@
     import keybindings from "../mixins/keybindings";
     import jingles from "../mixins/jingles";
     import siegmeister from "../mixins/siegmeister";
+    import shader from "../mixins/shader";
+
 
     export default {
         name: 'partymeister-slidemeister-web',
@@ -53,15 +64,23 @@
         mixins: [
             keybindings,
             jingles,
-            siegmeister
+            siegmeister,
+            shader,
         ],
         data: function () {
             return {
+                currentOpacity: 1,
+                nextOpacity: 0,
                 zoom: 2,
                 cachedPlaylists: [],
-                playnow: false,
-                playnowItem: {},
+
+                clearPlayNowAfter: false,
+                playNow: false,
+                playNowItems: [],
+                currentPlayNowItem: null,
+                nextPlayNowItem: null,
                 currentItemSaved: null,
+
                 playlistSaved: {},
                 playlist: {},
                 items: [],
@@ -90,15 +109,21 @@
         computed: {
             // a computed getter
             current: function () {
-                if (this.currentItem === 'playnow') {
-                    return this.playnowItem;
+                console.log('CURRENT updated');
+                if (this.playNow && this.playNowItems[this.currentPlayNowItem] !== undefined) {
+                    console.log('playnow current', this.playNowItems[this.currentPlayNowItem]);
+                    return this.playNowItems[this.currentPlayNowItem];
                 }
                 return this.items[this.currentItem];
             },
             next: function () {
-                console.log("Change in NEXT detected");
-                if (this.nextItem === 'playnow') {
-                    return this.playnowItem;
+                console.log('NEXT updated');
+                if (this.clearPlayNowAfter) {
+                    return this.items[this.nextItem];
+                }
+                if (this.playNow && this.playNowItems[this.nextPlayNowItem] !== undefined) {
+                    console.log('playnow next', this.playNowItems[this.nextPlayNowItem]);
+                    return this.playNowItems[this.nextPlayNowItem];
                 }
                 return this.items[this.nextItem];
             },
@@ -107,11 +132,12 @@
             },
         },
         methods: {
-            insertPlayNow() {
-                this.nextItem = 'playnow';
-                setTimeout(() => {
+            seekToPlayNow() {
+                this.playNow = true;
+                this.next;
+                this.$forceNextTick(() => {
                     this.playTransition();
-                }, 0)
+                });
             },
             afterSeek() {
                 localStorage.setItem('currentItem', this.currentItem);
@@ -136,7 +162,7 @@
                 }
                 if (!hard) {
                     setTimeout(() => {
-                        this.playTransition(this.items[this.currentItem].transition_slidemeister_identifier, this.items[this.currentItem].transition_duration);
+                        this.playTransition(this.current.transition_slidemeister_identifier, this.current.transition_duration);
                     }, 10);
                 } else {
                     this.previousItem = null;
@@ -147,10 +173,16 @@
             prepareTransition(currentItem, hard) {
                 if (!hard) {
                     setTimeout(() => {
-                        this.playTransition(this.items[currentItem].transition_slidemeister_identifier, this.items[currentItem].transition_duration);
+                        console.log(this.next);
+                        if (this.next.slide_type !== 'slidemeister_winners') {
+                            this.deleteBars();
+                        }
+                        this.playTransition(this.current.transition_slidemeister_identifier, this.current.transition_duration);
                     }, 0);
                 } else {
                     this.currentItem = this.nextItem;
+                    this.currentOpacity = 1;
+                    this.nextOpacity = 0;
                     this.afterSeek();
                 }
             },
@@ -159,7 +191,7 @@
                 this.clearTimeouts();
 
                 let currentItem = this.currentItem;
-                if ( this.currentItem === 'playnow') {
+                if (this.playNow) {
                     currentItem = this.currentItemSaved;
                 }
 
@@ -173,6 +205,7 @@
                 } else {
                     this.previousItem = this.items.length - 1;
                 }
+                this.next;
                 this.prepareTransition(currentItem, hard);
             },
             seekToPreviousItem(hard) {
@@ -180,7 +213,7 @@
                 this.clearTimeouts();
 
                 let currentItem = this.currentItem;
-                if ( this.currentItem === 'playnow') {
+                if (this.playNow) {
                     currentItem = this.currentItemSaved;
                 }
 
@@ -194,10 +227,11 @@
                 } else {
                     this.previousItem = 0;
                 }
+                this.next;
                 this.prepareTransition(currentItem, hard);
             },
             checkVideo() {
-                if (this.items[this.currentItem].type === 'video') {
+                if (this.current.type === 'video') {
                     setTimeout(() => {
                         let currentVideo = document.getElementById("video-current");
                         if (currentVideo != null) {
@@ -224,11 +258,26 @@
                     transitionGroup = this.transitionGroups[Math.floor(Math.random() * this.transitionGroups.length)];
                 }
 
+                this.currentOpacity = 1;
+                this.nextOpacity = 1;
                 this.animateCSS('.next', transitionGroup[0], () => {
                     console.log('Transition done - swapping items');
                     document.querySelector('.next').style.zIndex = 1001;
-                    this.currentItem = this.nextItem;
+                    if (this.clearPlayNowAfter) {
+                        this.playNow = false;
+                        this.clearPlayNowAfter = false;
+                    }
+                    this.current;
+                    this.next;
+                    this.$forceUpdate();
 
+                    if (this.playNow) {
+                        console.log("post transition playnow management");
+                        this.currentPlayNowItem = this.nextPlayNowItem;
+                    } else {
+                        this.currentItem = this.nextItem;
+                    }
+                    this.nextOpacity = 0;
                     setTimeout(() => {
                         document.querySelector('.next').style.zIndex = 999;
                         this.afterSeek();
@@ -248,6 +297,9 @@
                 }
             },
             setCallbackDelay() {
+                if (this.currentItem === 'playnow') {
+                    return;
+                }
                 if (this.playlist.callbacks !== undefined && this.playlist.callbacks) {
                     console.log('Setting callback timeout to ' + this.items[this.currentItem].callback_delay);
                     if (this.items[this.currentItem].callback_hash !== '') {
@@ -276,29 +328,39 @@
                 }
                 if (this.currentBackground !== this.items[this.currentItem].slide_type) {
                     console.log('New background needed, stopping all playing backgrounds');
-                    stopEnd();
-                    stopComingup();
-                    stopStarfield();
+                    this.$eventHub.$emit('slidemeister:shader', null);
                 }
                 this.currentBackground = this.items[this.currentItem].slide_type;
                 this.clearSiegmeisterBars();
 
+                let newFragmentShader = '';
+
                 switch (this.currentBackground) {
                     case 'comingup':
-                        // startComingup();
+                        newFragmentShader = this.configuration['fragment_coming_up_now'];
                         break;
                     case 'end':
-                        // startEnd();
+                        newFragmentShader = this.configuration['fragment_end'];
                         break;
-                    case 'default':
                     case 'announce':
-                        // startStarfield();
+                        newFragmentShader = this.configuration['fragment_announce'];
+                        break;
+                    case 'announce_important':
+                        newFragmentShader = this.configuration['fragment_announce_important'];
                         break;
                     case 'compo':
-                    case 'siegmeister_bars':
-                    case 'siegmeister_winners':
-                        // startStarfield();
+                        newFragmentShader = this.configuration['fragment_compo'];
                         break;
+                    default:
+                        newFragmentShader = '';
+                }
+                if (newFragmentShader !== this.fragmentShader && newFragmentShader !== '') {
+                    this.fragmentShader = newFragmentShader;
+                    this.unloadScene();
+                    this.loadScene();
+                    this.animate();
+                } else if (newFragmentShader === '') {
+                    this.unloadScene();
                 }
             },
             updateStatus() {
@@ -350,41 +412,45 @@
                 this.playlist = {};
                 this.items = [];
                 this.currentItem = null;
-
-                // stopEnd();
-                // stopComingup();
-                // stopStarfield();
                 document.querySelectorAll('canvas').forEach((element) => {
                     element.style.zIndex = 0;
                 });
+                this.fragmentShader = '';
+                this.unloadScene();
 
                 localStorage.clear();
                 this.updateStatus();
             },
         },
         mounted() {
-            window.onresize = () => {
-                this.resizeWindow();
-            };
+            document.addEventListener('DOMContentLoaded', () => {
 
-            setTimeout(() => {
-                this.resizeWindow();
-            }, 0);
+                window.onresize = () => {
+                    this.resizeWindow();
+                };
 
-            // Check if we have playlists in local storage
-            let cachedPlaylists = localStorage.getItem('cachedPlaylists');
-            if (cachedPlaylists !== undefined && cachedPlaylists != null) {
-                this.cachedPlaylists = JSON.parse(cachedPlaylists);
-            }
-            let playlist = localStorage.getItem('playlist');
-            if (playlist !== undefined && playlist != null) {
-                this.playlist = JSON.parse(playlist);
-                this.items = this.playlist.items;
-            }
-            let currentItem = localStorage.getItem('currentItem');
-            if (currentItem !== undefined && currentItem != null) {
-                this.seekToIndex(parseInt(currentItem), true);
-            }
+                setTimeout(() => {
+                    this.resizeWindow();
+                }, 0);
+
+                // Check if we have playlists in local storage
+                let cachedPlaylists = localStorage.getItem('cachedPlaylists');
+                if (cachedPlaylists !== undefined && cachedPlaylists != null) {
+                    this.cachedPlaylists = JSON.parse(cachedPlaylists);
+                }
+                let playlist = localStorage.getItem('playlist');
+                if (playlist !== undefined && playlist != null) {
+                    this.playlist = JSON.parse(playlist);
+                    this.items = this.playlist.items;
+                }
+                let currentItem = localStorage.getItem('currentItem');
+                if (currentItem !== undefined && currentItem != null) {
+                    // Delay is necessary to correctly load the background shader on first load
+                    setTimeout(() => {
+                        this.seekToIndex(parseInt(currentItem), true);
+                    }, 500);
+                }
+            }, false);
 
         }
     }
@@ -476,5 +542,8 @@
         z-index: 999;
         width: 960px;
         height: 540px;
+    }
+    div[data-partymeister-slides-visibility='preview'] {
+        display: none;
     }
 </style>

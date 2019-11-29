@@ -18,7 +18,7 @@ return [
         'announce'           => 'Default',
         'announce_important' => 'Warning',
         'compo'              => 'Competition',
-        'comingup'           => 'Coming up / End',
+        'coming_up_now'      => 'Coming up / Now',
         'end'                => 'End / Participants'
     ],
 

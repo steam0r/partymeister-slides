@@ -29,5 +29,18 @@ class SlideClientConfigurationForm extends Form implements HasMedia
                 'colorpicker',
                 [ 'label' => trans('partymeister-slides::backend/slide_clients.prizegiving_bar_blink_color') ]
             );
+
+        foreach(trans('partymeister-slides::backend/slides.slide_types') as $type => $name) {
+            $this->add(
+                'fragment_'.$type,
+                'textarea',
+                [ 'label' => trans('partymeister-slides::backend/slide_clients.fragment', ['type' => $name]) ]
+            );
+//            $this->add(
+//                'copy_from_'.$type,
+//                'select',
+//                [ 'label' => trans('partymeister-slides::backend/slide_clients.copy_from') ]
+//            );
+        }
     }
 }

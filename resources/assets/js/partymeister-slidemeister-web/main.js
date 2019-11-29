@@ -21,19 +21,6 @@ window.VueApp = new Vue({
     el: '#app',
 });
 
-
-// window._ = require('lodash');
-
-// window.$ = window.jQuery = require('jquery');
-//
-// window.Vue = require('vue');
-//
-//
-// require('vue-resource');
-//
-// window.axios = require('axios');
-
-
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

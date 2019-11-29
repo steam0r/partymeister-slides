@@ -15,12 +15,10 @@
 
 <body>
 <div id="app">
-    <partymeister-slidemeister-web ref="slidemeisterweb" :jingles='{!! json_encode($jingles) !!}' :configuration='{!! json_encode($configuration) !!}' route="{{$route}}"></partymeister-slidemeister-web>
+    <partymeister-slidemeister-web ref="slidemeisterweb" :jingles='{!! json_encode($jingles) !!}'
+                                   :configuration='{!! json_encode($configuration) !!}'
+                                   route="{{$route}}"></partymeister-slidemeister-web>
 </div>
-@include('partymeister-slides::slidemeister-web.effects.starfield')
-@include('partymeister-slides::slidemeister-web.effects.comingup')
-@include('partymeister-slides::slidemeister-web.effects.end')
-
 <script src="{{mix('js/partymeister-slidemeister-web.js')}}"></script>
 @yield('view_scripts')
 </body>
