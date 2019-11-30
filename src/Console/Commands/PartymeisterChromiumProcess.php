@@ -38,12 +38,12 @@ class PartymeisterChromiumProcess extends Command
     public function handle()
     {
         if ($this->argument('status') === 'start') {
-            $process = new Process(config('partymeister-slides.chromedriver'));
+            $process = new Process(config('partymeister-slides.webdriver'));
             $process->start();
             sleep(5);
             $this->info('Started chromium webdriver');
         } elseif ($this->argument('status') === 'stop') {
-            $process = new Process('killall '.config('partymeister-slides.chromedriver'));
+            $process = new Process('killall '.config('partymeister-slides.webdriver'));
             $process->run();
             $this->info('Stopped chromium webdriver');
         }
