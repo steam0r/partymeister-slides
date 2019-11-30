@@ -59,9 +59,9 @@ class SlideTemplateService extends BaseService
     protected function generatePreview()
     {
         $browser = new ScreenshotHelper();
-        $browser->screenshot(route('backend.slide_templates.show', [ $this->record->id ]).'?preview=true',
+        $browser->screenshot(route('backend.slide_templates.show', [ $this->record->id ], false).'?preview=true',
             storage_path().'/preview_'.$this->record->id.'.png');
-        $browser->screenshot(route('backend.slide_templates.show', [ $this->record->id ]),
+        $browser->screenshot(route('backend.slide_templates.show', [ $this->record->id ], false),
             storage_path().'/final_'.$this->record->id.'.png');
 
 
