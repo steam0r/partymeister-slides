@@ -137,9 +137,9 @@ class PlaylistService extends BaseService
             $i->save();
 
             // 7. generate slides
-            $browser->screenshot(route('backend.slides.show', [ $s->id ], false).'?preview=true',
+            $browser->screenshot(config('app.url').route('backend.slides.show', [ $s->id ], false).'?preview=true',
                 storage_path().'/preview_'.$slideName.'.png');
-            $browser->screenshot(route('backend.slides.show', [ $s->id ], false),
+            $browser->screenshot(config('app.url').route('backend.slides.show', [ $s->id ], false),
                 storage_path().'/final_'.$slideName.'.png');
 
             $s->clearMediaCollection('preview');
@@ -287,9 +287,9 @@ class PlaylistService extends BaseService
                     $i->save();
 
                     // 7. generate slides
-                    $browser->screenshot(route('backend.slides.show', [ $s->id ], false).'?preview=true',
+                    $browser->screenshot(config('app.url').route('backend.slides.show', [ $s->id ], false).'?preview=true',
                         storage_path().'/preview_'.$slideName.'.png');
-                    $browser->screenshot(route('backend.slides.show', [ $s->id ], false),
+                    $browser->screenshot(config('app.url').route('backend.slides.show', [ $s->id ], false),
                         storage_path().'/final_'.$slideName.'.png');
 
                     $s->clearMediaCollection('preview');
