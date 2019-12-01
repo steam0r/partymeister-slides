@@ -33,6 +33,12 @@ export default {
             }
         },
         loadScene() {
+            if (this.fragmentShader === undefined || this.fragmentShader === '') {
+                console.log("NO SHADER - SKIPPING");
+                return;
+            }
+            console.log("LOAD SCENE");
+            document.getElementById('shader-container').style.display = '';
             var geometry = new THREE.PlaneBufferGeometry(2, 2);
 
             this.uniforms = {
@@ -59,6 +65,7 @@ export default {
         },
         unloadScene() {
             console.log("UNLOAD");
+            document.getElementById('shader-container').style.display = 'none';
             window.cancelAnimationFrame(this.animationFrameRequest);
             console.log("REMOVE CHILDREN");
             if (this.scene) {
@@ -78,6 +85,9 @@ export default {
             this.renderer = null;
         },
         animate(timestamp) {
+            if (!this.fragmentShader) {
+                return;
+            }
             this.animationFrameRequest = requestAnimationFrame(this.animate);
 
             this.uniforms["time"].value = timestamp / 1000;

@@ -35,6 +35,11 @@ class SlideTemplatesTableSeeder extends Seeder
                 'definitions'  => file_get_contents(__DIR__.'/slide_templates/coming_up.json')
             ],
             [
+                'name'         => 'Now up',
+                'template_for' => 'now',
+                'definitions'  => file_get_contents(__DIR__.'/slide_templates/now.json')
+            ],
+            [
                 'name'         => 'End',
                 'template_for' => 'end',
                 'definitions'  => file_get_contents(__DIR__.'/slide_templates/end.json')

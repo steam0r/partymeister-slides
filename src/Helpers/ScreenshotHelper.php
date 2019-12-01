@@ -9,7 +9,7 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 class ScreenshotHelper
 {
 
-    protected $driver;
+    protected $driver = null;
 
     /**
      * ScreenshotHelper constructor.
@@ -17,18 +17,22 @@ class ScreenshotHelper
      */
     public function __construct()
     {
-        $host = 'http://localhost:9515';
-        $options = new ChromeOptions();
-        $options->addArguments(array(
-            '--headless',
-            '--window-size=1920x1080',
-            '--disable-gpu',
-            '--no-sandbox'
-        ));
+        try {
+            $host = 'http://localhost:9515';
+            $options = new ChromeOptions();
+            $options->addArguments(array(
+                '--headless',
+                '--window-size=1920x1080',
+                '--disable-gpu',
+                '--no-sandbox'
+            ));
 
-        $capabilities = DesiredCapabilities::chrome();
-        $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
-        $this->driver = RemoteWebDriver::create($host, $capabilities, 5000);
+            $capabilities = DesiredCapabilities::chrome();
+            $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
+            $this->driver = RemoteWebDriver::create($host, $capabilities, 5000);
+        } catch (\Exception $e) {
+            // Do nothing for now
+        }
     }
 
     /**
@@ -37,8 +41,10 @@ class ScreenshotHelper
      */
     public function screenshot($url, $file)
     {
-        $this->driver->get($url);
-        $this->driver->takeScreenshot($file);
+        if ($this->driver) {
+            $this->driver->get($url);
+            $this->driver->takeScreenshot($file);
+        }
     }
 
     /**

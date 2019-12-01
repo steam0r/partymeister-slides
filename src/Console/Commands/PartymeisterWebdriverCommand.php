@@ -12,7 +12,7 @@ use Symfony\Component\Process\Process;
  * Class PartymeisterChromiumProcess
  * @package Partymeister\Competitions\Console\Commands
  */
-class PartymeisterChromiumProcess extends Command
+class PartymeisterWebdriverCommand extends Command
 {
 
     /**
@@ -37,6 +37,15 @@ class PartymeisterChromiumProcess extends Command
      */
     public function handle()
     {
+        if (is_null(config('partymeister-slides.webdriver', null))) {
+            $this->error('No chromium-webdriver binary defined');
+            return;
+        }
+        if (!is_file(config('partymeister-slides.webdriver', null))) {
+            $this->error('No chromium-webdriver binary found in '.config('partymeister-slides.webdriver'));
+            return;
+        }
+
         if ($this->argument('status') === 'start') {
             $process = new Process(config('partymeister-slides.webdriver'));
             $process->start();

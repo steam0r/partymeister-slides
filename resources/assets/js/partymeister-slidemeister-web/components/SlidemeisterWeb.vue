@@ -360,6 +360,7 @@
                     this.loadScene();
                     this.animate();
                 } else if (newFragmentShader === '') {
+                    this.fragmentShader = newFragmentShader;
                     this.unloadScene();
                 }
             },

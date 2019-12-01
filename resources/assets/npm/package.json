@@ -1,13 +1,19 @@
 {
   "private": true,
   "devDependencies": {
-    "animate.css": "^3.7.0",
-    "dom-to-image": "^2.6.0",
+    "animate.css": "^3.7.2",
+    "dom-to-image-more": "^2.8.0",
     "google-fonts-webpack-plugin": "^0.4.4",
     "medium-editor": "^5.23.3",
-    "laravel-echo": "^1.4.1",
-    "laravel-echo-server": "^1.4.2",
-    "socket.io-client": "^2.1.1",
-    "dom-to-image-more": "^2.8.0"
+    "laravel-echo": "^1.6.1",
+    "laravel-echo-server": "^1.6.0",
+    "socket.io-client": "^2.3.0",
+    "@caohenghu/vue-colorpicker": "^1.2.2",
+    "vue-audio": "0.0.12",
+    "vue-color": "^2.7.0",
+    "vue-force-next-tick": "^1.0.3",
+    "vue-moveable": "^1.1.0",
+    "vue-undo-redo-stack": "^1.0.0",
+    "vue2-medium-editor": "^1.1.6"
   }
 }

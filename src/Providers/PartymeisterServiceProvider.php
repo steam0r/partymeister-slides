@@ -4,7 +4,7 @@ namespace Partymeister\Slides\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Partymeister\Slides\Console\Commands\PartymeisterChromiumProcess;
+use Partymeister\Slides\Console\Commands\PartymeisterWebdriverCommand;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\PlaylistItem;
 use Partymeister\Slides\Models\Slide;
@@ -43,7 +43,7 @@ class PartymeisterServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                PartymeisterChromiumProcess::class,
+                PartymeisterWebdriverCommand::class,
             ]);
         }
     }
