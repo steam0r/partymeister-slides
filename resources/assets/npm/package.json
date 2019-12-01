@@ -14,6 +14,7 @@
     "vue-force-next-tick": "^1.0.3",
     "vue-moveable": "^1.1.0",
     "vue-undo-redo-stack": "^1.0.0",
-    "vue2-medium-editor": "^1.1.6"
+    "vue2-medium-editor": "^1.1.6",
+    "three": "^0.111.0"
   }
 }
