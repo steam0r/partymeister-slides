@@ -82,7 +82,7 @@
             <colorpicker label="color" :color="activeElement.properties.color"
                          v-model="activeElement.properties.color"/>
             <div :class="{hidden: simple}">
-                <colorpicker label="backgroundColor" :color="activeElement.properties.backgroundColor"
+                <colorpicker label="background" :color="activeElement.properties.backgroundColor"
                              v-model="activeElement.properties.backgroundColor"/>
             </div>
             <div :class="{hidden: simple}" class="input-group">
@@ -133,7 +133,7 @@
 </template>
 <script>
 
-    import colorpicker from '../../components/partymeister-slides/ColorPicker';
+    import colorpicker from '../components/ColorPicker';
 
     export default {
         name: 'partymeister-slides-properties',

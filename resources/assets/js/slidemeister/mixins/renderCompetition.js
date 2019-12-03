@@ -9,7 +9,7 @@ export default {
         renderCompetitionParticipants(replacements) {
             Object.entries(this.elements).forEach(([key, element]) => {
                 this.replaceContent(element, 'participants', replacements);
-                element.properties.content = element.properties.content.replace(/\<\<.+\>\>/, '')
+                element.properties.content = element.properties.content.replace(/<<.+>>/, '');
                 this.$forceNextTick(() => {
                     this.updateElementProperties(element);
                 });
@@ -20,7 +20,7 @@ export default {
                 Object.entries(replacements).forEach(([property, value]) => {
                     this.replaceContent(element, property, value);
                 });
-                element.properties.content = element.properties.content.replace(/\<\<.+\>\>/, '')
+                element.properties.content = element.properties.content.replace(/<<.+>>/, '');
                 this.$forceNextTick(() => {
                     this.updateElementProperties(element);
                 });

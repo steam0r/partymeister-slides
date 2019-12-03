@@ -7,6 +7,7 @@
             top: 50px;
             left: 50px;
             width: 200px;
+        }
 
         .sortable-ghost .file-description {
             display: none;
@@ -64,7 +65,6 @@
 @endsection
 
 @section('view_scripts')
-    @include('partymeister-slides::layouts.partials.slide_scripts')
     <script>
         $(document).ready(function () {
             $('.slidemeister-save').on('click', function (e) {
@@ -84,10 +84,26 @@
                 e.preventDefault();
             });
 
+            // Legacy format handling
+            let elementData = $('input[name="definitions"]').val();
+            if (elementData === '') {
+                return;
+            }
+            elementData = JSON.parse(elementData);
+            let data = {};
+            if (elementData.elements === undefined) {
+                data.elements = elementData;
+            } else {
+                data.elements = elementData.elements;
+            }
+
+            data.id = $('input[name="name"]').val();
+            data.type = $('#template_for option:selected').val();
+
             if ($('input[name="definitions"]').val() != '') {
                 Vue.prototype.$eventHub.$emit('partymeister-slides:load-definitions', {
                     name: 'template-editor',
-                    elements: JSON.parse($('input[name="definitions"]').val()),
+                    elements: data,
                     replacements: {}
                 });
             }

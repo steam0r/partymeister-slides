@@ -6,14 +6,20 @@ export default {
             if (!clickTarget) {
                 return;
             }
+
+            // we need to go up a maximum of two levels
+            if (clickTarget.className === '') {
+                clickTarget = clickTarget.parentElement;
+            }
+
             if (clickTarget.className === '') {
                 clickTarget = clickTarget.parentElement;
             }
 
             if (clickTarget.className === 'medium-editor-element') {
                 target = clickTarget;
-            } else if (target.className == 'moveable') {
-                target = event.target.querySelector('div');
+            } else if (clickTarget.className.search('moveable') !== -1) {
+                target = event.target.querySelector('.medium-editor-element');
             }
 
             let elementTarget = target.parentElement;

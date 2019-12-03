@@ -1,6 +1,11 @@
+import Vue from 'vue';
+
 export default {
     methods: {
         cloneElement(element, nameModifier, yOffset) {
+            if (element.properties === undefined) {
+                element = this.elements[element.name];
+            }
             let clonedElement = JSON.parse(JSON.stringify(element));
             clonedElement.name = clonedElement.name + '_' + nameModifier;
             Vue.set(this.elements, clonedElement.name, clonedElement);

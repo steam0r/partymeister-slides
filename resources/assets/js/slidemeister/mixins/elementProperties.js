@@ -6,7 +6,7 @@ export default {
             element.properties.zIndex = 2000 + this.elementOrder.length + 1;
             return element;
         },
-        createEmptyElement(name, image) {
+        createEmptyElement(name, image, dataUrl) {
             return {
                 name: name,
                 moveable: {
@@ -28,6 +28,7 @@ export default {
                 },
                 properties: {
                     image: image,
+                    dataUrl: dataUrl,
                     resizable: true,
                     warpable: false,
                     prettyname: '',
@@ -110,6 +111,9 @@ export default {
         updateElementProperties(element) {
             this.$forceNextTick(() => {
                 const target = document.querySelector('#' + this.name + ' .' + element.name);
+                if (target === null) {
+                    return;
+                }
                 let content = target.querySelector('div');
 
                 let shadowElement = document.querySelector('#' + this.name + ' .shadow-' + element.name);
@@ -144,8 +148,9 @@ export default {
                 if (element.properties.image) {
                     target.style.backgroundImage = 'url(' + element.properties.image + ')';
                 }
-
-                // target.style.justifyContent = element.properties.horizontalAlign;
+                if (element.properties.dataUrl) {
+                    target.style.backgroundImage = 'url(' + element.properties.dataUrl + ')';
+                }
 
                 if (element.properties.size === 'fill') {
                     this.handleRotate({
@@ -159,7 +164,9 @@ export default {
                     this.handleDrag({target: target, transform: 'matrix(1,0,0,1,0,0) translate(0px 0px)'});
                     this.handleResize({target: target, width: 959, height: 539, delta: [1, 1]});
                 }
-                this.$refs[element.name][0].updateRec();
+                if (this.$refs[element.name][0] !== null && this.$refs[element.name][0] !== undefined) {
+                    this.$refs[element.name][0].updateRec();
+                }
                 this.resizeText(target);
                 element.properties.size = 'individual';
             });

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h6>Layers</h6>
+        <h6>Layer manager</h6>
         <ul v-if="this.simple" class="list-group">
             <li :class="{active: (activeElement && activeElement.name === element.name), hover: (hoverElement && hoverElement.name === element.name)}"
                 class="list-group-item" v-for="(element, index) in elementOrder" :key="index">

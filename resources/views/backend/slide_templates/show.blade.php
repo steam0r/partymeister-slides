@@ -70,15 +70,5 @@
         console.log('page is fully loaded');
     });
 </script>
-@if ($record->cached_html_preview == '')
-    <script src="{{mix('js/motor-backend.js')}}"></script>
-    @include('partymeister-slides::layouts.partials.slide_scripts')
-    <script>
-        $(window).bind("load", function () {
-            slidemeister = $('#slidemeister').slidemeister('#slidemeister-properties', slidemeisterProperties);
-            slidemeister.data.load({!! $record->definitions !!}, {!! $placeholderData !!}, false, {{$preview}});
-        });
-    </script>
-@endif
 </body>
 </html>
