@@ -9,7 +9,7 @@
 
             let sm = VueApp.$refs.slidemeisterweb;
 
-            Echo.channel('{{$channelPrefix}}:slidemeister-web.{{$slideClientId}}')
+            Echo.channel('{{$channelPrefix}}.slidemeister-web.{{$slideClientId}}')
                 .listen('.Partymeister\\Slides\\Events\\PlayNowRequest', (e) => {
                     console.log('PlayNowRequest incoming');
                     if (sm.playlist.id != undefined) {

@@ -29,11 +29,20 @@ window.VueApp = new Vue({
 
 import Echo from "laravel-echo"
 
-window.io = require('socket.io-client');
+window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
-    broadcaster: 'socket.io',
-    host: window.location.hostname + ':6001'
+    broadcaster: 'pusher',
+    key: '12345',
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    disableStats: true,
 });
+
+// window.Echo = new Echo({
+//     broadcaster: 'socket.io',
+//     // host: 'https://pm.demoparty.be/socket.io'
+//     host: window.location.hostname + '/socket.io'
+// });
 
 window.Vue = Vue;
