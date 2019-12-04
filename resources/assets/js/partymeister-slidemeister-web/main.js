@@ -36,6 +36,7 @@ window.Echo = new Echo({
     key: '12345',
     wsHost: window.location.hostname,
     wsPort: 6001,
+    wsPath: '/socket',
     disableStats: true,
 });
 
