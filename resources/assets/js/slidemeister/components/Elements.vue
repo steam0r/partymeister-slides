@@ -332,6 +332,10 @@
                 this.emitAllElements();
             });
 
+            if (this.readonly) {
+                this.showOverlay = true;
+            }
+
             if (this.elementData) {
                 this.$eventHub.$emit('partymeister-slides:load-definitions', {
                     name: this.name,
