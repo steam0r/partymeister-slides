@@ -34,10 +34,10 @@ export default {
         },
         loadScene() {
             if (this.fragmentShader === undefined || this.fragmentShader === '') {
-                console.log("NO SHADER - SKIPPING");
+                // console.log("NO SHADER - SKIPPING");
                 return;
             }
-            console.log("LOAD SCENE");
+            // console.log("LOAD SCENE");
             document.getElementById('shader-container').style.display = '';
             var geometry = new THREE.PlaneBufferGeometry(2, 2);
 
@@ -64,10 +64,10 @@ export default {
             this.resize();
         },
         unloadScene() {
-            console.log("UNLOAD");
+            // console.log("UNLOAD");
             document.getElementById('shader-container').style.display = 'none';
             window.cancelAnimationFrame(this.animationFrameRequest);
-            console.log("REMOVE CHILDREN");
+            // console.log("REMOVE CHILDREN");
             if (this.scene) {
                 while (this.scene.children.length > 0) {
                     this.scene.remove(this.scene.children[0]);
@@ -76,7 +76,7 @@ export default {
 
             var child = this.container.lastElementChild;
 
-            console.log("REMOVE DOMELEMENTS");
+            // console.log("REMOVE DOMELEMENTS");
             while (child) {
                 this.container.removeChild(child);
                 child = this.container.lastElementChild;

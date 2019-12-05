@@ -1,11 +1,14 @@
 <template>
-    <main>
+    <main class="main">
         <script id="vertexShader" type="x-shader/x-vertex">
             varying vec2 vUv;
             void main()	{
                 vUv = uv;
                 gl_Position = vec4( position, 1.0 );
             }
+
+
+
 
         </script>
         <div id="shader-container"></div>
@@ -14,7 +17,8 @@
             Playlist: {{ playlist.name }}<br>
             Items: {{ items.length }}<br>
             CurrentItem: {{ currentItem }}<br>
-            <button @click="deleteStorage">Empty cache</button>
+            <button @click="deleteStorage" class="btn btn-sm btn-primary btn-block">Empty cache</button>
+            <button v-if="standalone" @click="goToConfiguration" class="btn btn-sm btn-primary btn-block">Server configuration</button>
             <vue-audio style="display: none;" id="jingle-player" :file="jingle"/>
         </div>
 
@@ -24,7 +28,8 @@
             <div v-if="current.type == 'image' && current.cached_html_final != ''"
                  v-html="current.cached_html_final" class="slidemeister-instance slide current"
                  :style="{'opacity': currentOpacity, 'zoom': zoom}"></div>
-            <video v-if="current.type == 'video'" id="video-current" class="slide current" :style="{'opacity': currentOpacity}">
+            <video v-if="current.type == 'video'" id="video-current" class="slide current"
+                   :style="{'opacity': currentOpacity}">
                 <source :src="current.file.file_original" type="video/mp4">
             </video>
         </template>
@@ -42,7 +47,8 @@
             <img v-if="next.type == 'image' && next.cached_html_final === undefined"
                  :src="next.file.file_original" class="img-fluid slide next" :style="{'opacity': nextOpacity}">
             <div v-if="next.type == 'image' && next.cached_html_final != ''"
-                 v-html="next.cached_html_final" class="slidemeister-instance slide next" :style="{'opacity': nextOpacity, 'zoom': zoom}"></div>
+                 v-html="next.cached_html_final" class="slidemeister-instance slide next"
+                 :style="{'opacity': nextOpacity, 'zoom': zoom}"></div>
             <video v-if="next.type == 'video'" id="video-next" class="slide next" :style="{'opacity': nextOpacity}">
                 <source :src="next.file.file_original" type="video/mp4">
             </video>
@@ -52,20 +58,29 @@
 
 <script>
 
+    const axios = require('axios');
+    import Vue from 'vue';
     import keybindings from "../mixins/keybindings";
     import jingles from "../mixins/jingles";
     import siegmeister from "../mixins/siegmeister";
     import shader from "../mixins/shader";
-
+    import VueAudio from 'vue-audio';
+    import toast from "../mixins/toast";
+    import echo from "../mixins/echo";
 
     export default {
         name: 'partymeister-slidemeister-web',
-        props: ['configuration', 'jingles', 'route'],
+        props: ['standalone'],
+        components: {
+            VueAudio
+        },
         mixins: [
             keybindings,
             jingles,
             siegmeister,
             shader,
+            toast,
+            echo,
         ],
         data: function () {
             return {
@@ -73,6 +88,7 @@
                 nextOpacity: 0,
                 zoom: 2,
                 cachedPlaylists: [],
+                configuration: {},
 
                 clearPlayNowAfter: false,
                 playNow: false,
@@ -109,20 +125,20 @@
         computed: {
             // a computed getter
             current: function () {
-                console.log('CURRENT updated');
+                // console.log('CURRENT updated');
                 if (this.playNow && this.playNowItems[this.currentPlayNowItem] !== undefined) {
-                    console.log('playnow current', this.playNowItems[this.currentPlayNowItem]);
+                    // console.log('playnow current', this.playNowItems[this.currentPlayNowItem]);
                     return this.playNowItems[this.currentPlayNowItem];
                 }
                 return this.items[this.currentItem];
             },
             next: function () {
-                console.log('NEXT updated');
+                // console.log('NEXT updated');
                 if (this.clearPlayNowAfter) {
                     return this.items[this.nextItem];
                 }
                 if (this.playNow && this.playNowItems[this.nextPlayNowItem] !== undefined) {
-                    console.log('playnow next', this.playNowItems[this.nextPlayNowItem]);
+                    // console.log('playnow next', this.playNowItems[this.nextPlayNowItem]);
                     return this.playNowItems[this.nextPlayNowItem];
                 }
                 return this.items[this.nextItem];
@@ -132,6 +148,9 @@
             },
         },
         methods: {
+            goToConfiguration() {
+                this.$router.push({name: 'configuration'});
+            },
             seekToPlayNow() {
                 this.playNow = true;
                 this.next;
@@ -152,7 +171,7 @@
 
             },
             seekToIndex(index, hard) {
-                console.log('Seek to index ' + index);
+                // console.log('Seek to index ' + index);
                 this.clearTimeouts();
 
                 if (this.items[index] !== undefined) {
@@ -173,7 +192,6 @@
             prepareTransition(currentItem, hard) {
                 if (!hard) {
                     setTimeout(() => {
-                        console.log(this.next);
                         if (this.next.slide_type !== 'slidemeister_winners') {
                             this.deleteBars();
                         }
@@ -187,7 +205,7 @@
                 }
             },
             seekToNextItem(hard) {
-                console.log('Seek to next item');
+                // console.log('Seek to next item');
                 this.clearTimeouts();
 
                 let currentItem = this.currentItem;
@@ -209,7 +227,7 @@
                 this.prepareTransition(currentItem, hard);
             },
             seekToPreviousItem(hard) {
-                console.log('Seek to previous item');
+                // console.log('Seek to previous item');
                 this.clearTimeouts();
 
                 let currentItem = this.currentItem;
@@ -246,8 +264,6 @@
                 }
             },
             playTransition(transition, duration) {
-                console.log('Play transition');
-
                 this.clearSiegmeisterBars();
 
                 let transitionGroup = this.transitionGroups[Math.floor(Math.random() * this.transitionGroups.length)];
@@ -261,7 +277,7 @@
                 this.currentOpacity = 1;
                 this.nextOpacity = 1;
                 this.animateCSS('.next', transitionGroup[0], () => {
-                    console.log('Transition done - swapping items');
+                    // console.log('Transition done - swapping items');
                     document.querySelector('.next').style.zIndex = 1001;
                     if (this.clearPlayNowAfter) {
                         this.playNow = false;
@@ -272,7 +288,7 @@
                     this.$forceUpdate();
 
                     if (this.playNow) {
-                        console.log("post transition playnow management");
+                        // console.log("post transition playnow management");
                         this.currentPlayNowItem = this.nextPlayNowItem;
                     } else {
                         this.currentItem = this.nextItem;
@@ -285,12 +301,11 @@
                 });
 
                 this.animateCSS('.current', transitionGroup[1], () => {
-                    console.log('Transition done');
                 });
             },
             setSlideTimeout() {
                 if (!this.items[this.currentItem].is_advanced_manually) {
-                    console.log('Setting timeout to ' + this.items[this.currentItem].duration);
+                    // console.log('Setting timeout to ' + this.items[this.currentItem].duration);
                     this.slideTimeout = setTimeout(() => {
                         this.seekToNextItem();
                     }, this.items[this.currentItem].duration * 1000)
@@ -301,33 +316,33 @@
                     return;
                 }
                 if (this.playlist.callbacks !== undefined && this.playlist.callbacks) {
-                    console.log('Setting callback timeout to ' + this.items[this.currentItem].callback_delay);
+                    // console.log('Setting callback timeout to ' + this.items[this.currentItem].callback_delay);
                     if (this.items[this.currentItem].callback_hash !== '') {
                         this.callbackTimeout = setTimeout(() => {
-                            console.log('Excuting callback ' + this.items[this.currentItem].callback_hash);
+                            // console.log('Excuting callback ' + this.items[this.currentItem].callback_hash);
                             axios.get(this.playlist.callback_url + this.items[this.currentItem].callback_hash).then(result => {
-                                console.log('Callback successfully executed');
+                                // console.log('Callback successfully executed');
                             }).catch(e => {
-                                console.log('Error executing callback');
+                                // console.log('Error executing callback');
                             });
                         }, this.items[this.currentItem].callback_delay * 1000)
                     }
                 }
             },
             clearTimeouts() {
-                console.log('Clearing timeouts');
+                // console.log('Clearing timeouts');
                 window.clearTimeout(this.callbackTimeout);
                 window.clearTimeout(this.slideTimeout);
             },
             animateBackground() {
                 if (this.currentBackground === this.items[this.currentItem].slide_type) {
-                    console.log('Correct background is already playing, skipping');
+                    // console.log('Correct background is already playing, skipping');
                     this.currentBackground = this.items[this.currentItem].slide_type;
                     this.clearSiegmeisterBars();
                     return;
                 }
                 if (this.currentBackground !== this.items[this.currentItem].slide_type) {
-                    console.log('New background needed, stopping all playing backgrounds');
+                    // console.log('New background needed, stopping all playing backgrounds');
                     this.$eventHub.$emit('slidemeister:shader', null);
                 }
                 this.currentBackground = this.items[this.currentItem].slide_type;
@@ -354,6 +369,7 @@
                     default:
                         newFragmentShader = '';
                 }
+
                 if (newFragmentShader !== this.fragmentShader && newFragmentShader !== '') {
                     this.fragmentShader = newFragmentShader;
                     this.unloadScene();
@@ -365,7 +381,7 @@
                 }
             },
             updateStatus() {
-                console.log('Update status');
+                // console.log('Update status');
 
                 let currentItem = this.items[this.currentItem];
                 let currentItemId = null;
@@ -381,9 +397,13 @@
                     currentPlaylist: this.playlist.id,
                     currentItem: currentItemId,
                 };
-                axios.post(this.route, data).then(response => {
-                    console.log('Updated status');
-                });
+
+                if (this.configuration.server !== undefined) {
+                    axios.post(this.configuration.server + '/ajax/slidemeister-web/' + this.configuration.client + '/status', data).then(response => {
+                        // console.log('Updated status');
+                    });
+                }
+
             },
             resizeWindow() {
                 let scaleX = window.innerWidth / 960;
@@ -394,7 +414,7 @@
             animateCSS(element, animationName, callback) {
                 const node = document.querySelector(element);
                 if (node === null) {
-                    console.error('Node ' + element + ' not found - skipping');
+                    // console.error('Node ' + element + ' not found - skipping');
                     return;
                 }
                 node.classList.add('animated', animationName);
@@ -422,28 +442,48 @@
                 localStorage.clear();
                 this.updateStatus();
             },
+            getSlideClientConfiguration() {
+                let configuration = localStorage.getItem('slideClientConfiguration');
+                if (configuration !== undefined && configuration !== null) {
+                    configuration = JSON.parse(configuration);
+                    Vue.set(this, 'configuration', configuration.configuration);
+                }
+            },
         },
-        mounted() {
-            document.addEventListener('DOMContentLoaded', () => {
+        created() {
+            this.$eventHub.$on('show-viewer', () => {
+                window.addEventListener('keydown', this.addListener, false);
+            });
+            this.$eventHub.$on('slide-client-loaded', () => {
+                this.getSlideClientConfiguration();
+            });
 
-                window.onresize = () => {
-                    this.resizeWindow();
-                };
+            this.getSlideClientConfiguration();
 
-                setTimeout(() => {
-                    this.resizeWindow();
-                }, 0);
+            window.onresize = () => {
+                this.resizeWindow();
+            };
 
-                // Check if we have playlists in local storage
+            setTimeout(() => {
+                this.resizeWindow();
+            }, 0);
+
+            // Check if we have playlists in local storage
+            if (this.cachedPlaylists.length === 0) {
                 let cachedPlaylists = localStorage.getItem('cachedPlaylists');
                 if (cachedPlaylists !== undefined && cachedPlaylists != null) {
                     this.cachedPlaylists = JSON.parse(cachedPlaylists);
                 }
+            }
+            if (Object.keys(this.playlist).length === 0) {
                 let playlist = localStorage.getItem('playlist');
                 if (playlist !== undefined && playlist != null) {
                     this.playlist = JSON.parse(playlist);
                     this.items = this.playlist.items;
                 }
+            }
+
+            if (this.currentItem === null) {
                 let currentItem = localStorage.getItem('currentItem');
                 if (currentItem !== undefined && currentItem != null) {
                     // Delay is necessary to correctly load the background shader on first load
@@ -451,15 +491,16 @@
                         this.seekToIndex(parseInt(currentItem), true);
                     }, 500);
                 }
-            }, false);
+            }
 
         }
     }
 
 </script>
 <style lang="scss">
-    body {
+    main {
         cursor: none;
+        background: black;
     }
 
     canvas {
@@ -488,7 +529,7 @@
     main .debug {
         position: absolute;
         z-index: 10000;
-        opacity: 0.8;
+        opacity: 0.9;
     }
 
     main .previous {
@@ -544,7 +585,53 @@
         width: 960px;
         height: 540px;
     }
+
     div[data-partymeister-slides-visibility='preview'] {
         display: none;
+    }
+
+    .medium-editor-element {
+        z-index: 10000;
+        width: 98%;
+        margin: 0 auto;
+        text-align: left;
+        font-family: Arial, sans-serif;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .medium-editor-element p {
+        margin-bottom: 0;
+    }
+
+    .moveable {
+        display: flex;
+        font-family: "Roboto", sans-serif;
+        z-index: 1000;
+        position: absolute;
+        width: 300px;
+        height: 200px;
+        text-align: center;
+        font-size: 40px;
+        margin: 0 auto;
+        font-weight: 100;
+        letter-spacing: 1px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+
+    .movable span {
+        font-size: 10px;
+    }
+
+    .snappable-shadow {
+        width: 200px;
+        height: 200px;
+        /*background-color: red;*/
+        position: absolute;
+        visibility: hidden;
     }
 </style>

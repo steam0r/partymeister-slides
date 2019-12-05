@@ -13,6 +13,14 @@ Route::group([
     Route::resource('slide_templates', 'SlideTemplatesController');
     Route::resource('playlists', 'PlaylistsController');
     Route::resource('transitions', 'TransitionsController');
+});
+
+Route::group([
+    'middleware' => [ 'bindings' ],
+    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix'     => 'api',
+    'as'         => 'api.',
+], function () {
     Route::resource('slide_clients', 'SlideClientsController');
 });
 

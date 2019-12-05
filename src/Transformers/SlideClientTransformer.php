@@ -23,14 +23,25 @@ class SlideClientTransformer extends Fractal\TransformerAbstract
     /**
      * Transform record to array
      *
-     * @param SlideClient $record
+     * @param  SlideClient  $record
      *
      * @return array
      */
     public function transform(SlideClient $record)
     {
         return [
-            'id' => (int) $record->id
+            'id'            => (int) $record->id,
+            'name'          => $record->name,
+            'type'          => $record->type,
+            'ip_address'    => $record->ip_address,
+            'port'          => $record->port,
+            'configuration' => $record->configuration,
+            'websocket' => [
+                'key' => config('broadcasting.connections.pusher.key'),
+                'host' => config('broadcasting.connections.pusher.options.host'),
+                'port' => config('broadcasting.connections.pusher.options.port'),
+                'path' => config('broadcasting.connections.pusher.options.path'),
+            ]
         ];
     }
 }
