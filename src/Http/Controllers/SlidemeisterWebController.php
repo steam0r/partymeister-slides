@@ -3,7 +3,6 @@
 namespace Partymeister\Slides\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Arr;
 use Partymeister\Slides\Models\SlideClient;
 
 /**
@@ -12,6 +11,7 @@ use Partymeister\Slides\Models\SlideClient;
  */
 class SlidemeisterWebController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -20,23 +20,6 @@ class SlidemeisterWebController extends Controller
      */
     public function index(SlideClient $record)
     {
-        $jingles = [];
-        foreach ($record->file_associations as $file) {
-            $mediaFile = $file->file->getMedia('file')->first();
-            if ($mediaFile) {
-                $jingles[ $file->identifier ] = $mediaFile->getUrl();
-            }
-        }
-
-        return view('partymeister-slides::slidemeister-web/index',
-            [
-                'slideClientId' => $record->id,
-                'jingles'       => $jingles,
-                'configuration' => $record->configuration,
-                'route'         => route('ajax.slidemeister-web.status.update', [ 'slide_client' => $record->id ]),
-                //                'prizegivingBarColor'      => Arr::get($record->configuration, 'prizegiving_bar_color'),
-                //                'prizegivingBarBlinkColor' => Arr::get($record->configuration, 'prizegiving_bar_blink_color'),
-                'channelPrefix' => config('cache.prefix')
-            ]);
+        return view('partymeister-slides::slidemeister-web/index');
     }
 }

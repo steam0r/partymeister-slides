@@ -29,6 +29,14 @@ class SlideClientTransformer extends Fractal\TransformerAbstract
      */
     public function transform(SlideClient $record)
     {
+        $jingles = [];
+        foreach ($record->file_associations as $file) {
+            $mediaFile = $file->file->getMedia('file')->first();
+            if ($mediaFile) {
+                $jingles[$file->identifier] = $mediaFile->getFullUrl();
+            }
+        }
+
         return [
             'id'            => (int) $record->id,
             'name'          => $record->name,
@@ -36,8 +44,9 @@ class SlideClientTransformer extends Fractal\TransformerAbstract
             'ip_address'    => $record->ip_address,
             'port'          => $record->port,
             'configuration' => $record->configuration,
-            'websocket' => [
-                'key' => config('broadcasting.connections.pusher.key'),
+            'jingles'       => $jingles,
+            'websocket'     => [
+                'key'  => config('broadcasting.connections.pusher.key'),
                 'host' => config('broadcasting.connections.pusher.options.host'),
                 'port' => config('broadcasting.connections.pusher.options.port'),
                 'path' => config('broadcasting.connections.pusher.options.path'),

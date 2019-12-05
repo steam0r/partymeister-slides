@@ -43,6 +43,7 @@
                     document.querySelector('.server-error').classList.add('d-none');
                     this.toast('Slide client configuration loaded');
                     this.$eventHub.$emit('server-configuration-update');
+                    this.$eventHub.$emit('jingles-loaded', result.data.data.jingles);
                 }).catch(e => {
                     this.error = 'Problems getting slide client configuration from server. Please check your configuration. (' + e.message + ')';
                     document.querySelector('.server-error').classList.remove('d-none');

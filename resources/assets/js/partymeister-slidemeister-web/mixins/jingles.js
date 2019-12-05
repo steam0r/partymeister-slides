@@ -1,8 +1,14 @@
 export default {
     data: function () {
         return {
+            jingles: [],
             jingle: null,
         };
+    },
+    created() {
+        this.$eventHub.$on('jingles-loaded', (jingles) => {
+            this.jingles = jingles;
+        });
     },
     methods: {
         playJingle(index) {
