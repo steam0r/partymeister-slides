@@ -343,7 +343,7 @@
             animateBackground() {
                 if (parseInt(this.items[this.currentItem].midi_note) > 0) {
                     if (WebMidi.outputs.length > 0) {
-                        WebMidi.outputs[0].playNote(parseInt(this.items[this.currentItem].midi_note), "all", {velocity: 1, duration: 1000});
+                        WebMidi.outputs[0].playNote(parseInt(this.items[this.currentItem].midi_note), 1, {velocity: 1, duration: 1000});
                         console.log("Played midi note " + this.items[this.currentItem].midi_note + ' to device ' + WebMidi.outputs[0].name + ' ('+  WebMidi.outputs[0].id + ')');
                     }
                 }
