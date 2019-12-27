@@ -19,7 +19,7 @@ export default {
                 let player = document.querySelector('#jingle-player > audio');
                 setTimeout(() => {
                     player.play();
-                    if (WebMidi.outputs.length > 0 && parseInt(this.configuration['midi_note_' + index]) !== undefined) {
+                    if (WebMidi.outputs.length > 0 && parseInt(this.configuration['midi_note_' + index]) > 0) {
                         WebMidi.outputs[0].playNote(parseInt(this.configuration['midi_note_' + index]), "all", {velocity: 1, duration: 1000});
                         console.log("Played midi note for jingle " + this.configuration['midi_note_' + index] + ' to device ' + WebMidi.outputs[0].name + ' ('+  WebMidi.outputs[0].id + ')');
                     }

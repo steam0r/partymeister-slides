@@ -26,6 +26,12 @@ export default {
                     break;
             }
 
+            if (e.key === 'F10') {
+                let player = document.querySelector('#jingle-player > audio');
+                player.stop();
+            }
+
+
             if (this.standalone && e.key === 'c') {
                 this.$eventHub.$emit('show-configuration');
                 window.removeEventListener('keydown', this.addListener, false);
