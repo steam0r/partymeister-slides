@@ -28,9 +28,9 @@ export default {
 
             if (e.key === 'F10') {
                 let player = document.querySelector('#jingle-player > audio');
-                player.stop();
+                player.pause();
+                player.currentTime = 0;
             }
-
 
             if (this.standalone && e.key === 'c') {
                 this.$eventHub.$emit('show-configuration');
