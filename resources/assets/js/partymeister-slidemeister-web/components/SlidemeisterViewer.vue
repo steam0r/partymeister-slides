@@ -68,6 +68,12 @@
     import toast from "../mixins/toast";
     import echo from "../mixins/echo";
 
+    import WebMidi from 'webmidi';
+
+    WebMidi.enable(function(err) {
+        if (err) console.log("An error occurred", err);
+    }, true);
+
     export default {
         name: 'partymeister-slidemeister-web',
         props: ['standalone'],
@@ -335,6 +341,13 @@
                 window.clearTimeout(this.slideTimeout);
             },
             animateBackground() {
+                if (this.items[this.currentItem].midi_note >= 0) {
+                    if (WebMidi.outputs.length > 0) {
+                        WebMidi.outputs[0].playNote(this.items[this.currentItem].midi_note, "all", {velocity: 1, duration: 1000});
+                        console.log("Played midi note " + this.items[this.currentItem].midi_note + ' to device ' + WebMidi.outputs[0].name + ' ('+  WebMidi.outputs[0].id + ')');
+                    }
+                }
+
                 if (this.currentBackground === this.items[this.currentItem].slide_type) {
                     // console.log('Correct background is already playing, skipping');
                     this.currentBackground = this.items[this.currentItem].slide_type;

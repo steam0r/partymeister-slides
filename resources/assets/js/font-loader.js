@@ -1,0 +1,1 @@
+window.WebFont = require('webfontloader');

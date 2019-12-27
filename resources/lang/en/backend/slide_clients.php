@@ -32,6 +32,7 @@ return [
     ],
     'open_client'                 => 'Open client window',
     'jingle'                      => 'Jingle',
+    'jingle_midi_note'            => 'Jingle midi note',
     'prizegiving_bar_color'       => 'Prizegiving bar color',
     'prizegiving_bar_blink_color' => 'Prizegiving bar blink color',
     'fragment'                    => 'Fragment shader for :type',

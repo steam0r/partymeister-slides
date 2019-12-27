@@ -20,6 +20,22 @@ class SlideClientConfigurationForm extends Form implements HasMedia
     public function buildForm()
     {
         $this->add(
+            'midi_note_jingle_1',
+            'text',
+            [ 'label' => trans('partymeister-slides::backend/slide_clients.jingle_midi_note').' (F1)' ]
+        )->add(
+            'midi_note_jingle_2',
+            'text',
+            [ 'label' => trans('partymeister-slides::backend/slide_clients.jingle_midi_note').' (F2)' ]
+        )->add(
+            'midi_note_jingle_3',
+            'text',
+            [ 'label' => trans('partymeister-slides::backend/slide_clients.jingle_midi_note').' (F3)' ]
+        )->add(
+            'midi_note_jingle_4',
+            'text',
+            [ 'label' => trans('partymeister-slides::backend/slide_clients.jingle_midi_note').' (F4)' ]
+        )->add(
             'prizegiving_bar_color',
             'colorpicker',
             [ 'label' => trans('partymeister-slides::backend/slide_clients.prizegiving_bar_color') ]
