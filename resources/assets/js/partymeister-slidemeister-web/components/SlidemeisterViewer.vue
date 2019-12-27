@@ -158,7 +158,7 @@
                 this.$router.push({name: 'configuration'});
             },
             seekToPlayNow() {
-                window.clearTimeout(this.slideTimeout);
+                this.clearTimeouts();
                 this.playNow = true;
                 this.next;
                 this.$forceNextTick(() => {
