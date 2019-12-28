@@ -185,9 +185,10 @@
                 this.clearTimeouts();
 
                 if (this.items[index] !== undefined) {
-                    this.currentItem = index;
+                    this.nextItem = index;
                 } else {
                     this.currentItem = 0;
+                    this.nextItem = 0;
                 }
                 if (!hard) {
                     setTimeout(() => {
