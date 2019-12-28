@@ -10,6 +10,7 @@
 
 
 
+
         </script>
         <div id="shader-container"></div>
         <div class="debug alert alert-danger d-none">
@@ -18,7 +19,9 @@
             Items: {{ items.length }}<br>
             CurrentItem: {{ currentItem }}<br>
             <button @click="deleteStorage" class="btn btn-sm btn-primary btn-block">Empty cache</button>
-            <button v-if="standalone" @click="goToConfiguration" class="btn btn-sm btn-primary btn-block">Server configuration</button>
+            <button v-if="standalone" @click="goToConfiguration" class="btn btn-sm btn-primary btn-block">Server
+                configuration
+            </button>
             <vue-audio style="display: none;" id="jingle-player" :file="jingle"/>
         </div>
 
@@ -70,7 +73,7 @@
 
     import WebMidi from 'webmidi';
 
-    WebMidi.enable(function(err) {
+    WebMidi.enable(function (err) {
         if (err) console.log("An error occurred", err);
     }, true);
 
@@ -311,6 +314,9 @@
                 });
             },
             setSlideTimeout() {
+                if (this.playNow) {
+                    return;
+                }
                 if (!this.items[this.currentItem].is_advanced_manually) {
                     // console.log('Setting timeout to ' + this.items[this.currentItem].duration);
                     this.slideTimeout = setTimeout(() => {
@@ -344,8 +350,11 @@
             animateBackground() {
                 if (parseInt(this.items[this.currentItem].midi_note) > 0) {
                     if (WebMidi.outputs.length > 0) {
-                        WebMidi.outputs[0].playNote(parseInt(this.items[this.currentItem].midi_note), 1, {velocity: 1, duration: 1000});
-                        console.log("Played midi note " + this.items[this.currentItem].midi_note + ' to device ' + WebMidi.outputs[0].name + ' ('+  WebMidi.outputs[0].id + ')');
+                        WebMidi.outputs[0].playNote(parseInt(this.items[this.currentItem].midi_note), 1, {
+                            velocity: 1,
+                            duration: 1000
+                        });
+                        console.log("Played midi note " + this.items[this.currentItem].midi_note + ' to device ' + WebMidi.outputs[0].name + ' (' + WebMidi.outputs[0].id + ')');
                     }
                 }
 
