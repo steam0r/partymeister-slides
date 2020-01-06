@@ -20,6 +20,7 @@ export default {
 
 
             // Duplicate elements and replace placeholders
+            let previousTime = null;
             replacements.rows.forEach((row, index) => {
                 let timeElement;
                 let typeElement;
@@ -35,9 +36,17 @@ export default {
                 }
 
                 this.replaceColor(typeElement, row.color);
-                this.replaceContent(timeElement, 'time', row.time, true);
+
+                if (row.time == previousTime) {
+                    this.replaceContent(timeElement, 'time', '', true);
+                } else {
+                    this.replaceContent(timeElement, 'time', row.time, true);
+                }
+
                 this.replaceContent(typeElement, 'type', row.type, true);
                 this.replaceContent(nameElement, 'name', row.name, true);
+
+                previousTime = row.time;
             });
         },
         replaceColor(element, color) {
