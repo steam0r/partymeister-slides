@@ -31,6 +31,8 @@ class ScreenshotHelper
             $capabilities->setCapability(ChromeOptions::CAPABILITY, $options);
             $this->driver = RemoteWebDriver::create($host, $capabilities, 5000);
         } catch (\Exception $e) {
+            die($e->getMessage());
+            die("Webdriver not running");
             // Do nothing for now
         }
     }

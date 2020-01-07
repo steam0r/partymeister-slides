@@ -68,10 +68,16 @@ class SlideTemplateService extends BaseService
         $this->record->clearMediaCollection('preview');
         $this->record->clearMediaCollection('final');
 
-        $this->record->addMedia(storage_path().'/preview_'.$this->record->id.'.png')
-            ->toMediaCollection('preview', 'media');
-        $this->record->addMedia(storage_path().'/final_'.$this->record->id.'.png')
-            ->toMediaCollection('final', 'media');
+        if (file_exists(storage_path().'/preview_'.$this->record->id.'.png')) {
+            $this->record->addMedia(storage_path().'/preview_'.$this->record->id.'.png')
+                ->toMediaCollection('preview', 'media');
+        }
+
+        if (file_exists(storage_path().'/final_'.$this->record->id.'.png')) {
+            $this->record->addMedia(storage_path().'/final_'.$this->record->id.'.png')
+                ->toMediaCollection('final', 'media');
+        }
+
     }
 
 

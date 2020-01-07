@@ -218,6 +218,7 @@
 
                 this.$eventHub.$emit('partymeister-slides:receive-definitions', {
                     definitions: definitions,
+                    definitions_as_form_data: this.addslashes(definitions),
                     meta: JSON.stringify(meta),
                     name: this.name
                 });
@@ -359,6 +360,9 @@
             this.$eventHub.$off();
         },
         methods: {
+            addslashes(string) {
+                return string.replace(/\\/g, '\\\\').replace(/\u0008/g, '\\b').replace(/\t/g, '\\t').replace(/\n/g, '\\n').replace(/\f/g, '\\f').replace(/\r/g, '\\r').replace(/'/g, '\\\'').replace(/"/g, '\\"');
+            },
             addElement(name, image, dataUrl) {
                 this.addStepToUndoStack();
                 let element = this.createEmptyElement(name, image, dataUrl);
@@ -520,6 +524,7 @@
     .hidden {
         display: none;
     }
+
     .medium-editor-element:focus {
         outline: none !important;
     }

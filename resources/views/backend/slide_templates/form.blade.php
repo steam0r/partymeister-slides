@@ -73,7 +73,7 @@
 
                 Vue.prototype.$eventHub.$on('partymeister-slides:receive-definitions', (data) => {
                     if (data.name === 'template-editor') {
-                        $('input[name="definitions"]').val(data.definitions);
+                        $('input[name="definitions"]').val(data.definitions_as_form_data);
                         $('input[name="cached_html_preview"]').val($('#slidemeister').html());
                         $('input[name="cached_html_final"]').val($('#slidemeister').html());
                         $('#slide-template-form').submit();

@@ -160,9 +160,9 @@ export default {
                     });
                     target.style.transform = '';
                     target.style.top = '0px';
-                    target.style.left = '2px';
+                    target.style.left = '0px';
                     this.handleDrag({target: target, transform: 'matrix(1,0,0,1,0,0) translate(0px 0px)'});
-                    this.handleResize({target: target, width: 959, height: 539, delta: [1, 1]});
+                    this.handleResize({target: target, width: 960, height: 540, delta: [1, 1]});
                 }
                 if (this.$refs[element.name][0] !== null && this.$refs[element.name][0] !== undefined) {
                     this.$refs[element.name][0].updateRec();

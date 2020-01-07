@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import * as Rematrix from 'rematrix';
 
 export default {
     methods: {
@@ -8,13 +9,19 @@ export default {
             }
             let clonedElement = JSON.parse(JSON.stringify(element));
             clonedElement.name = clonedElement.name + '_' + nameModifier;
+
+            // Strip translate from css transform and add it to the new transform matrix
+            let translatePosition = clonedElement.properties.coordinates.transform.indexOf('translate');
+            let strippedTranslate = clonedElement.properties.coordinates.transform.substring(translatePosition + 10).replace(')', '').replace(' ', '').replace(/px/g, '');
+            let savedCoordinates = strippedTranslate.split(',');
+            let savedTranslate = Rematrix.translate(parseInt(savedCoordinates[0]), parseInt(savedCoordinates[1]))
+            let savedTransform = Rematrix.fromString(clonedElement.properties.coordinates.transform);
+            let translateY = Rematrix.translateY(yOffset);
+            let newTransform = [savedTransform, savedTranslate, translateY].reduce(Rematrix.multiply);
+
+            clonedElement.properties.coordinates.transform = Rematrix.toString(newTransform);
+
             Vue.set(this.elements, clonedElement.name, clonedElement);
-            this.updateElementProperties(this.elements[clonedElement.name]);
-            this.$forceNextTick(() => {
-                document.querySelector('#' + this.name + ' .' + clonedElement.name).style.top = yOffset + 'px';
-            });
-            // setTimeout(() => {
-            // }, 0);
 
             return this.elements[clonedElement.name];
         },
