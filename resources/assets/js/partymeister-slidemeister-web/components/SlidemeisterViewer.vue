@@ -6,13 +6,8 @@
                 vUv = uv;
                 gl_Position = vec4( position, 1.0 );
             }
-
-
-
-
-
         </script>
-        <div id="shader-container"></div>
+        <div id="shader-container" :style="{'zoom': zoom/2}"></div>
         <div class="debug alert alert-danger d-none">
             CachedPlaylists: {{ cachedPlaylists.length }}<br>
             Playlist: {{ playlist.name }}<br>
@@ -66,7 +61,8 @@
     import keybindings from "../mixins/keybindings";
     import jingles from "../mixins/jingles";
     import siegmeister from "../mixins/siegmeister";
-    import shader from "../mixins/shader";
+    // import shader from "../mixins/shader";
+    import Bonzo from "../classes/bonzo";
     import VueAudio from 'vue-audio';
     import toast from "../mixins/toast";
     import echo from "../mixins/echo";
@@ -87,7 +83,7 @@
             keybindings,
             jingles,
             siegmeister,
-            shader,
+            // shader,
             toast,
             echo,
         ],
@@ -130,6 +126,12 @@
                     ['rollIn', 'rollOut'],
                 ],
             };
+        },
+        mounted() {
+            let shader = new Bonzo();
+            setTimeout(() => {
+                shader.animate();
+            }, 1000);
         },
         computed: {
             // a computed getter
@@ -394,15 +396,15 @@
                         newFragmentShader = '';
                 }
 
-                if (newFragmentShader !== this.fragmentShader && newFragmentShader !== '') {
-                    this.fragmentShader = newFragmentShader;
-                    this.unloadScene();
-                    this.loadScene();
-                    this.animate();
-                } else if (newFragmentShader === '') {
-                    this.fragmentShader = newFragmentShader;
-                    this.unloadScene();
-                }
+                // if (newFragmentShader !== this.fragmentShader && newFragmentShader !== '') {
+                //     this.fragmentShader = newFragmentShader;
+                //     this.unloadScene();
+                //     this.loadScene();
+                //     this.animate();
+                // } else if (newFragmentShader === '') {
+                //     this.fragmentShader = newFragmentShader;
+                //     this.unloadScene();
+                // }
             },
             updateStatus() {
                 // console.log('Update status');
@@ -657,5 +659,10 @@
         /*background-color: red;*/
         position: absolute;
         visibility: hidden;
+    }
+    #shader-container {
+        position: absolute;
+        width: 1920px;
+        height: 1080px;
     }
 </style>
