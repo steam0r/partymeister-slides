@@ -51,6 +51,8 @@ export default {
                     snapping: true,
                     zIndex: 2000 + this.elementOrder.length,
                     content: 'Enter text',
+                    textShadow: 'none',
+                    textTransform: 'none',
                     coordinates: {
                         transform: 'matrix(1, 0, 0, 1, 0, 0) translate(0px 0px)',
                         width: 300,
@@ -140,6 +142,8 @@ export default {
                 target.style.backgroundColor = element.properties.backgroundColor;
                 target.style.opacity = element.properties.opacity;
                 target.style.zIndex = element.properties.zIndex;
+                target.style.textShadow = element.properties.textShadow;
+                target.style.textTransform = element.properties.textTransform;
                 target.dataset.partymeisterSlidesVisibility = element.properties.visibility;
 
                 content.innerHTML = element.properties.content;
@@ -165,7 +169,7 @@ export default {
                     this.handleResize({target: target, width: 960, height: 540, delta: [1, 1]});
                 }
                 if (this.$refs[element.name][0] !== null && this.$refs[element.name][0] !== undefined) {
-                    this.$refs[element.name][0].updateRec();
+                    this.$refs[element.name][0].updateRect();
                 }
                 this.resizeText(target);
                 element.properties.size = 'individual';

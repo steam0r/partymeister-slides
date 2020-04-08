@@ -20,11 +20,13 @@
                 <select @focus="addStepToUndoStack('fontFamily')" @change="updateProperties"
                         v-model="activeElement.properties.fontFamily" class="form-control form-control-sm"
                         id="fontFamily" name="fontFamily">
-                    <option value="Arial">Arial</option>
-                    <option value="Verdana">Verdana</option>
-                    <option value="'Exo 2'">'Exo 2'</option>
-                    <option value="'Ticketing'">'Ticketing'</option>
+                    <option v-for="font in fonts" :value="font">{{font}}</option>
                 </select>
+            </div>
+            <div class="input-group">
+                <label class="col-form-label col-form-label-sm" for="webfontloader">webfontloader</label>
+                <input @blur="loadFontEvent"
+                       class="form-control form-control-sm" id="webfontloader" type="text" name="webfontloader">
             </div>
             <div :class="{hidden: simple}" class="input-group">
                 <label class="col-form-label col-form-label-sm" for="size">size</label>
@@ -101,6 +103,18 @@
                 </select>
             </div>
             <div :class="{hidden: simple}" class="input-group">
+                <label class="col-form-label col-form-label-sm" for="textShadow">textShadow</label>
+                <input @focus="addStepToUndoStack('textShadow')" @blur="updateProperties"
+                       class="form-control form-control-sm" id="textShadow" type="text" name="textShadow"
+                       v-model="activeElement.properties.textShadow">
+            </div>
+            <div :class="{hidden: simple}" class="input-group">
+                <label class="col-form-label col-form-label-sm" for="textTransform">textTransform</label>
+                <input @focus="addStepToUndoStack('textTransform')" @blur="updateProperties"
+                       class="form-control form-control-sm" id="textTransform" type="text" name="textTransform"
+                       v-model="activeElement.properties.textTransform">
+            </div>
+            <div :class="{hidden: simple}" class="input-group">
                 <label class="col-form-label col-form-label-sm" for="editable">editable</label>
                 <input @focus="addStepToUndoStack('editable')" @blur="updateProperties" type="checkbox"
                        class="form-check-input" id="editable" name="editable"
@@ -134,10 +148,14 @@
 <script>
 
     import colorpicker from '../components/ColorPicker';
+    import webFontLoader from "../mixins/webFontLoader";
 
     export default {
         name: 'partymeister-slides-properties',
         props: ['simple'],
+        mixins: [
+            webFontLoader
+        ],
         components: {
             colorpicker,
         },
@@ -146,8 +164,16 @@
             activeElement: undefined,
             activeElementIndex: null,
             mouseIsUp: true,
+            fonts: ['Arial', 'Verdana', '\'Exo 2\'', '\'Ticketing\'', '\'USN_Stencil\'']
         }),
         mounted() {
+            this.$eventHub.$on('partymeister-slides:load-font', (font) => {
+                if (!this.fonts.includes(font)) {
+                    console.log("Request loading font " + font);
+                    this.fonts.push(font);
+                    this.loadFont(font);
+                }
+            });
             this.$eventHub.$on('partymeister-slides:active-element', (data) => {
                 this.activeElement = data.activeElement;
             });

@@ -487,6 +487,7 @@
             handleWarp({target, transform}) {
                 // console.log('onWarp', transform);
                 target.style.transform = transform;
+                this.updateCoordinates(target);
             },
             adjustImageElement(element, data) {
                 // adjust ratio
