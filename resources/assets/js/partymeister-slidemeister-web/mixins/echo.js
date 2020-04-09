@@ -3,6 +3,8 @@ import Echo from "laravel-echo";
 let Pusher = require('pusher-js');
 import Vue from 'vue';
 
+let siegmeisterInProgress = false;
+
 export default {
     data: function () {
         return {
@@ -108,7 +110,13 @@ export default {
                 })
                 .listen('.Partymeister\\Slides\\Events\\SiegmeisterRequest', (e) => {
                     console.log("Siegmeister request received");
-                    this.renderPrizegivingBars();
+                    if (siegmeisterInProgress === false) {
+                        this.renderPrizegivingBars();
+                    }
+                    siegmeisterInProgress = true;
+                    setTimeout(() => {
+                        siegmeisterInProgress = false;
+                    }, 2000);
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistRequest', (e) => {
                     // console.log('PlaylistRequest incoming');

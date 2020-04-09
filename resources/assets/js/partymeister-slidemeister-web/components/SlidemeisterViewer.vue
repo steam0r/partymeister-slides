@@ -192,6 +192,10 @@
                     this.currentItem = 0;
                     this.nextItem = 0;
                 }
+                if (this.currentItem === null) {
+                    this.currentItem = 0;
+                    this.nextItem = 0;
+                }
                 if (!hard) {
                     setTimeout(() => {
                         this.playTransition(this.current.transition_slidemeister_identifier, this.current.transition_duration);
@@ -511,11 +515,13 @@
 
             if (this.currentItem === null) {
                 let currentItem = localStorage.getItem('currentItem');
-                if (currentItem !== undefined && currentItem != null) {
+                if (currentItem !== undefined && currentItem !== null) {
                     // Delay is necessary to correctly load the background shader on first load
                     setTimeout(() => {
                         this.seekToIndex(parseInt(currentItem), true);
                     }, 500);
+                } else {
+                    this.seekToIndex(0, true);
                 }
             }
 

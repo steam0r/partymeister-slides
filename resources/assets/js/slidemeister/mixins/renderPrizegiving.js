@@ -1,3 +1,5 @@
+import * as Rematrix from "rematrix";
+
 export default {
     methods: {
         renderPrizegivingSupport(replacements) {
@@ -42,8 +44,10 @@ export default {
                 if (includeRank) {
                     this.replaceContent(rankElement, 'rank', '#' + row.rank, true);
                 } else {
-                    this.replaceContent(rankElement, 'rank', '', true);
-                    this.calculatePrizegivingBarCoordinates(row, entryElement);
+                    setTimeout(() => {
+                        this.replaceContent(rankElement, 'rank', '', true);
+                        this.calculatePrizegivingBarCoordinates(row, entryElement);
+                    }, 500);
                 }
             });
         },
@@ -58,14 +62,17 @@ export default {
 
                 let x1, x2, y1, y2 = 0;
 
-                let transformGroups = [...target.style.transform.matchAll(/\((.+?)\)/gm)];
-                if (transformGroups.length === 0) {
-                    return;
-                }
-                let matrix = transformGroups[0][1].split(', ');
-                let transform = transformGroups[1][1].split(', ');
+                let rematrixTransform = Rematrix.fromString(target.style.transform);
 
-                x1 = parseInt(matrix[4]) + parseInt(transform[0].replace('px', ''));
+                // let transformGroups = [...target.style.transform.matchAll(/\((.+?)\)/gm)];
+                // if (transformGroups.length === 0) {
+                //     return;
+                // }
+                // let matrix = transformGroups[0][1].split(', ');
+                // let transform = transformGroups[1][1].split(', ');
+
+                // x1 = parseInt(matrix[4]) + parseInt(transform[0].replace('px', ''));
+                x1 = parseInt(rematrixTransform[12]);
                 x2 = x1 + width;
 
                 let top = parseInt(target.style.top.replace('px', ''));
@@ -73,7 +80,8 @@ export default {
                     top = 0;
                 }
 
-                y1 = parseInt(matrix[5]) + parseInt(transform[1].replace('px', '')) + top;
+                // y1 = parseInt(matrix[5]) + parseInt(transform[1].replace('px', '')) + top;
+                y1 = parseInt(rematrixTransform[13]) + top;
                 y2 = y1 + height;
 
                 if (row.max_points == 0) {
