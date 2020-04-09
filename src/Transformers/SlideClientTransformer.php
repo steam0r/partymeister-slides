@@ -40,6 +40,7 @@ class SlideClientTransformer extends Fractal\TransformerAbstract
         $configuration = $record->configuration;
 
         $configuration['server'] = config('app.url');
+        $configuration['client'] = $record->id;
 
         return [
             'id'            => (int) $record->id,
