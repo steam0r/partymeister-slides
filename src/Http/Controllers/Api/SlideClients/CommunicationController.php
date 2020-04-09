@@ -12,6 +12,7 @@ use Partymeister\Slides\Events\PlaylistPreviousRequest;
 use Partymeister\Slides\Events\PlaylistRequest;
 use Partymeister\Slides\Events\PlaylistSeekRequest;
 use Partymeister\Slides\Events\PlayNowRequest;
+use Partymeister\Slides\Events\SiegmeisterRequest;
 use Partymeister\Slides\Models\Playlist;
 use Partymeister\Slides\Models\SlideClient;
 use Partymeister\Slides\Services\XMLService;
@@ -25,7 +26,7 @@ class CommunicationController extends Controller
 {
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function playlist(Request $request)
@@ -33,33 +34,33 @@ class CommunicationController extends Controller
         $client = SlideClient::find(session('screens.active'));
 
         if (is_null($client)) {
-            return response()->json([ 'message' => 'No slide client active' ], 400);
+            return response()->json(['message' => 'No slide client active'], 400);
         }
 
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('playlist', $request->all());
-                if (! $result) {
-                    return response()->json([ 'result' => $result ], 400);
+                if ( ! $result) {
+                    return response()->json(['result' => $result], 400);
                 } else {
-                    return response()->json([ 'result' => $result ]);
+                    return response()->json(['result' => $result]);
                 }
                 break;
             case 'slidemeister-web':
                 $playlist = Playlist::find($request->get('playlist_id'));
                 if (is_null($playlist)) {
-                    return response()->json([ 'message' => 'Playlist not found' ], 400);
+                    return response()->json(['message' => 'Playlist not found'], 400);
                 }
                 event(new PlaylistRequest($playlist, $request->get('callbacks')));
 
-                return response()->json([ 'result' => 'Playlist event sent' ]);
+                return response()->json(['result' => 'Playlist event sent']);
                 break;
         }
     }
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function playnow(Request $request)
@@ -67,16 +68,16 @@ class CommunicationController extends Controller
         $client = SlideClient::find(session('screens.active'));
 
         if (is_null($client)) {
-            return response()->json([ 'message' => 'No slide client active' ], 400);
+            return response()->json(['message' => 'No slide client active'], 400);
         }
 
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('playnow', $request->all());
-                if (! $result) {
-                    return response()->json([ 'result' => $result ], 400);
+                if ( ! $result) {
+                    return response()->json(['result' => $result], 400);
                 } else {
-                    return response()->json([ 'result' => $result ]);
+                    return response()->json(['result' => $result]);
                 }
                 break;
             case 'slidemeister-web':
@@ -90,14 +91,14 @@ class CommunicationController extends Controller
 
                 event(new PlayNowRequest($type, $item));
 
-                return response()->json([ 'result' => 'PlayNow event sent' ]);
+                return response()->json(['result' => 'PlayNow event sent']);
                 break;
         }
     }
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function seek(Request $request)
@@ -105,37 +106,37 @@ class CommunicationController extends Controller
         $client = SlideClient::find(session('screens.active'));
 
         if (is_null($client)) {
-            return response()->json([ 'message' => 'No slide client active' ], 400);
+            return response()->json(['message' => 'No slide client active'], 400);
         }
 
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('seek', $request->all());
-                if (! $result) {
-                    return response()->json([ 'result' => $result ], 400);
+                if ( ! $result) {
+                    return response()->json(['result' => $result], 400);
                 } else {
-                    return response()->json([ 'result' => $result ]);
+                    return response()->json(['result' => $result]);
                 }
                 break;
             case 'slidemeister-web':
                 $playlist = Playlist::find($request->get('playlist_id'));
                 if (is_null($playlist)) {
-                    return response()->json([ 'message' => 'Playlist not found' ], 400);
+                    return response()->json(['message' => 'Playlist not found'], 400);
                 }
                 event(new PlaylistSeekRequest($playlist, 0));
 
-                return response()->json([ 'result' => 'Seek event sent' ]);
+                return response()->json(['result' => 'Seek event sent']);
                 break;
         }
     }
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function skip(Request $request)
@@ -143,18 +144,18 @@ class CommunicationController extends Controller
         $client = SlideClient::find(session('screens.active'));
 
         if (is_null($client)) {
-            return response()->json([ 'message' => 'No slide client active' ], 400);
+            return response()->json(['message' => 'No slide client active'], 400);
         }
 
         switch ($client->type) {
             case 'screens':
-                $result = XMLService::send($request->get('direction'), [ 'hard' => $request->get('hard') ]);
-                if (! $result) {
-                    return response()->json([ 'result' => $result ], 400);
+                $result = XMLService::send($request->get('direction'), ['hard' => $request->get('hard')]);
+                if ( ! $result) {
+                    return response()->json(['result' => $result], 400);
                 } else {
-                    return response()->json([ 'result' => $result ]);
+                    return response()->json(['result' => $result]);
                 }
-                // no break
+            // no break
             case 'slidemeister-web':
                 switch ($request->get('direction')) {
                     case 'previous':
@@ -165,38 +166,66 @@ class CommunicationController extends Controller
                         break;
                 }
 
-                return response()->json([ 'result' => 'Skip event sent' ]);
+                return response()->json(['result' => 'Skip event sent']);
                 break;
         }
     }
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      */
     /**
-     * @param Request $request
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    public function siegmeister(Request $request)
+    {
+        $client = SlideClient::find(session('screens.active'));
+
+        if (is_null($client)) {
+            return response()->json(['message' => 'No slide client active'], 400);
+        }
+
+        switch ($client->type) {
+            case 'screens':
+                // NO SUPPORT
+                break;
+            case 'slidemeister-web':
+                event(new SiegmeisterRequest());
+
+                return response()->json(['result' => 'Siegmeister event sent']);
+                break;
+        }
+    }
+
+    /**
+     * @param  Request  $request
+     * @return JsonResponse
+     */
+    /**
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function get_system_info(Request $request)
     {
         $result = XMLService::send('get_system_info');
-        if (! $result) {
-            return response()->json([ 'result' => $result ], 400);
+        if ( ! $result) {
+            return response()->json(['result' => $result], 400);
         } else {
-            return response()->json([ 'result' => $result ]);
+            return response()->json(['result' => $result]);
         }
     }
 
 
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      * @throws InvalidArgumentException
      */
     /**
-     * @param Request $request
+     * @param  Request  $request
      * @return JsonResponse
      * @throws InvalidArgumentException
      */
@@ -205,25 +234,25 @@ class CommunicationController extends Controller
         $client = SlideClient::find(session('screens.active'));
 
         if (is_null($client)) {
-            return response()->json([ 'message' => 'No slide client active' ], 400);
+            return response()->json(['message' => 'No slide client active'], 400);
         }
 
         switch ($client->type) {
             case 'screens':
                 $result = XMLService::send('get_playlists');
-                if (! $result) {
-                    return response()->json([ 'result' => $result ], 400);
+                if ( ! $result) {
+                    return response()->json(['result' => $result], 400);
                 } else {
-                    return response()->json([ 'result' => $result ]);
+                    return response()->json(['result' => $result]);
                 }
                 break;
             case 'slidemeister-web':
                 $result = Cache::store('redis')
-                               ->get(config('cache.prefix') . ':slidemeister-web.' . session('screens.active'));
-                if (! $result) {
-                    return response()->json([ 'result' => $result ], 400);
+                               ->get(config('cache.prefix').':slidemeister-web.'.session('screens.active'));
+                if ( ! $result) {
+                    return response()->json(['result' => $result], 400);
                 } else {
-                    return response()->json([ 'result' => $result ]);
+                    return response()->json(['result' => $result]);
                 }
                 break;
         }

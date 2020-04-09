@@ -53,6 +53,7 @@ export default {
                     content: 'Enter text',
                     textShadow: 'none',
                     textTransform: 'none',
+                    lineHeight: 'normal',
                     coordinates: {
                         transform: 'matrix(1, 0, 0, 1, 0, 0) translate(0px 0px)',
                         width: 300,
@@ -143,6 +144,7 @@ export default {
                 target.style.opacity = element.properties.opacity;
                 target.style.zIndex = element.properties.zIndex;
                 target.style.textShadow = element.properties.textShadow;
+                target.style.lineHeight = element.properties.lineHeight;
                 target.style.textTransform = element.properties.textTransform;
                 target.dataset.partymeisterSlidesVisibility = element.properties.visibility;
 

@@ -43,7 +43,17 @@ Route::group([
     Route::post('slide_clients/communication/playlist', 'SlideClients\CommunicationController@playlist')->name('slide_clients.communication.playlist');
     Route::post('slide_clients/communication/playnow', 'SlideClients\CommunicationController@playnow')->name('slide_clients.communication.playnow');
     Route::post('slide_clients/communication/seek', 'SlideClients\CommunicationController@seek')->name('slide_clients.communication.seek');
+    Route::post('slide_clients/communication/siegmeister', 'SlideClients\CommunicationController@siegmeister')->name('slide_clients.communication.siegmeister');
     Route::post('slide_clients/communication/skip', 'SlideClients\CommunicationController@skip')->name('slide_clients.communication.skip');
     Route::get('slide_clients/communication/system', 'SlideClients\CommunicationController@get_system_info')->name('slide_clients.communication.system');
     Route::get('slide_clients/communication/playlists', 'SlideClients\CommunicationController@get_playlists')->name('slide_clients.communication.playlists');
+});
+
+Route::group([
+    'middleware' => [ 'bindings' ],
+    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
+    'prefix'     => 'ajax',
+    'as'         => 'ajax.',
+], function () {
+    Route::post('slide_clients/communication/skip-for-revision', 'SlideClients\CommunicationController@skip')->name('slide_clients.communication.skipforrevision');
 });

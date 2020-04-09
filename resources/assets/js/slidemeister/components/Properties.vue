@@ -103,6 +103,12 @@
                 </select>
             </div>
             <div :class="{hidden: simple}" class="input-group">
+                <label class="col-form-label col-form-label-sm" for="lineHeight">lineHeight</label>
+                <input @focus="addStepToUndoStack('lineHeight')" @blur="updateProperties"
+                       class="form-control form-control-sm" id="lineHeight" type="text" name="lineHeight"
+                       v-model="activeElement.properties.lineHeight">
+            </div>
+            <div :class="{hidden: simple}" class="input-group">
                 <label class="col-form-label col-form-label-sm" for="textShadow">textShadow</label>
                 <input @focus="addStepToUndoStack('textShadow')" @blur="updateProperties"
                        class="form-control form-control-sm" id="textShadow" type="text" name="textShadow"

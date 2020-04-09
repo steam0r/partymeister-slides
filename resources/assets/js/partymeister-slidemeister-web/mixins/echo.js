@@ -106,6 +106,9 @@ export default {
                     }
                     this.updateStatus();
                 })
+                .listen('.Partymeister\\Slides\\Events\\SiegmeisterRequest', (e) => {
+                    this.renderPrizegivingBars();
+                })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistRequest', (e) => {
                     // console.log('PlaylistRequest incoming');
 

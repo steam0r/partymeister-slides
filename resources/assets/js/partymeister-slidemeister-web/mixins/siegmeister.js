@@ -19,6 +19,7 @@ export default {
             }
         },
         renderPrizegivingBars() {
+            console.log("Siegmeister bars triggered");
             // remove potentially existing bar elements and remove them from the dom
             this.deleteBars();
 
