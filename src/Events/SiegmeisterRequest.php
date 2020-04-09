@@ -1,5 +1,4 @@
 <?php
-
 namespace Partymeister\Slides\Events;
 
 use Illuminate\Broadcasting\Channel;
@@ -14,23 +13,17 @@ use Illuminate\Queue\SerializesModels;
  */
 class SiegmeisterRequest implements ShouldBroadcastNow
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * @var bool
-     */
-    public $hard = false;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
 
     /**
      * Create a new event instance.
      *
      * PlaylistNextRequest constructor.
-     * @param bool $hard
      */
-    public function __construct($hard = false)
+    public function __construct()
     {
-        $this->hard = $hard;
     }
 
 
@@ -41,6 +34,6 @@ class SiegmeisterRequest implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel(config('cache.prefix') . '.slidemeister-web.' . session('screens.active'));
+        return new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'));
     }
 }

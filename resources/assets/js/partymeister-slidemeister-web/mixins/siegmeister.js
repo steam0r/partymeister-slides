@@ -32,6 +32,10 @@ export default {
 
             let zoom = document.querySelector('.slidemeister-instance').style.zoom;
 
+            if (!metadata.hasOwnProperty('entries')) {
+                return;
+            }
+
             for (const [index, e] of metadata.entries()) {
                 let bar = document.createElement("div");
                 let left = Number((e.x1 * 960 * zoom).toFixed(2));

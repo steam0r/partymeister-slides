@@ -107,6 +107,7 @@ export default {
                     this.updateStatus();
                 })
                 .listen('.Partymeister\\Slides\\Events\\SiegmeisterRequest', (e) => {
+                    console.log("Siegmeister request received");
                     this.renderPrizegivingBars();
                 })
                 .listen('.Partymeister\\Slides\\Events\\PlaylistRequest', (e) => {

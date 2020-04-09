@@ -14,17 +14,23 @@ use Illuminate\Queue\SerializesModels;
  */
 class PlaylistNextRequest implements ShouldBroadcastNow
 {
-
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    /**
+     * @var bool
+     */
+    public $hard = false;
 
 
     /**
      * Create a new event instance.
      *
      * PlaylistNextRequest constructor.
+     * @param bool $hard
      */
-    public function __construct()
+    public function __construct($hard = false)
     {
+        $this->hard = $hard;
     }
 
 
@@ -35,6 +41,6 @@ class PlaylistNextRequest implements ShouldBroadcastNow
      */
     public function broadcastOn()
     {
-        return new Channel(config('cache.prefix').'.slidemeister-web.'.session('screens.active'));
+        return new Channel(config('cache.prefix') . '.slidemeister-web.' . session('screens.active'));
     }
 }
