@@ -37,13 +37,17 @@ class SlideClientTransformer extends Fractal\TransformerAbstract
             }
         }
 
+        $configuration = $record->configuration;
+
+        $configuration['server'] = config('app.url');
+
         return [
             'id'            => (int) $record->id,
             'name'          => $record->name,
             'type'          => $record->type,
             'ip_address'    => $record->ip_address,
             'port'          => $record->port,
-            'configuration' => $record->configuration,
+            'configuration' => $configuration,
             'jingles'       => $jingles,
             'websocket'     => [
                 'key'  => config('broadcasting.connections.pusher.key'),

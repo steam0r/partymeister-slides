@@ -208,9 +208,6 @@
                         if (this.next.slide_type !== 'slidemeister_winners') {
                             this.deleteBars();
                         }
-                        if (this.current === undefined) {
-                            this.current = this.next;
-                        }
                         this.playTransition(this.current.transition_slidemeister_identifier, this.current.transition_duration);
                     }, 0);
                 } else {

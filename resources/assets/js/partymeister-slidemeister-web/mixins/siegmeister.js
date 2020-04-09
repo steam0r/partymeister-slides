@@ -32,9 +32,7 @@ export default {
 
             let zoom = document.querySelector('.slidemeister-instance').style.zoom;
 
-            if (!metadata.hasOwnProperty('entries')) {
-                return;
-            }
+            console.log(metadata);
 
             for (const [index, e] of metadata.entries()) {
                 let bar = document.createElement("div");
