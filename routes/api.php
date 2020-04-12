@@ -51,9 +51,10 @@ Route::group([
 
 Route::group([
     'middleware' => [ 'bindings' ],
-    'namespace'  => 'Partymeister\Slides\Http\Controllers\Api',
+    //'namespace'  => '',
     'prefix'     => 'ajax',
-    'as'         => 'ajax.',
+    'as'         => 'ajax.frontend.',
 ], function () {
     Route::post('slide_clients/communication/skip-for-revision', 'SlideClients\CommunicationController@skip')->name('slide_clients.communication.skipforrevision');
+    Route::get('frontend-playlists/{playlist}', 'Partymeister\Slides\Http\Controllers\Api\PlaylistsController@show')->name('playlists.show');
 });

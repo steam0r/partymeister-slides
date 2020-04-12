@@ -3,6 +3,8 @@
 namespace Partymeister\Slides\Transformers;
 
 use League\Fractal;
+use Partymeister\Accounting\Models\Sale;
+use Partymeister\Accounting\Transformers\ItemTransformer;
 use Partymeister\Slides\Models\Playlist;
 
 /**
@@ -17,8 +19,9 @@ class PlaylistTransformer extends Fractal\TransformerAbstract
      *
      * @var array
      */
-    protected $availableIncludes = [];
-
+    //protected $availableIncludes = ['items'];
+    //
+    //protected $defaultIncludes = [ 'items' ];
 
     /**
      * Transform record to array
@@ -36,5 +39,16 @@ class PlaylistTransformer extends Fractal\TransformerAbstract
             'created_at' => $record->created_at,
             'updated_at' => $record->updated_at
         ];
+    }
+
+    /**
+     * @param  Playlist  $record
+     * @return Fractal\Resource\Collection
+     */
+    public function includeItems(Playlist $record)
+    {
+        if (! is_null($record->items)) {
+            return $this->collection($record->items, new PlaylistItemTransformer());
+        }
     }
 }

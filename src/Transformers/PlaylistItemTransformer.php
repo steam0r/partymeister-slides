@@ -43,7 +43,7 @@ class PlaylistItemTransformer extends Fractal\TransformerAbstract
             'midi_note'             => (int) $record->midi_note,
             'metadata'              => $record->metadata,
             'callback_hash'         => $record->callback_hash,
-            'callback_delay'        => $record->callback_delay
+            'callback_delay'        => $record->callback_delay,
         ];
     }
 }

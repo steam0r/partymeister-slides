@@ -8,6 +8,21 @@ Route::get('slidemeister-web/{slide_client}',
     '\Partymeister\Slides\Http\Controllers\SlidemeisterWebController@index')->middleware([ 'bindings' ])->name('backend.slidemeister-web.show');
 
 Route::group([
+    'as'         => 'component.',
+    'prefix'     => 'component',
+    'namespace'  => 'Partymeister\Slides\Http\Controllers\Backend\Component',
+    'middleware' => [
+        'web',
+    ]
+], function () {
+    // You only need this part if you already have a component group for the given namespace
+    Route::get('playlist-viewers', 'ComponentPlaylistViewersController@create')->name('playlist-viewers.create');
+    Route::post('playlist-viewers', 'ComponentPlaylistViewersController@store')->name('playlist-viewers.store');
+    Route::get('playlist-viewers/{component_playlist_viewer}', 'ComponentPlaylistViewersController@edit')->name('playlist-viewers.edit');
+    Route::patch('playlist-viewers/{component_playlist_viewer}', 'ComponentPlaylistViewersController@update')->name('playlist-viewers.update');
+});
+
+Route::group([
     'as'         => 'backend.',
     'prefix'     => 'backend',
     'namespace'  => 'Partymeister\Slides\Http\Controllers\Backend',
