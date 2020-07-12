@@ -47,7 +47,7 @@ class PartymeisterWebdriverCommand extends Command
         }
 
         if ($this->argument('status') === 'start') {
-            $process = new Process(config('partymeister-slides.webdriver'));
+            $process = new Process([config('partymeister-slides.webdriver')]);
             $process->start();
             sleep(5);
             $this->info('Started chromium webdriver');
