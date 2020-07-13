@@ -40,6 +40,7 @@ class SlideTransformer extends Fractal\TransformerAbstract
             'file_final'          => MediaHelper::getFileInformation($record, 'final', false, [ 'preview', 'thumb' ]),
             'cached_html_preview' => $record->cached_html_preview,
             'cached_html_final'   => $record->cached_html_final,
+            'definitions'         => $record->definitions
         ];
     }
 }
