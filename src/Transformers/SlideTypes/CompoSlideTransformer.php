@@ -1,31 +1,38 @@
 <?php
+
 namespace Partymeister\Slides\Transformers\SlideTypes;
 
+use Illuminate\Support\Arr;
 use Partymeister\Competitions\Models\Competition;
 use Partymeister\Competitions\Models\Entry;
-use Partymeister\Competitions\Transformers\EntryTransformer;
+use Partymeister\Competitions\Transformers\Entry\JsonTransformer;
 use Partymeister\Slides\Models\Slide;
-use Partymeister\Slides\Transformers\SlideTransformer;
 
-class CompoSlideTransformer extends SlideTransformer
+class CompoSlideTransformer extends AbstractSlideTransformer
 {
-    public function transform(Slide $record) {
-        $data = [];
+    public function transform(Slide $record)
+    {
+        $data = parent::transform($record);
         $definitions = json_decode($record->definitions);
         $competition = Competition::where('name', $record->category->name)->first();
-        if($competition) {
-            foreach($definitions->elements as $key => $element) {
-                if($element->properties->placeholder == "<<sort_position_prefixed>>") {
-                    $sortPosition = (int) ltrim( $element->properties->content, "0");
+        if ($competition) {
+            foreach ($definitions->elements as $key => $element) {
+                if ($element->properties->placeholder == "<<sort_position_prefixed>>") {
+                    $sortPosition = (int)ltrim($element->properties->content, "0");
                     /** @var Entry $entry */
-                    $entry = Entry::where('competition_id', (int) $competition->id)->where('sort_position', $sortPosition)->first();
-                    if($entry) {
-                        $entryTransformer = new EntryTransformer();
-                        $data['entry'] = $entryTransformer->transform($entry);
+                    $entry = Entry::where('competition_id', (int)$competition->id)
+                        ->where('sort_position', $sortPosition)
+                        ->first();
+                    if ($entry) {
+                        $resource = $this->transformItem($entry, JsonTransformer::class);
+                        $entry = $this->fractal->createData($resource)->toArray();
+                        $entry = Arr::get($entry, 'data');
+                        $data['entry'] = $entry;
                     }
                 }
             }
         }
+
         return $data;
     }
 }

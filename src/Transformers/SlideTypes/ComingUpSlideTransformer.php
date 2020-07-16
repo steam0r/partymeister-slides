@@ -1,12 +1,8 @@
 <?php
+
 namespace Partymeister\Slides\Transformers\SlideTypes;
 
-use Partymeister\Slides\Models\Slide;
-use Partymeister\Slides\Transformers\SlideTransformer;
-
-class ComingUpSlideTransformer extends SlideTransformer
+class ComingUpSlideTransformer extends AbstractSlideTransformer
 {
-    public function transform(Slide $record) {
-        return [];
-    }
+
 }
