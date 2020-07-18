@@ -52,6 +52,7 @@ Route::group([
             'SlideClientsController@activate')->name('slide_clients.activate');
 
         Route::get('playlist/{playlist}/json', 'JsonPlaylistController@show');
+        Route::get('playlist/screen/{slideClient}/json', 'JsonPlaylistController@screen');
 
         Route::resource('files', 'FilesController');
     });
