@@ -3,6 +3,7 @@
 namespace Partymeister\Slides\Grids;
 
 use Motor\Backend\Grid\Grid;
+use Motor\Backend\Grid\Renderers\BladeRenderer;
 use Motor\Backend\Grid\Renderers\TranslateRenderer;
 
 /**
@@ -18,6 +19,11 @@ class SlideClientGrid extends Grid
              ->renderer(TranslateRenderer::class, [ 'file' => 'partymeister-slides::backend/slide_clients.types' ]);
         $this->addColumn('ip_address', trans('partymeister-slides::backend/slide_clients.ip_address'), true);
         $this->addColumn('port', trans('partymeister-slides::backend/slide_clients.port'), true);
+
+        $this->addColumn('id', trans('partymeister-slides::backend/slide_clients.ws_channel'), true)
+            ->renderer(BladeRenderer::class, [ 'template' => 'partymeister-slides::grid.slide_clients.ws_name' ]);
+
+
         $this->addColumn('sort_position', trans('partymeister-slides::backend/slide_clients.sort_position'), true);
         $this->addColumn('playlist.name', trans('partymeister-slides::backend/slide_clients.current_playlist'), true);
 
