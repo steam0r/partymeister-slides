@@ -40,4 +40,5 @@ class CompoSlideTransformer extends AbstractSlideTransformer
 
         return $data;
     }
+
 }
