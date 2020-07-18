@@ -14,7 +14,12 @@ class CompoSlideTransformer extends AbstractSlideTransformer
     {
         $data = parent::transform($record);
         $definitions = json_decode($record->definitions);
-        $competition = Competition::where('name', $record->category->name)->first();
+        if($record->category->competition_id) {
+            $competition = Competition::where('id', $record->category->competition_id)->first();
+        }else{
+            // fallback to association by name if compoid is not set
+            $competition = Competition::where('name', $record->category->name)->first();
+        }
         if ($competition) {
             foreach ($definitions->elements as $key => $element) {
                 if ($element->properties->placeholder == "<<sort_position_prefixed>>") {

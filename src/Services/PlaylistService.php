@@ -205,6 +205,7 @@ class PlaylistService extends BaseService
         $playlist->name = 'Competition: '.$competition->name;
         $playlist->type = 'video';
         $playlist->is_competition = true;
+        $playlist->competition_id = $competition->id;
         $playlist->save();
 
         // 3. save slides
