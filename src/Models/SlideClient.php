@@ -16,6 +16,7 @@ use Motor\Core\Filter\Filter;
 use Motor\Core\Traits\Filterable;
 use Motor\Core\Traits\Searchable;
 use Motor\Media\Models\FileAssociation;
+use Partymeister\Core\Models\Visitor;
 
 /**
  * Partymeister\Slides\Models\SlideClient
@@ -107,5 +108,13 @@ class SlideClient extends Model
     public function file_associations()
     {
         return $this->morphMany(FileAssociation::class, 'model');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function playlist()
+    {
+        return $this->belongsTo(Playlist::class);
     }
 }
