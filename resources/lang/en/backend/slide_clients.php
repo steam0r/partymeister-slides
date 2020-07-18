@@ -18,6 +18,7 @@ return [
     'no_active_client'            => 'No slide client is active - please select one from the top',
     'play_with_callbacks'         => 'Play with callbacks',
     'play_without_callbacks'      => 'Play without callbacks',
+    'json_playlist'               => 'Open JSON Playlist',
     'continue'                    => 'Continue playing',
     'cache'                       => 'Cache',
     'outdated'                    => 'Outdated - please reupload',

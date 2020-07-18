@@ -1,4 +1,4 @@
-<div class="float-right btn-group" style="margin-right: 25px;">
+z<div class="float-right btn-group" style="margin-right: 25px;">
     @foreach (Partymeister\Slides\Models\SlideClient::all() as $client)
     <a href="{{route('backend.slide_clients.activate', ['slide_client' => $client->id])}}"
        class="btn btn-sm @if (session('screens.active') == $client->id) btn-success @else btn-outline-primary @endif">{{$client->name}} ({{trans('partymeister-slides::backend/slide_clients.types.'.$client->type)}}) @if (session('screens.active') == $client->id)
