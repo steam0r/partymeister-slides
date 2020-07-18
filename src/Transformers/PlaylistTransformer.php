@@ -7,6 +7,7 @@ use League\Fractal;
 use League\Fractal\Manager;
 use League\Fractal\Serializer\ArraySerializer;
 use Partymeister\Competitions\Models\Competition;
+use Partymeister\Competitions\Transformers\CompetitionTransformer;
 use Partymeister\Competitions\Transformers\Entry\JsonTransformer;
 use Partymeister\Slides\Models\Playlist;
 
@@ -47,10 +48,14 @@ class PlaylistTransformer extends Fractal\TransformerAbstract
         if($record->is_competition && $record->competition_id) {
             $competition = Competition::where('id', $record->competition_id)->first();
             if ($competition) {
+                $manager = new Manager();
+                $resource = $this->item($competition, new CompetitionTransformer());
+                $entry = $manager->createData($resource)->toArray();
+                $entry = Arr::get($entry, 'data');
+                $data['competition'] = $entry;
                 $data['entries'] = [];
                 foreach ($competition->entries()->where('status', 1)->orderBy('sort_position', 'ASC')->get() as $entry) {
                     $resource = $this->item($entry, new JsonTransformer());
-                    $manager = new Manager();
                     $entry = $manager->createData($resource)->toArray();
                     $entry = Arr::get($entry, 'data');
                     $data['entries'][] = $entry;
