@@ -51,11 +51,23 @@ Route::group([
         Route::get('slide_clients/{slide_client}/activate',
             'SlideClientsController@activate')->name('slide_clients.activate');
 
-        Route::get('playlist/{playlist}/json', 'JsonPlaylistController@show');
-        Route::get('playlist/screen/{slideClient}/json', 'JsonPlaylistController@screen');
+
 
         Route::resource('files', 'FilesController');
     });
+});
+
+
+Route::group([
+    'as' => 'backend.',
+    'prefix' => 'backend',
+    'namespace' => 'Partymeister\Slides\Http\Controllers\Backend',
+    'middleware' => [
+        'web',
+    ],
+], function () {
+    Route::get('playlist/{playlist}/json', 'JsonPlaylistController@show');
+    Route::get('playlist/screen/{slideClient}/json', 'JsonPlaylistController@screen');
 });
 
 Route::get('backend/slide_templates/{slide_template}.html',
