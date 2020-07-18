@@ -25,7 +25,8 @@ class SlideClientGrid extends Grid
 
 
         $this->addColumn('sort_position', trans('partymeister-slides::backend/slide_clients.sort_position'), true);
-        $this->addColumn('playlist.name', trans('partymeister-slides::backend/slide_clients.current_playlist'), true);
+        $this->addColumn('playlist.name', trans('partymeister-slides::backend/slide_clients.current_playlist'), true)
+            ->renderer(BladeRenderer::class, [ 'template' => 'partymeister-slides::grid.slide_clients.current_playlist' ]);
 
         $this->setDefaultSorting('sort_position', 'ASC');
 
