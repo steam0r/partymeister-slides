@@ -3,7 +3,6 @@
 </div>
 @if (session('screens.active', null) == null)
     {{trans('partymeister-slides::backend/slide_clients.no_active_client')}}<br/>
-    <a href="/backend/playlists/{{$record->id}}/json" target="_blank" class="slide-clients-json">{{trans('partymeister-slides::backend/slide_clients.json_playlist')}}</a>
 @else
     <ul class="list-unstyled">
         <li>
