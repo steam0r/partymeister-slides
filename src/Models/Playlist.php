@@ -24,6 +24,7 @@ use Motor\Core\Traits\Searchable;
  * @property string                                                                                   $name
  * @property string                                                                                   $type
  * @property int                                                                                      $is_competition
+ * @property int                                                                                      $is_prizegiving
  * @property int|null                                                                                 $competition_id
  * @property int                                                                                      $created_by
  * @property int                                                                                      $updated_by
@@ -83,6 +84,7 @@ class Playlist extends Model
         'name',
         'type',
         'is_competition',
+        'is_prizegiving',
         'competition_id'
     ];
 
