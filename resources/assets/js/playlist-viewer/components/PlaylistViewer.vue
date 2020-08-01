@@ -14,8 +14,9 @@
 <script>
 
     import {VueAgile} from 'vue-agile'
-    import {Ziggy} from 'ziggy-js';
-    import route from 'ziggy-js/src/js/route';
+
+    import route from 'ziggy-route';
+    import {Ziggy} from 'ziggy';
 
     window.Ziggy = Ziggy;
     export default {
