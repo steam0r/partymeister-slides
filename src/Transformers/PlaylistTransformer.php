@@ -44,7 +44,7 @@ class PlaylistTransformer extends Fractal\TransformerAbstract
             'name' => $record->name,
             'is_competition' => $record->is_competition,
             'competition_id' => $record->competition_id,
-            'playlist_role' => PlaylistTransformer::getPlaylistRole($record),
+            'playlist_role' => $this->getPlaylistRole($record),
             'created_at' => $record->created_at,
             'updated_at' => $record->updated_at
         ];
@@ -69,7 +69,7 @@ class PlaylistTransformer extends Fractal\TransformerAbstract
                     $data['entries'][] = $entry;
                 }
             }
-        }else if($record->is_prizegiving) {
+        }else if($this->playlistIsPrizegiving($record)) {
             $results      = VoteService::getAllVotesByRank('ASC');
             $specialVotes = VoteService::getAllSpecialVotesByRank();
 
@@ -130,14 +130,18 @@ class PlaylistTransformer extends Fractal\TransformerAbstract
         }
     }
 
-    public static function getPlaylistRole(Playlist $playlist)
+    protected function getPlaylistRole(Playlist $playlist)
     {
         $role = "rotation";
         if($playlist->is_competition && $playlist->competition_id) {
             $role = "competition";
-        }else if($playlist->is_prizegiving) {
+        }else if($this->playlistIsPrizegiving($playlist)) {
             $role = "prizegiving";
         }
         return $role;
+    }
+
+    protected function playlistIsPrizegiving(Playlist $playlist) {
+        return $playlist->is_prizegiving && $playlist->is_prizegiving !== "null";
     }
 }
