@@ -69,6 +69,7 @@ class PlaylistService extends BaseService
             $playlist = new Playlist();
         }
         $playlist->name = 'Prizegiving: Actual prizegiving with winners';
+        $playlist->is_prizegiving = true;
         $playlist->type = 'video';
         $playlist->save();
 
